@@ -17,4 +17,9 @@ class Response
     {
         http_response_code((int) $code);
     }
+
+    public function poweredBy(string $str = 'Laika')
+    {
+        header("X-Powered-By:{$str}");
+    }
 }
