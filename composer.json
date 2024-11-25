@@ -1,0 +1,20 @@
+{
+    "name": "cb-master/cbm-core",
+    "description": "Cloud Bill Master Header Response, Request & MVC Framework URL Repo",
+    "keyword":"framework, cbm core, cloud bill master, http header, http request",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "CBM\\Core\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Cloud Bill Master",
+            "email": "strblackhawk@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
