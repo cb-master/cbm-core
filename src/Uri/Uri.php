@@ -12,7 +12,6 @@
 namespace CBM\Core\Uri;
 
 use CBM\CoreHelper\Resources;
-use CBM\CoreHelper\CoreException;
 
 class Uri Extends Resources
 {
