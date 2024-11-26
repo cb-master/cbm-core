@@ -80,4 +80,20 @@ class Uri Extends Resources
     {
         return in_array($value, self::slugs());
     }
+
+    // Get Slug Key By Value
+    public static function key(string $value):int
+    {
+        $array = self::slugs();
+        $return_key = 1000000;
+
+        foreach($array as $key => $val){
+            if($value == $val){
+                $return_key = $key;
+                break;
+            }
+        }
+
+        return $return_key;
+    }
 }
