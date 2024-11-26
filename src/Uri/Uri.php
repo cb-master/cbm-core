@@ -50,9 +50,15 @@ class Uri Extends Resources
     // Application Uri
     public static function app_uri():string
     {
-        $http = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] != 'off')) ? 'https://' : 'http://';
+        $http = self::is_https() ? 'https://' : 'http://';
         $host = $http . ($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME']);
         return self::sub_directory() ? $host . '/' . self::sub_directory() : $host;
+    }
+
+    // HTTPS Check
+    public static function is_https():bool
+    {
+        return (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] != 'off')) ? true : false;
     }
 
     // All Slugs
