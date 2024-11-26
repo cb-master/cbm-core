@@ -27,9 +27,9 @@ class Response
 
     // Response Header
     public static function header(
-        string $origin = '*',
-        array $methods = ['get', 'post'],
-        array $headers = ['Authorization', 'Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+        string $origin      = '*',
+        array $methods      = ['get', 'post'],
+        array $headers      = ['Authorization', 'Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
         string $credentials = 'true'
         )
     {
