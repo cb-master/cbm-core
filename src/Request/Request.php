@@ -13,86 +13,124 @@ namespace CBM\Core\Request;
 
 class Request
 {
+    // Instance
+    private static Object|Null $instance = Null;
+
     // Method
     private $method;
 
-    public function __construct()
+    private static function init()
     {
-        $this->method = strtolower($_SERVER['REQUEST_METHOD']);
+        self::$instance = self::$instance ?: new Static;
+        self::$instance->method = strtolower($_SERVER['REQUEST_METHOD']);
+        return self::$instance;
     }
 
     // Get Method
-    public function method():string
+    public static function method():string
     {
-        return $this->method;
+        // Initiate Instance
+        self::init();
+        
+        // Return Value
+        return self::$instance->method;
     }
 
     // Method is Post
-    public function isPost():bool
+    public static function isPost():bool
     {
-        return $this->method === 'post';
+        // Initiate Class
+        self::init();
+
+        // Return Value
+        return self::$instance->method === 'post';
     }
 
     // Method is Get
-    public function isGet():bool
+    public static function isGet():bool
     {
-        return $this->method === 'get';
+        // Initiate Class
+        self::init();
+
+        // Return Value
+        return self::$instance->method === 'get';
     }
 
     // Requested Data
-    public function data(array $data = []):array
+    public static function data(array $data = []):array
     {
-        $methoded = [];
-        if($this->isPost() || $this->isGet()){
+        // Initiate Class
+        self::init();
+
+        $request_data = [];
+        // Clear request Data
+        if(self::isPost() || self::isGet()){
             $data = $data ?: $_REQUEST;
             foreach($data as $key => $value){
-                $methoded[$key] = is_array($value) ? $this->data($value) : htmlspecialchars(trim($value));
+                $request_data[$key] = is_array($value) ? self::data($value) : htmlspecialchars(trim($value));
             }
         }
-        return $methoded;
+        // Return Request Data
+        return $request_data;
     }
 
     // Request Key Value
-    public function key(string $key):string|array
+    public static function key(string $key):string|array
     {
-        return $this->data()[$key] ?? '';
+        // Initiate Class
+        self::init();
+
+        // Return Data
+        return self::data()[$key] ?? '';
     }
     
     // Get Post Data
-    public function post(string $key):string|array
+    public static function post(string $key):string|array
     {
-        return ($this->isPost()) ? $this->key($key) : '';
+        // Initiate Class
+        self::init();
+
+        // Return Data
+        return (self::isPost()) ? self::key($key) : '';
     }
 
     // Get Get Data
-    public function get(string $key):string
+    public static function get(string $key):string
     {
-        return ($this->isGet()) ? $this->key($key) : '';
+        // Initiate Class
+        self::init();
+
+        // Return Data
+        return (self::isGet()) ? self::key($key) : '';
     }
 
     // Get Requested Files
-    public function files()
+    public static function files()
     {
+        // Return Data
         return $_FILES;
     }
 
     // Request Files
     public function file(string $key):array
     {
+        // Return Data
         return $_FILES[$key] ?? [];
     }
 
     // Validate Request Keys
-	public function validate(string|array $keys, String $redirect)
+	public static function validate(string|array $keys, String $redirect)
 	{
+        // Initiate Class
+        self::init();
+
         $keys = (is_string($keys)) ? [$keys] : $keys;
         
 		$errors = [];
-        $request = strtoupper($this->method()) . " Method";
 		foreach($keys as $key):
-			if(!array_key_exists($key, $this->data()))
+			if(!array_key_exists($key, self::data()))
 			{
-				$errors[] = sprintf("Please use <b style='color:red'>%s</b> as key for <b style='color:red'>%s</b> in Form.", $key, $request);
+				$errors[] = sprintf("Request Key '<b style='color:red'>%s</b>' Missing.", $key);
 			}
 		endforeach;
 
