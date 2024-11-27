@@ -64,9 +64,10 @@ class Uri Extends Resource
     // All Slugs
     public static function slugs():array
     {
-        $slugs = explode('/', self::request_path());
-
-        return $slugs ?: [];
+        // Get Request Path
+        $path = self::request_path();
+        // Get & Return Slugs Array From Request Path
+        return $path ? explode('/', self::request_path()) : [];
     }
 
     // Single Slug
@@ -96,4 +97,5 @@ class Uri Extends Resource
 
         return $return_key;
     }
+
 }
