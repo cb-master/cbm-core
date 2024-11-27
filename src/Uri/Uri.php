@@ -11,15 +11,15 @@
 // Namespace
 namespace CBM\Core\Uri;
 
-use CBM\CoreHelper\Resources;
+use CBM\CoreHelper\Resource;
 
-class Uri Extends Resources
+class Uri Extends Resource
 {
     // Get Sub Directory
     public static function sub_directory():string
     {
         // Check Rootpath Exist
-        Resources::check_rootpath();
+        self::check_rootpath();
 
         $app_path = str_replace('\\', '/', ROOTPATH);
         $doc_root = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);

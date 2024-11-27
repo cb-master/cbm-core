@@ -11,85 +11,67 @@
 // Namespace
 namespace CBM\Core\Request;
 
-class Request
+use CBM\Core\Uri\Uri;
+use CBM\CoreHelper\Resource;
+
+class Request Extends Resource
 {
     // Instance
     private static Object|Null $instance = Null;
 
     // Method
-    private $method;
+    private string $method;
 
-    private static function init()
+    // Initiate Request Class
+    public function __construct()
     {
-        self::$instance = self::$instance ?: new Static;
-        self::$instance->method = strtolower($_SERVER['REQUEST_METHOD']);
-        return self::$instance;
+        $this->method = strtolower($_SERVER['REQUEST_METHOD']);
+    }
+
+    // Load Instance
+    public static function instance()
+    {
+        return self::$instance ?: new Static;
     }
 
     // Get Method
     public static function method():string
-    {
-        // Initiate Instance
-        self::init();
-        
+    {       
         // Return Value
-        return self::$instance->method;
+        return self::instance()->method;
     }
 
     // Method is Post
     public static function isPost():bool
     {
-        // Initiate Class
-        self::init();
-
         // Return Value
-        return self::$instance->method === 'post';
+        return self::method() === 'post';
     }
 
     // Method is Get
     public static function isGet():bool
     {
-        // Initiate Class
-        self::init();
-
         // Return Value
-        return self::$instance->method === 'get';
+        return self::method() === 'get';
     }
 
     // Requested Data
     public static function data(array $data = []):array
     {
-        // Initiate Class
-        self::init();
-
-        $request_data = [];
-        // Clear request Data
-        if(self::isPost() || self::isGet()){
-            $data = $data ?: $_REQUEST;
-            foreach($data as $key => $value){
-                $request_data[$key] = is_array($value) ? self::data($value) : htmlspecialchars(trim($value));
-            }
-        }
         // Return Request Data
-        return $request_data;
+        return self::instance()->purify($_REQUEST);
     }
 
     // Request Key Value
     public static function key(string $key):string|array
     {
-        // Initiate Class
-        self::init();
-
         // Return Data
-        return self::data()[$key] ?? '';
+        return self::instance()->data()[$key] ?? '';
     }
     
     // Get Post Data
     public static function post(string $key):string|array
     {
-        // Initiate Class
-        self::init();
-
         // Return Data
         return (self::isPost()) ? self::key($key) : '';
     }
@@ -97,9 +79,6 @@ class Request
     // Get Get Data
     public static function get(string $key):string
     {
-        // Initiate Class
-        self::init();
-
         // Return Data
         return (self::isGet()) ? self::key($key) : '';
     }
@@ -119,12 +98,13 @@ class Request
     }
 
     // Validate Request Keys
-	public static function validate(string|array $keys, String $redirect)
+	public static function validate(string|array $keys, string $location)
 	{
-        // Initiate Class
-        self::init();
-
         $keys = (is_string($keys)) ? [$keys] : $keys;
+
+        $location = trim($location, "/");
+
+        $redirect = Uri::app_uri()."/{$location}/";
         
 		$errors = [];
 		foreach($keys as $key):
@@ -134,19 +114,22 @@ class Request
 			}
 		endforeach;
 
-		if(!empty($errors))
+		if($errors)
 		{
-            echo "<body style=\"margin:0;\">
-            <div style=\"max-width: 80%;margin:30px 0\">
-            <h2 style=\"text-align:center;padding:10px 0;color:red;\">APP ERROR!</h2>";
-
-            foreach($errors as $error):
-                echo "<center style=\"font-size: 18px;\">{$error}</center></br>";
-            endforeach;
-
-            echo "<div style=\"text-align:center\">\n<button style=\"padding: 5px 10px;border-radius: 3px;border: none;background-color: red;color: #fff;\"><a style=\"text-decoration:none;color:#fff\" href=\"{$redirect}\">Go Back!</a></button></div>\n</div></body>\n";
-            unset($errors);
-            die();
+            self::validate_error_message();
 		}
 	}
+
+    // Request Data Purify
+    public function purify(array $data = [])
+    {
+        $request_data = [];
+        // Clear Request Data
+        $data = $data ?: $_REQUEST;
+        foreach($data as $key => $value){
+            $request_data[$key] = is_array($value) ? $this->purify($value) : htmlspecialchars(trim($value));
+        }
+        // Return Request Data
+        return $request_data;
+    }
 }
