@@ -71,36 +71,4 @@ class Helper
         }
         return $ip;
     }
-
-    // To JSON
-    public static function array_to_json(array $array, $object = JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT):string
-    {
-        return json_encode($array, $object);
-    }
-
-    // From JSON
-    public static function json_to_array(string $string):array
-    {
-        $arr = json_decode($string, true);
-        return $arr ?: [];
-    }
-
-    // To Object
-    public static function array_to_object(array $arr):object
-    {
-        $obj = new \stdClass;
-        foreach($arr as $key => $value){
-            if(is_array($value)){
-                $value = self::array_to_object($value);
-            }
-            $obj->$key = $value;
-        }
-        return $obj;
-    }
-
-    // Convert To Float Number
-    public static function to_decinal(int|string|float|null $number, int|string $decimal = 2):string
-    {
-        return is_numeric($number) ? number_format($number, (int) $decimal,'.','') : number_format(0, (int) $decimal,'.','');
-    }
 }

@@ -18,6 +18,6 @@ class CoreException Extends Exception
     // Exception Message
     public function message():string
     {
-        return "[".$this->getCode() . "] - " . $this->getMessage() . ". Line: " . $this->getFile() . ":" . $this->getLine() . "\n";
+        return "[{$this->getCode()}] - {$this->getMessage()}. In {$this->getFile()}:{$this->getLine()}\n";
     }
 }
