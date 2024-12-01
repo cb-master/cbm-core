@@ -9,12 +9,12 @@
  */
 
 // Namespace
-namespace CBM\Core\Converter;
+namespace CBM\Core\Support;
 
-class Converter
+class Convert
 {
     // To Array
-    public static function to_array(mixed $property):array
+    public static function toArray(mixed $property):array
     {
         if(is_object($property) || is_array($property)){
             $arr = [];
@@ -31,7 +31,7 @@ class Converter
     }
 
     // To Array
-    public static function to_json(mixed $property):string
+    public static function toJson(mixed $property):string
     {
         return json_encode($property, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
     }
@@ -41,7 +41,7 @@ class Converter
     {
         $obj = new \stdClass;
         // Get As Array
-        $arr = !is_array($property) ? self::to_array($property) : $property;
+        $arr = !is_array($property) ? self::toArray($property) : $property;
 
         foreach($arr as $key => $value){
             if(is_array($value)){
@@ -54,7 +54,7 @@ class Converter
     }
 
     // Convert To Float Number
-    public static function to_decinal(int|string|float|null $number, int|string $decimal = 2, string $thousands_separator = ''):string
+    public static function toDecinal(int|string|float|null $number, int|string $decimal = 2, string $thousands_separator = ''):string
     {
         return is_numeric($number) ? number_format($number, (int) $decimal,'.',$thousands_separator) : number_format(0, (int) $decimal,'.',$thousands_separator);
     }
