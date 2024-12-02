@@ -14,18 +14,30 @@ namespace CBM\Core\Response;
 class Response
 {
     // Set Response Code
+    /**
+     * @param int|string $code - Default is 200
+     */
     public static function set(int|string $code = 200)
     {
         http_response_code((int) $code);
     }
 
     // Powered By Response
+    /**
+     * @param string $str - Default is 'Laika'
+     */
     public static function poweredBy(string $str = 'Laika')
     {
         header("X-Powered-By:{$str}");
     }
 
     // Response Header
+    /**
+     * @param string $origin - Default is '*'
+     * @param array $methods - Default is ['get', 'post']
+     * @param array $headers - Default is ['Authorization', 'Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+     * @param string $credentials - 'true'
+     */
     public static function header(
         string $origin      = '*',
         array $methods      = ['get', 'post'],

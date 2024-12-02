@@ -71,18 +71,27 @@ class Uri Extends Resource
     }
 
     // Single Slug
+    /**
+     * @param string $key - Required Argument
+     */
     public static function slug(string $key):array
     {
         return self::slugs()[$key] ?? false;
     }
 
     // Check Slug Exist
+    /**
+     * @param string $value - Required Argument
+     */
     public static function in_slug(string $value)
     {
         return in_array($value, self::slugs());
     }
 
     // Get Slug Key By Value
+    /**
+     * @param string $value - Required Argument
+     */
     public static function key(string $value):int
     {
         $array = self::slugs();

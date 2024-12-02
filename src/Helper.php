@@ -11,13 +11,15 @@
 // Namespace
 namespace CBM\Core;
 
-use CBM\Core\Uri\Uri;
-use CBM\Core\Request\Request;
 use CBM\Core\Response\Response;
 
 class Helper
 {
     // Show Data
+    /**
+     * @param mixed $data - Required Argument
+     * @param bool $die - Default is false
+     */
     public static function show(mixed $data, bool $die = false)
     {
         echo "<pre style=\"background-color:#000;color:#fff;\">";
@@ -27,6 +29,10 @@ class Helper
     }
 
     // Dump Data & Die
+    /**
+     * @param mixed $data - Required Argument
+     * @param bool $die - Default is false
+     */
     public static function dd(mixed $data, bool $die = false):void
     {
         echo '<pre style="background-color:#000;color:#fff;">';
@@ -36,12 +42,21 @@ class Helper
     }
 
     // Check Values Are Same
+    /**
+     * @param mixed $value - Required Argument
+     * @param mixed $match - Required Argument
+     * @param bool $strict - Default is false
+     */
     public static function match(mixed $value, mixed $match, bool $strict = false):bool // Stricts validate same type
     {
         return $strict ? ($value === $match) : ($value == $match);
     }
 
     // Redirect Function
+    /**
+     * @param string $uri - Required Argument
+     * @param int $response - Default is 302
+     */
     public static function redirect(string $uri, int $response = 302)
     {
         Response::set($response);

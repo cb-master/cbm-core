@@ -56,6 +56,9 @@ class Request Extends Resource
     }
 
     // Requested Data
+    /**
+     * @param array $data - Default Value is []
+     */
     public static function data(array $data = []):array
     {
         // Return Request Data
@@ -63,6 +66,9 @@ class Request Extends Resource
     }
 
     // Request Key Value
+    /**
+     * @param string $key - Required Argument
+     */
     public static function key(string $key):string|array
     {
         // Return Data
@@ -70,6 +76,9 @@ class Request Extends Resource
     }
     
     // Get Post Data
+    /**
+     * @param string $key - Required Argument
+     */
     public static function post(string $key):string|array
     {
         // Return Data
@@ -77,6 +86,9 @@ class Request Extends Resource
     }
 
     // Get Get Data
+    /**
+     * @param string $key - Required Argument
+     */
     public static function get(string $key):string
     {
         // Return Data
@@ -98,6 +110,10 @@ class Request Extends Resource
     }
 
     // Validate Request Keys
+    /**
+     * @param string|array $keys - Required Argument
+     * @param string $location - Required Argument. Example 'sample' or 'sample/url'
+     */
 	public static function validate(string|array $keys, string $location)
 	{
         $keys = (is_string($keys)) ? [$keys] : $keys;
@@ -116,11 +132,14 @@ class Request Extends Resource
 
 		if($errors)
 		{
-            self::validate_error_message();
+            self::validate_error_message($errors, $redirect);
 		}
 	}
 
     // Request Data Purify
+    /**
+     * @param array $keys - Default Value is []
+     */
     public function purify(array $data = [])
     {
         $request_data = [];

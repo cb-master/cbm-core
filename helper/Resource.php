@@ -50,6 +50,10 @@ class Resource
     }
 
     // Validate Error Message
+    /**
+     * @param array $errors - Default is []
+     * @param ?string $redirect - Default is null
+     */
     public static function validate_error_message(array $errors = [], ?string $redirect = null):void
     {
         $redirect = $redirect ?: Uri::app_uri();

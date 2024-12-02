@@ -14,6 +14,9 @@ namespace CBM\Core\Support;
 class Convert
 {
     // To Array
+    /**
+     * @param mixed $property - Required Argument
+     */
     public static function toArray(mixed $property):array
     {
         if(is_object($property) || is_array($property)){
@@ -31,12 +34,18 @@ class Convert
     }
 
     // To Array
+    /**
+     * @param mixed $property - Required Argument
+     */
     public static function toJson(mixed $property):string
     {
         return json_encode($property, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
     }
 
     // To Object
+    /**
+     * @param mixed $property - Required Argument
+     */
     public static function to_object(mixed $property):object
     {
         $obj = new \stdClass;
@@ -54,7 +63,16 @@ class Convert
     }
 
     // Convert To Float Number
-    public static function toDecinal(int|string|float|null $number, int|string $decimal = 2, string $thousands_separator = ''):string
+    /**
+     * @param int|string|float|null $number - Required Argument
+     * @param int|string $decimal - Default is 2
+     * @param string $thousands_separator - Default is Blank String ''
+     */
+    public static function toDecinal(
+        int|string|float|null $number,
+        int|string $decimal = 2,
+        string $thousands_separator = ''
+        ):string
     {
         return is_numeric($number) ? number_format($number, (int) $decimal,'.',$thousands_separator) : number_format(0, (int) $decimal,'.',$thousands_separator);
     }
