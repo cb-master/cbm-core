@@ -13,6 +13,19 @@ namespace CBM\Core\Response;
 
 class Response
 {
+    // Headers
+    /**
+     * Default Headers
+     */
+    private static array $headers = [
+        "Access-Control-Allow-Origin"       =>  "*",
+        "Access-Control-Allow-Methods"      =>  "GET, POST",
+        "Access-Control-Allow-Headers"      =>  "Authorization, Origin, X-Requested-With, Content-Type, Accept",
+        "Access-Control-Allow-Credentials"  =>  "true",
+        "X-Powered-By"                      =>  "Laika",
+        "App-Provider"                      =>  "Laika",
+    ];
+
     // Set Response Code
     /**
      * @param int|string $code - Default is 200
@@ -31,25 +44,19 @@ class Response
         header("X-Powered-By:{$str}");
     }
 
-    // Response Header
+    // Response Header Set
     /**
-     * @param string $origin - Default is '*'
-     * @param array $methods - Default is ['get', 'post']
-     * @param array $headers - Default is ['Authorization', 'Origin', 'X-Requested-With', 'Content-Type', 'Accept']
-     * @param string $credentials - 'true'
+     * @param array $headers - Custom Headers to Add New or Edit
      */
-    public static function header(
-        string $origin      = '*',
-        array $methods      = ['get', 'post'],
-        array $headers      = ['Authorization', 'Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-        string $credentials = 'true'
-        )
+    public static function header(array $headers = [])
     {
-        $methods = strtoupper(implode(', ', $methods));
-        $headers = ucwords(implode(', ', $headers));
-        header("Access-Control-Allow-Origin: {$origin}");
-        header("Access-Control-Allow-Methods: {$methods}");
-        header("Access-Control-Allow-Headers: {$headers}");
-        header("Access-Control-Allow-Credentials: {$credentials}");
+        $headers["Request-Time"] = time();
+        $headers = array_merge(self::$headers, $headers);
+
+        foreach($headers as $key => $value){
+            $key = trim($key);
+            $value = trim($value);
+            header("{$key}: {$value}");
+        }
     }
 }

@@ -11,6 +11,7 @@
 // Namespace
 namespace CBM\Core\Support;
 
+// Validate Hndler
 class Validate
 {
     // Alphanumeric

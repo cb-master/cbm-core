@@ -55,6 +55,12 @@ class Uri Extends Resource
         return self::sub_directory() ? $host . '/' . self::sub_directory() : $host;
     }
 
+    // Application Host Name
+    public static function host():string
+    {
+        return parse_url(self::app_uri(), PHP_URL_HOST);
+    }
+
     // HTTPS Check
     public static function is_https():bool
     {
