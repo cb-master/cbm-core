@@ -29,7 +29,7 @@ class Vault
     {
         $appsecret = Option::get('appsecret');
         if(!$appsecret){
-            $appsecret = self::randomKey();
+            $appsecret = self::randomKey(32);
             Option::set('appsecret', $appsecret);
         }
         return $appsecret;
