@@ -36,18 +36,19 @@ class Convert
 
     // To Array
     /**
-     * @param mixed $property - Required Argument
+     * @param mixed $property - Required Argument.
+     * @param int $type - Default Value is JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT.
      */
-    public static function toJson(mixed $property):string
+    public static function toJson(mixed $property, int $type = JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT):string
     {
-        return json_encode($property, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+        return json_encode($property, $type);
     }
 
     // To Object
     /**
      * @param mixed $property - Required Argument
      */
-    public static function to_object(mixed $property):object
+    public static function toObject(mixed $property):object
     {
         $obj = new \stdClass;
         // Get As Array
@@ -55,7 +56,7 @@ class Convert
 
         foreach($arr as $key => $value){
             if(is_array($value)){
-                $value = self::to_object($value);
+                $value = self::toObject($value);
             }
             $obj->$key = $value;
         }
@@ -69,11 +70,7 @@ class Convert
      * @param int|string $decimal - Default is 2
      * @param string $thousands_separator - Default is Blank String ''
      */
-    public static function toDecinal(
-        int|string|float|null $number,
-        int|string $decimal = 2,
-        string $thousands_separator = ''
-        ):string
+    public static function toDecinal(int|string|float|null $number, int|string $decimal = 2, string $thousands_separator = ''):string
     {
         return is_numeric($number) ? number_format($number, (int) $decimal,'.',$thousands_separator) : number_format(0, (int) $decimal,'.',$thousands_separator);
     }

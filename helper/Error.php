@@ -13,7 +13,7 @@ namespace CBM\CoreHelper;
 
 use Exception;
 
-class CoreException Extends Exception
+class Error Extends Exception
 {
     // Errors
     private static $errors = [];

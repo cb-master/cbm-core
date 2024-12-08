@@ -71,16 +71,16 @@ class Uri Extends Resource
     public static function slugs():array
     {
         // Get Request Path
-        $path = self::request_path();
+        $path = strtolower(self::request_path());
         // Get & Return Slugs Array From Request Path
-        return $path ? explode('/', self::request_path()) : [];
+        return $path ? explode('/', $path) : [];
     }
 
     // Single Slug
     /**
-     * @param string $key - Required Argument
+     * @param int $key - Required Argument
      */
-    public static function slug(string $key):array
+    public static function slug(int $key):string|bool
     {
         return self::slugs()[$key] ?? false;
     }

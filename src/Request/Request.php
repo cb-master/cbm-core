@@ -132,7 +132,7 @@ class Request Extends Resource
 
 		if($errors)
 		{
-            self::validate_error_message($errors, $redirect);
+            self::request_validator_message($errors, $redirect);
 		}
 	}
 
