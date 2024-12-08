@@ -12,30 +12,11 @@
 namespace CBM\Core\App;
 
 use CBM\Core\Uri\Uri;
-use CBM\Core\Response\Response;
-
 
 class App
 {
     // Instance
     private static Object|Null $instance = Null;
-
-    // Controller
-    private string $controller;
-
-    // Method
-    private string $method;
-
-    // Slugs
-    private array $slugs;
-
-    // Initiate Request Class
-    public function __construct()
-    {
-        $this->slugs = Uri::slugs();
-        // $this->controller = 'index';
-        // $this->method = 'index';
-    }
 
     // Load Instance
     public static function instance():object
@@ -47,26 +28,27 @@ class App
     // Run Application
     public static function run()
     {
-        $slugs = self::instance()->slugs;
+        $controller = ucfirst(Uri::slug(0) ?: 'Index');
 
-        self::instance()->controller = ucfirst($slugs[0] ?? 'Index');
-        self::instance()->method = ucfirst(empty($slugs) ? 'Index' : '_404');
-        $class = "\\CBM\\App\\Controller\\".self::instance()->controller;
-        // $method = 
-        dd(class_exists($class));
-        if(class_exists($class)){
-            $object = new $class;
-            show($object);
+        // Get Class Name & Check Class Exist
+        $controller = "\\CBM\\App\\Controller\\{$controller}";
+        // 404 Controller Class
+        $_404 = "\\CBM\\App\\Controller\\_404";
+
+        $class = (class_exists($controller)) ? $controller : $_404;
+
+        // Get Controller Class Object
+        $object = new $class;
+
+        // Get Method & Check Exist
+        $method = Uri::slug(1) ?: 'index';
+
+        if(!method_exists($object, $method)){
+            $object = new $_404;
+            $method = 'index';
         }
 
-        // Set Controller
-        // self::instance()->controller = $slugs[0] ?? '_404';
-
-        // self::instance()->method = $slugs[1] ?? '_404';
-        // // if($slugs && (strtolower(Uri::slug(0)) != 'index')){
-        // //     self::instance()->controller = Uri::slug(0);
-        // // }
-        // dd(self::instance()->controller);
-        // dd(self::instance()->method);
+        // Load Controller & Method
+        call_user_func([$object, $method]);
     }
 }

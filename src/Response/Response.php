@@ -28,11 +28,11 @@ class Response
 
     // Set Response Code
     /**
-     * @param int|string $code - Default is 200
+     * @param int $code - Default is 200
      */
-    public static function set(int|string $code = 200)
+    public static function set(int $code = 200)
     {
-        http_response_code((int) $code);
+        http_response_code($code);
     }
 
     // Powered By Response

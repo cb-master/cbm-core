@@ -82,6 +82,7 @@ class Uri Extends Resource
      */
     public static function slug(int $key):string|bool
     {
+        // $val = self::slugs()[$key] ?? '';
         return self::slugs()[$key] ?? false;
     }
 
