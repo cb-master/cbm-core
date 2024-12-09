@@ -59,7 +59,7 @@ class Request Extends Resource
     /**
      * @param array $data - Default Value is []
      */
-    public static function data(array $data = []):array
+    public static function data():array
     {
         // Return Request Data
         return self::instance()->purify($_REQUEST);

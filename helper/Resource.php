@@ -38,12 +38,12 @@ class Resource
         // Throw Exception If Rootpath Not Defined
         try{
             if(!defined('ROOTPATH')){
-                throw new CoreException("'ROOTPATH' Not Defined.", 80000);
+                throw new Error("'ROOTPATH' Not Defined.", 80000);
             }else{
                 $defined = true;
             }
-        }catch(CoreException $e){
-            $e->message();
+        }catch(Error $e){
+            Error::throw($e);
         }
 
         return $defined;

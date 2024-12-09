@@ -12,6 +12,7 @@
 namespace CBM\Core\Uri;
 
 use CBM\CoreHelper\Resource;
+use CBM\Core\Request\Request;
 
 class Uri Extends Resource
 {
@@ -42,9 +43,9 @@ class Uri Extends Resource
     }
 
     // Query Strings
-    public static function queries():string
+    public static function queries():string|array
     {
-        return $_SERVER['QUERY_STRING'] ?? '';
+        return (Request::isGet() && Request::data()) ? Request::data() : [];
     }
 
     // Application Uri
