@@ -12,6 +12,7 @@
 namespace CBM\Core\App;
 
 use CBM\Core\Uri\Uri;
+use CBM\Core\Response\Response;
 
 class App
 {
@@ -35,18 +36,17 @@ class App
         // 404 Controller Class
         $_404 = "\\CBM\\App\\Controller\\_404";
 
-        $class = (class_exists($controller)) ? $controller : $_404;
+        // Get Class & Method
+        $method = Uri::slug(1) ?: 'index';
+        $class = (class_exists($controller) && method_exists($controller, $method)) ? $controller : $_404;
+
+        ($class == $_404) ? Response::set(404) : Response::set(200);
+
+        // Check Method Exist
+        $method = method_exists($controller, $method) ? $method : 'index';
 
         // Get Controller Class Object
         $object = new $class;
-
-        // Get Method & Check Exist
-        $method = Uri::slug(1) ?: 'index';
-
-        if(!method_exists($object, $method)){
-            $object = new $_404;
-            $method = 'index';
-        }
 
         // Load Controller & Method
         call_user_func([$object, $method]);

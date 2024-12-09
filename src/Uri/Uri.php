@@ -82,8 +82,8 @@ class Uri Extends Resource
      */
     public static function slug(int $key):string|bool
     {
-        // $val = self::slugs()[$key] ?? '';
-        return self::slugs()[$key] ?? false;
+        $val = self::slugs()[$key] ?? '';
+        return $val ?: false;
     }
 
     // Check Slug Exist
@@ -114,4 +114,15 @@ class Uri Extends Resource
         return $return_key;
     }
 
+    // Create Path if Does Not Exist
+    /**
+     * @param string $path - Required Argument as String. It Wi;; Create Path if Does not Exist
+     */
+    public static function path(string $path)
+    {
+        if(!file_exists($path)){
+            mkdir($path);
+        }
+        return $path;
+    }
 }
