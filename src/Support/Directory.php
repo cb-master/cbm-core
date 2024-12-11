@@ -19,4 +19,10 @@ class Directory
     {
         return glob(ROOTPATH."/config/*.php");
     }
+
+    // Get All Directories
+    public static function functions():array
+    {
+        return glob(ROOTPATH."/functions/*.php");
+    }
 }

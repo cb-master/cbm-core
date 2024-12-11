@@ -16,12 +16,6 @@ use CBM\Core\Uri\Uri;
 // Cookie Hndler
 class Cookie
 {
-    // Expire Time
-    /**
-     * @property $expires - Required Expire Time in Int Format. Default is time() + 7 Days
-     */
-    public static null|int $expires = null;
-
     // Secured
     /**
      * @property $secure - Required Bool. Default is True
@@ -44,11 +38,12 @@ class Cookie
     /**
     * @param ?string $key - Required Cookie Name Key
     * @param ?string $value - Required Cookie value
+    * @param int $expires - Default is time() + 7 Days
     */
-    public static function set(string $name, string $value):bool
+    public static function set(string $name, string $value, int $expires = 604800):bool
     {
         return setcookie($name, $value, [
-            'expires' => time() + (self::$expires ?: 604800),
+            'expires' => time() + $expires,
             'path' => self::$path ?: (Uri::sub_directory() ?: '/'),
             'domain' => Uri::host(),
             'secure' => self::$secure,

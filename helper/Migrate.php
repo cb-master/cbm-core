@@ -19,25 +19,15 @@ class Migrate
     // Run Database Migration
     public static function run():void
     {
-        try{
-            Model::beginTransaction();
-
-            // Create Tables
-            self::admins();
-            self::adminroles();
-            self::sessions();
-            self::options();
-
-            Model::commit();
-
-        }catch(Error $e){
-            Model::rollBack();
-            Error::throw($e);
-        }
+        // Create Common Tables
+        self::admins();
+        self::adminroles();
+        self::sessions();
+        self::options();
     }
 
     // Admins Table Migrate
-    public static function admins():void
+    private static function admins():void
     {
         if(!Model::table('admins')->exist()){
             Model::table('admins')
@@ -71,7 +61,7 @@ class Migrate
     }
 
     // Admin Roles Table Migrate
-    public static function adminroles():void
+    private static function adminroles():void
     {
         if(!Model::table('adminroles')->exist()){
             Model::table('adminroles')
@@ -98,12 +88,12 @@ class Migrate
                 'accesses'      =>  '{"viewStaff":1,"addStaff":1,"removeStaff":1,"editStaff":1}',
                 'default_role'  =>  'yes'
             ];
-            var_dump(Model::table('adminroles')->insert($data));
+            Model::table('adminroles')->insert($data);
         }
     }
 
     // Session Table Migrate
-    public static function sessions():void
+    private static function sessions():void
     {
         if(!Model::table('sessions')->exist()){
             Model::table('sessions')->column('id', 'varchar(50)')

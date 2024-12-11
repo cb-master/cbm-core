@@ -12,6 +12,7 @@
 namespace CBM\Core\Vault;
 
 use CBM\Core\Option;
+use CBM\Core\Config;
 
 class Vault
 {
@@ -40,7 +41,7 @@ class Vault
     {
         $appiv = Option::get('appiv');
         if(!$appiv){
-            $appiv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(ENCRYPTION_METHOD));
+            $appiv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')));
             Option::set('appiv', $appiv);
         }
         return $appiv;
@@ -52,7 +53,7 @@ class Vault
      */
     public static function encrtpt(string $string):string
     {
-        return openssl_encrypt($string, ENCRYPTION_METHOD, self::secret(), 0, self::iv());
+        return openssl_encrypt($string, Config::get('app', 'encryption_method'), self::secret(), 0, self::iv());
     }
 
     // Decrypt Encrypted String
@@ -61,6 +62,6 @@ class Vault
      */
     public static function decrypt(string $string):string
     {
-        return openssl_decrypt($string, ENCRYPTION_METHOD, self::secret(), 0, self::iv());
+        return openssl_decrypt($string, Config::get('app', 'encryption_method'), self::secret(), 0, self::iv());
     }
 }
