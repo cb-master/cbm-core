@@ -11,6 +11,9 @@
 namespace CBM\CoreHelper\Console;
 
 use CBM\CoreHelper\Console\Action\Controller;
+use CBM\CoreHelper\Console\Action\Middleware;
+use CBM\CoreHelper\Console\Action\Model;
+use CBM\CoreHelper\Console\Action\View;
 
 class Commander
 {
@@ -37,6 +40,18 @@ class Commander
     
                 case 'pop:controller':
                     Controller::pop($inputs);
+                    break;
+
+                case 'create:middleware':
+                    Middleware::create($inputs);
+                    break;
+    
+                case 'rename:middleware':
+                    Middleware::rename($inputs);
+                    break;
+    
+                case 'pop:middleware':
+                    Middleware::pop($inputs);
                     break;
                 
                 default:
