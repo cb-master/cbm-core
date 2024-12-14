@@ -10,51 +10,21 @@
 
 namespace CBM\CoreHelper\Console;
 
-use CBM\CoreHelper\Migrate;
-use CBM\CoreHelper\Console\Driver\Action;
-use CBM\CoreHelper\Console\Driver\Target;
-
-class Console
+class Console Extends Commander
 {
-    // Arguments
-    public $args;
-
+    // Run Console
     /**
      * @param array $array - Required Argument. Input Should Be $argv
      */
-    // Initiate Console With Argv
-    public function __construct(array $array)
+    public static function run(array $array)
     {
-        $this->args = $array;
-        Action::set($this->args);
-    }
+        array_shift($array);
+        $inputs = [];
+        foreach($array as $val){
+            $inputs[] = strtolower($val);
+        }
 
-    // Run Console
-    public function run()
-    {
-        print_r(Action::get());
-        print_r(Target::get());
-
-        // // Get Actions
-        // $actions = $this->actions();
-        // $controller = $this->controller();
-
-        // // Create Controller
-        // if($this->isController()){
-        //     // Get Contents
-        //     $contents = file_get_contents(__DIR__."/samples/controller.php.sample");
-        //     $contents = str_replace('{class}', ucfirst($this->commands['argument']), $contents);
-        //     // Set Targeted File
-        //     $file = ucfirst($this->commands['argument']);
-        //     $targetedPath = CONSOLEPATH."/app/Controller/{$file}.php";
-        //     if(file_exists($targetedPath)){
-        //         $this->errors[] = "Controller {$this->commands['argument']} Already Exist";
-        //     }
-        //     // Show Errors If Exist
-        //     $this->showErrors();
-        //     // Create Controller
-        //     file_put_contents($targetedPath, $contents);
-        // }
-        // print_r($this->commands);
+        // Set Commander To Complete Tasks
+        self::set($inputs);
     }
 }

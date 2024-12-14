@@ -21,6 +21,8 @@ class {class} Extends Controller
     public function index()
     {
         $data['title'] = '{class} Page';
+        echo "This is {class} Page";
+        // $this->middleware('class', 'method', []);
         // $this->view('viewfile', $data);
     }
 }
