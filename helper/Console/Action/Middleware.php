@@ -107,7 +107,7 @@ class Middleware
         $middleware_file = self::$path."/{$name}.php";
         // Show Message If Middleware Does Not Exist
         if(!file_exists($middleware_file)){
-            echo "\n** [MIDDLEWARE EXIST] - Middleware '{$inputs[1]}' Does Not Exist.\n\n";
+            echo "\n** [NOT FOUND] - Middleware '{$inputs[1]}' Does Not Exist.\n\n";
             die;
         }
         // Remove Middleware

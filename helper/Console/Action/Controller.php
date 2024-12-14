@@ -73,7 +73,7 @@ class Controller
         // Get New Controller File
         $new_name = ucfirst($inputs[2]);
         $new_controller_file = self::$path."/{$new_name}.php";
-        // Show Message If Controdller Does Not Exist
+        // Show Message If Controller Does Not Exist
         if(!file_exists($old_controller_file)){
             echo "\n** [NOT FOUND] - Controller '{$inputs[1]}' Does Not Exist.\n\n";
             die;
@@ -107,7 +107,7 @@ class Controller
         $controller_file = self::$path."/{$name}.php";
         // Show Message If Controller Does Not Exist
         if(!file_exists($controller_file)){
-            echo "\n** [CONTROLLER EXIST] - Controller '{$inputs[1]}' Does Not Exist.\n\n";
+            echo "\n** [NOT FOUND] - Controller '{$inputs[1]}' Does Not Exist.\n\n";
             die;
         }
         // Remove Controller

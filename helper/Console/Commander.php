@@ -53,6 +53,18 @@ class Commander
                 case 'pop:middleware':
                     Middleware::pop($inputs);
                     break;
+
+                case 'create:model':
+                    Model::create($inputs);
+                    break;
+    
+                case 'rename:model':
+                    Model::rename($inputs);
+                    break;
+    
+                case 'pop:model':
+                    Model::pop($inputs);
+                    break;
                 
                 default:
                     Help::toHelp();
