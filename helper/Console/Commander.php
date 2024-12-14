@@ -65,6 +65,18 @@ class Commander
                 case 'pop:model':
                     Model::pop($inputs);
                     break;
+
+                case 'create:view':
+                    View::create($inputs);
+                    break;
+    
+                case 'rename:view':
+                    View::rename($inputs);
+                    break;
+    
+                case 'pop:view':
+                    View::pop($inputs);
+                    break;
                 
                 default:
                     Help::toHelp();
