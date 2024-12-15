@@ -21,6 +21,8 @@ class Help
         echo "\n\n------------------ LAIKA HELP -------------------\n";
         echo "------------------------------------------------\n";
         echo "Command Informations Are Given Below. Please Follow\nThe Instructions.\n\n";
+        echo self::initiate();
+        echo self::migrate();
         echo self::controller();
         echo self::middleware();
         echo self::model();
@@ -32,6 +34,30 @@ class Help
     public static function toHelp()
     {
         echo "\n** [COMMAND ERROR] - Laika Denied Your Command. Please Type 'php laika -h' to Get Help.\n\n";
+    }
+
+    // Initiate Laika Framework
+    private static function initiate():string
+    {
+        $str = "[INITIATE LAIKA FRAMEWORK]:\n";
+        $str .= "------------------------------------------------\n\t";
+        $str .= "WHAT TO DO  |  HOW TO DO\n";
+        $str .= "------------------------------------------------\n\t";
+        $str .= "[ INITIATE ] - php laika initiate\n\n";
+        
+        return $str;
+    }
+
+    // Migration Help
+    private static function migrate():string
+    {
+        $str = "[DATABASE MIGRATE]:\n";
+        $str .= "------------------------------------------------\n\t";
+        $str .= "WHAT TO DO  |  HOW TO DO\n";
+        $str .= "------------------------------------------------\n\t";
+        $str .= "[ MIGRATE ] - php laika migrate\n\n";
+        
+        return $str;
     }
 
     // Controller Help

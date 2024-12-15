@@ -10,20 +10,17 @@
 
 namespace CBM\CoreHelper\Console\Action;
 
-use CBM\CoreHelper\Migrate as DB;
-
-class Migrate
+class Framework
 {
     // Create Controller
     /**
      * @param array $inputs - Required Argument. Example ['create:controller', 'name']
      */
-    public static function tables()
+    public static function initiate()
     {
-        // Run DB Migration
-        DB::run();
+        exec('composer update', $var, $result);
 
         // Show Message
-        Message::message("SUCCESS", "Database Migrated Successfully.");
+        Message::message("SUCCESS", "Framework Initiated Successfully. Please Run 'php laika migrate'.");
     }
 }
