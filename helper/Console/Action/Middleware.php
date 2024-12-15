@@ -25,26 +25,25 @@ class Middleware
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            echo "\n** [NAME MISSING] - Middleware Name Not Found!\n\n";
-            die;
+            Message::message("NAME MISSING", "Middleware Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            echo "\n** [INVALID MIDDLEWARE] - Invalid Middleware Name! Input Should Contain Only Alphabets.\n\n";
-            die;
+            Message::message("INVALID MIDDLEWARE", "Invalid Middleware Name! Input Should Contain Only Alphabets.", "red");
         }
+
         // Get Middleware File
         $name = ucfirst($inputs[1]);
         $middleware_file = self::$path."/{$name}.php";
         // Shoe Error If Middleware Already Exist
         if(file_exists($middleware_file)){
-            echo "\n** [MIDDLEWARE EXIST] - Middleware '{$inputs[1]}' Already Exist.\n\n";
-            die;
+            Message::message("MIDDLEWARE EXIST", "Middleware '{$inputs[1]}' Already Exist.", "red");
         }
+
         // Create Middleware
         $example = file_get_contents(__DIR__."/../../samples/middleware.php.sample");
         $example = str_replace('{class}', $name, $example);
         file_put_contents($middleware_file, $example);
         // Show Message
-        echo "\n[SUCCESS] - Middleware '{$inputs[1]}' Created Successfully.\n\n";
+        Message::message("SUCCESS", "Middleware '{$inputs[1]}' Created Successfully.");
     }
 
     // Rename Middleware
@@ -55,37 +54,36 @@ class Middleware
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            echo "\n** [NAME MISSING] - Old Middleware Name Not Found!\n\n";
-            die;
+            Message::message("NAME MISSING", "Old Middleware Name Not Found!", "red");
         }elseif(!isset($inputs[2])){
-            echo "\n** [NAME MISSING] - New Middleware Name Not Found!\n\n";
-            die;
+            Message::message("NAME MISSING", "New Middleware Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            echo "\n** [INVALID MIDDLEWARE] - Invalid Old Middleware Name '{$inputs[1]}'! Input Should Contain Only Alphabets.\n\n";
-            die;
+            Message::message("INVALID MIDDLEWARE", "Invalid Old Middleware Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }elseif(!Validate::alpha($inputs[2])){
-            echo "\n** [INVALID MIDDLEWARE] - Invalid New Middleware Name '{$inputs[2]}'! Input Should Contain Only Alphabets.\n\n";
-            die;
+            Message::message("INVALID MIDDLEWARE", "Invalid New Middleware Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
+
         // Get Old Middleware File
         $old_name = ucfirst($inputs[1]);
         $old_middleware_file = self::$path."/{$old_name}.php";
+
         // Get New Middleware File
         $new_name = ucfirst($inputs[2]);
         $new_middleware_file = self::$path."/{$new_name}.php";
+
         // Show Message If Middleware Does Not Exist
         if(!file_exists($old_middleware_file)){
-            echo "\n** [NOT FOUND] - Middleware '{$inputs[1]}' Does Not Exist.\n\n";
-            die;
+            Message::message("NOT FOUND", "Middleware '{$inputs[1]}' Does Not Exist.", "red");
         }
         // Create New Middleware
         $content = file_get_contents($old_middleware_file);
         $content = str_replace("class {$old_name}", "class {$new_name}", $content);
         file_put_contents($new_middleware_file, $content);
+
         // Remove Old File
         unlink($old_middleware_file);
         // Show Message
-        echo "\n[SUCCESS] - Middleware '{$inputs[1]}' Moved Successfully.\n\n";
+        Message::message("SUCCESS", "Middleware '{$inputs[1]}' Moved Successfully.", "red");
     }
 
     // Remove Middleware
@@ -96,23 +94,22 @@ class Middleware
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            echo "\n** [NAME MISSING] - Middleware Name Not Found!\n\n";
-            die;
+            Message::message("NAME MISSING", "Middleware Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            echo "\n** [INVALID MIDDLEWARE] - Invalid Middleware Name '{$inputs[1]}'! Input Should Contain Only Alphabets.\n\n";
-            die;
+            Message::message("INVALID MIDDLEWARE", "Invalid Middleware Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
+
         // Get Middleware File
         $name = ucfirst($inputs[1]);
         $middleware_file = self::$path."/{$name}.php";
         // Show Message If Middleware Does Not Exist
         if(!file_exists($middleware_file)){
-            echo "\n** [NOT FOUND] - Middleware '{$inputs[1]}' Does Not Exist.\n\n";
-            die;
+            Message::message("NOT FOUND", "Middleware '{$inputs[1]}' Does Not Exist.", "red");
         }
+
         // Remove Middleware
         unlink($middleware_file);
         // Show Message
-        echo "\n[SUCCESS] - Middleware '{$inputs[1]}' Removed Successfully.\n\n";
+        Message::message("SUCCESS", "Middleware '{$inputs[1]}' Removed Successfully.");
     }
 }
