@@ -19,7 +19,7 @@ class Config
     private static null|object $instance = null;
 
     // Initiate Instance
-    public static function instance()
+    private static function instance()
     {
         self::$instance = self::$instance ?: new Static;
         return self::$instance;
