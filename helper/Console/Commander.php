@@ -12,6 +12,7 @@ namespace CBM\CoreHelper\Console;
 
 use CBM\CoreHelper\Console\Action\Controller;
 use CBM\CoreHelper\Console\Action\Middleware;
+use CBM\CoreHelper\Console\Action\Migrate;
 use CBM\CoreHelper\Console\Action\Model;
 use CBM\CoreHelper\Console\Action\View;
 
@@ -76,6 +77,10 @@ class Commander
     
                 case 'pop:view':
                     View::pop($inputs);
+                    break;
+    
+                case 'migrate':
+                    Migrate::tables();
                     break;
                 
                 default:
