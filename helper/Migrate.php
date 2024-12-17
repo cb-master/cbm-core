@@ -12,6 +12,9 @@
 namespace CBM\CoreHelper;
 
 use CBM\Model\Model;
+use CBM\Core\Option;
+use CBM\Core\Config;
+use CBM\Core\Vault\Vault;
 
 // Database Migrate Class
 class Migrate
@@ -113,6 +116,38 @@ class Migrate
 						->column('option_value', 'text')
 						->unique('option_key')
 						->create();
+        }
+
+        //// Set Values if Not Exist
+        // Set App Name If Not Exist
+        if(!Option::get('app_name')){
+            Option::set('app_name', 'Cloud Bill Master');
+        }
+        // Set App Timezone If Not Exist
+        if(!Option::get('time_zone')){
+            Option::set('time_zone', date_default_timezone_get());
+        }
+        // Set App Date Format If Not Exist
+        if(!Option::get('dateformat')){
+            Option::set('dateformat', 'Y-M-d H:i:s');
+        }
+        // Set App Session In Database If Not Exist
+        if(!Option::get('dbsession')){
+            Option::set('dbsession', 'yes');
+        }
+        // Set Developer Mode If Not Exist
+        if(!Option::get('developermode')){
+            Option::set('developermode', 'yes');
+        }
+        // Set App IV If Not Exist
+        if(!Option::get('appiv')){
+            $appiv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')));
+            Option::set('appiv', $appiv);
+        }
+        // Set App Secret If Not Exist
+        if(!Option::get('appsecret')){
+            $appsecret = Vault::randomKey(32);
+            Option::set('appsecret', $appsecret);
         }
     }
 }

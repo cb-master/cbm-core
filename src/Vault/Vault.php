@@ -25,27 +25,6 @@ class Vault
         return bin2hex(random_bytes($byte));
     }
 
-    // Get Open SSL Cipher Passphrase
-    private static function secret():string
-    {
-        $appsecret = Option::get('appsecret');
-        if(!$appsecret){
-            $appsecret = self::randomKey(32);
-            Option::set('appsecret', $appsecret);
-        }
-        return $appsecret;
-    }
-
-    // Get Open SSL Cipher IV
-    private static function iv():string
-    {
-        $appiv = Option::get('appiv');
-        if(!$appiv){
-            $appiv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')));
-            Option::set('appiv', $appiv);
-        }
-        return $appiv;
-    }
 
     // Encrypt String
     /**
@@ -53,7 +32,7 @@ class Vault
      */
     public static function encrtpt(string $string):string
     {
-        return openssl_encrypt($string, Config::get('app', 'encryption_method'), self::secret(), 0, self::iv());
+        return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), Option::get('appsecret'), 0, Option::get('appiv')));
     }
 
     // Decrypt Encrypted String
@@ -62,6 +41,6 @@ class Vault
      */
     public static function decrypt(string $string):string
     {
-        return openssl_decrypt($string, Config::get('app', 'encryption_method'), self::secret(), 0, self::iv());
+        return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), Option::get('appsecret'), 0, Option::get('appiv'));
     }
 }
