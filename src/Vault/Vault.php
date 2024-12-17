@@ -32,7 +32,7 @@ class Vault
      */
     public static function encrtpt(string $string):string
     {
-        return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), Option::get('appsecret'), 0, Option::get('appiv')));
+        return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), Option::get('secret'), 0, Option::get('key')));
     }
 
     // Decrypt Encrypted String
@@ -41,6 +41,6 @@ class Vault
      */
     public static function decrypt(string $string):string
     {
-        return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), Option::get('appsecret'), 0, Option::get('appiv'));
+        return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), Option::get('secret'), 0, Option::get('key'));
     }
 }

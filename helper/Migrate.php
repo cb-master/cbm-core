@@ -140,14 +140,14 @@ class Migrate
             Option::set('developermode', 'yes');
         }
         // Set App IV If Not Exist
-        if(!Option::get('appiv')){
-            $appiv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')));
-            Option::set('appiv', $appiv);
+        if(!Option::get('key')){
+            $key = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')));
+            Option::set('key', $key);
         }
         // Set App Secret If Not Exist
-        if(!Option::get('appsecret')){
-            $appsecret = Vault::randomKey(32);
-            Option::set('appsecret', $appsecret);
+        if(!Option::get('secret')){
+            $secret = Vault::randomKey(32);
+            Option::set('secret', $secret);
         }
     }
 }
