@@ -23,7 +23,8 @@ class Response
         "Access-Control-Allow-Headers"      =>  "Authorization, Origin, X-Requested-With, Content-Type, Accept",
         "Access-Control-Allow-Credentials"  =>  "true",
         "X-Powered-By"                      =>  "Laika",
-        "App-Provider"                      =>  "Laika",
+        "X-Frame-Options"                   =>  "sameorigin",
+        "Content-Security-Policy"           =>  "frame-ancestors 'self'",
     ];
 
     // Set Response Code
@@ -50,8 +51,9 @@ class Response
      */
     public static function header(array $headers = [])
     {
-        $headers["Request-Time"] = time();
         $headers = array_merge(self::$headers, $headers);
+        $headers["Request-Time"] = time();
+        $headers['App-Provider'] = "Cloud Bill Master";
 
         foreach($headers as $key => $value){
             $key = trim($key);

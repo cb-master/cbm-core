@@ -17,12 +17,31 @@ class Directory
     // Get All Directories
     public static function configs():array
     {
-        return glob(ROOTPATH."/config/*.php");
+        return self::files(ROOTPATH.'/config/*', 'php');
     }
 
     // Get All Directories
     public static function functions():array
     {
-        return glob(ROOTPATH."/functions/*.php");
+        return self::files(ROOTPATH."/resources/functions/*", 'php');
+    }
+
+    // Get Directory Folder
+    /**
+     * @param string $path - Required Argument as Directory
+     */
+    public static function folders(string $path)
+    {
+        return glob($path, GLOB_ONLYDIR);
+    }
+
+    // Get Directory Folder
+    /**
+     * @param string $path - Required Argument as Directory
+     * @param string $ext - Required Argument as File Extension. As Example 'php'
+     */
+    public static function files(string $path, string $ext)
+    {
+        return glob("{$path}.$ext");
     }
 }

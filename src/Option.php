@@ -34,4 +34,13 @@ class Option
         $option = Model::table('options')->select()->filter('option_key', '=', $name)->single();
         return $option->option_value ?? $option['option_value'] ?? '';
     }
+
+    // Get Option Value
+    public static function __callStatic($name, $type)
+    {
+        if(!method_exists(__CLASS__, $name)){
+            $option = Model::table('options')->select()->filter('option_key', '=', $name)->single();
+            return $option->option_value ?? $option['option_value'] ?? '';
+        }
+    }
 }
