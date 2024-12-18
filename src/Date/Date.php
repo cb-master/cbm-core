@@ -17,6 +17,9 @@ class Date Extends Format
     }
 
     // Date for Database
+    /**
+     * @param int|string $days - Default is 0;
+     */
     public static function db(int|string $days = 0):string
     {
         $date = self::current();
@@ -25,6 +28,9 @@ class Date Extends Format
     }
 
     // Get Past/Present/Future Date
+    /**
+     * @param int|string $days - Default is 0;
+     */
     public static function new(int $days = 0):string
     {
         $realtime = self::current();
@@ -32,7 +38,11 @@ class Date Extends Format
     }
 
     // Get Date Difference
-    public static function diff(string $start, string $end)
+    /**
+     * @param string $start - Required Argument as a string date like "2024-12-18";
+     * @param string $end - Required Argument as a string date like "2024-12-19";
+     */
+    public static function diff(string $start, string $end):int
     {
         $diff = date_diff(date_create($start), date_create($end));
         // Return Days Difference
@@ -40,12 +50,18 @@ class Date Extends Format
     }
 
     // Check if Date is Past
+    /**
+     * @param string $date - Required Argument as a string date like "2024-12-18";
+     */
     public static function isPast(string $date):bool
     {
         return date(self::default(), strtotime($date)) < self::new();
     }
 
     // Check if Date is Future
+    /**
+     * @param string $date - Required Argument as a string date like "2024-12-18";
+     */
     public static function isFuture(string $date):bool
     {
         return date(self::default(), strtotime($date)) > self::new();
