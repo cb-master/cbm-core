@@ -21,9 +21,9 @@ class Directory
     }
 
     // Get All Directories
-    public static function functions():array
+    public static function requires():array
     {
-        return self::files(ROOTPATH."/resources/functions/*", 'php');
+        return self::files(ROOTPATH."/resources/requires/*", 'php');
     }
 
     // Get Directory Folder
