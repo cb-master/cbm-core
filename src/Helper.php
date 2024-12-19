@@ -9,6 +9,8 @@
 namespace CBM\Core;
 
 use CBM\Core\Response\Response;
+use CBM\Core\Uri\Uri;
+use CBM\Core\Option;
 
 class Helper
 {
@@ -51,12 +53,14 @@ class Helper
 
     // Redirect Function
     /**
-     * @param string $uri - Required Argument
+     * @param string $slug - Required Argument
      * @param int $response - Default is 302
      */
-    public static function redirect(string $uri, int $response = 302)
+    public static function redirect(string $slug, int $response = 302)
     {
         Response::set($response);
+        $uri = ltrim($slug, '/');
+        $uri = (Option::app_uri() ?: Uri::app_uri()) . "/$uri";
         header("Location:{$uri}");
         die();
     }

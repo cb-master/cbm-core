@@ -28,7 +28,7 @@ class Filter
      * @param string $filter - Required Argument as filter name.
      * @param mixed ...$args - Required Argument as function parameters.
      */
-    public static function action(string $filter, mixed ...$args)
+    public static function do(string $filter, mixed ...$args)
     {
         if(!isset(self::$filters[$filter])){
             throw new Error("'{$filter}' Filter Not Found!");

@@ -60,4 +60,17 @@ class Cookie
     {
         return $_COOKIE[$name] ?? '';
     }
+
+    // Destroy Cookie
+    /**
+    * @param string $key - Required Cookie Name
+    */
+    public static function pop(string $name):bool
+    {
+        if(isset($_COOKIE[$name])){
+            unset($_COOKIE[$name]);
+            return true;
+        }
+        return false;
+    }
 }
