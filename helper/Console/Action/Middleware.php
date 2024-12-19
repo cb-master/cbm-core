@@ -43,7 +43,7 @@ class Middleware
         $example = str_replace('{class}', $name, $example);
         file_put_contents($middleware_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Middleware '{$inputs[1]}' Created Successfully.");
+        Message::message("SUCCESS", "Middleware '{$name}' Created Successfully.");
     }
 
     // Rename Middleware
@@ -83,7 +83,7 @@ class Middleware
         // Remove Old File
         unlink($old_middleware_file);
         // Show Message
-        Message::message("SUCCESS", "Middleware '{$inputs[1]}' Moved Successfully.", "red");
+        Message::message("SUCCESS", "Middleware '{$old_name}' Moved Successfully.", "red");
     }
 
     // Remove Middleware
@@ -110,6 +110,6 @@ class Middleware
         // Remove Middleware
         unlink($middleware_file);
         // Show Message
-        Message::message("SUCCESS", "Middleware '{$inputs[1]}' Removed Successfully.");
+        Message::message("SUCCESS", "Middleware '{$name}' Removed Successfully.");
     }
 }

@@ -43,7 +43,7 @@ class Model
         $example = str_replace('{class}', $name, $example);
         file_put_contents($model_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Model '{$inputs[1]}' Created Successfully.");
+        Message::message("SUCCESS", "Model '{$name}' Created Successfully.");
     }
 
     // Rename Model
@@ -83,7 +83,7 @@ class Model
         // Remove Old File
         unlink($old_model_file);
         // Show Message
-        Message::message("SUCCESS", "Model '{$inputs[1]}' Moved To '{$inputs[2]}' Successfully.");
+        Message::message("SUCCESS", "Model '{$old_name}' Moved To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Model
@@ -110,6 +110,6 @@ class Model
         // Remove Model
         unlink($model_file);
         // Show Message
-        Message::message("SUCCESS", "Model '{$inputs[1]}' Removed Successfully.");
+        Message::message("SUCCESS", "Model '{$name}' Removed Successfully.");
     }
 }

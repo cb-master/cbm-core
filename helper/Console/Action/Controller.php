@@ -45,7 +45,7 @@ class Controller
         file_put_contents($controller_file, $example);
 
         // Show Message
-        Message::message("SUCCESS", "Controller Name Not Found!");
+        Message::message("SUCCESS", "Controller '{$name}' Created Successfully!");
     }
 
     // Rename Controller
@@ -86,7 +86,7 @@ class Controller
         // Remove Old File
         unlink($old_controller_file);
         // Show Message
-        Message::message("SUCCESS", "Controller '{$inputs[1]}' Moved Successfully.");
+        Message::message("SUCCESS", "Controller '{$old_name}' Moved Successfully.");
     }
 
     // Remove Controller
@@ -111,6 +111,6 @@ class Controller
         // Remove Controller
         unlink($controller_file);
         // Show Message
-        Message::message("SUCCESS", "Controller '{$inputs[1]}' Removed Successfully.");
+        Message::message("SUCCESS", "Controller '{$name}' Removed Successfully.");
     }
 }
