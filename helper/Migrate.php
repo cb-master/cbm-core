@@ -112,8 +112,10 @@ class Migrate
     public static function options():void
     {
         if(!Model::table('options')->exist()){
-            Model::table('options')->column('option_key', 'varchar(100)')
+            Model::table('options')->column('id', 'int(11)', false, true)
+                        ->column('option_key', 'varchar(100)')
 						->column('option_value', 'text')
+                        ->primary('id')
 						->unique('option_key')
 						->create();
         }
