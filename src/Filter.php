@@ -31,12 +31,17 @@ class Filter
      */
     public static function do(string $filter, mixed ...$args)
     {
+        // Output
+        $output = [];
+
         if(!isset(self::$filters[$filter])){
             throw new Error("'{$filter}' Filter Not Found!");
         }
         
         foreach(self::$filters[$filter] as $callback){
-            call_user_func($callback, ...$args);
+            $output[] = call_user_func($callback, ...$args);
         }
+
+        return $output;
     }
 }

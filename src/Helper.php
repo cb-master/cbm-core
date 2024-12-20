@@ -60,7 +60,7 @@ class Helper
     {
         Response::set($response);
         $uri = ltrim($slug, '/');
-        $uri = (Option::app_uri() ?: Uri::app_uri()) . "/$uri";
+        $uri = (Option::webhost() ?: Uri::app_uri()) . "/$uri";
         header("Location:{$uri}");
         die();
     }
