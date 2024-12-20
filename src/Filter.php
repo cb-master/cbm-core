@@ -11,9 +11,6 @@ use CBM\CoreHelper\Error;
 
 class Filter
 {
-    // Output
-    $output = [];
-
     // Filters
     private static $filters = [];
 
@@ -34,6 +31,9 @@ class Filter
      */
     public static function do(string $filter, mixed ...$args)
     {
+        // Output
+        $output = [];
+
         if(!isset(self::$filters[$filter])){
             throw new Error("'{$filter}' Filter Not Found!");
         }
