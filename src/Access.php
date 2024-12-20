@@ -17,7 +17,7 @@ class Access
     private static $token = '';
 
     // Set Token for Application
-    public static function set(array $array):void
+    public static function set(array $array):string
     {
         $array = array_merge($array, ['validator'=>Cookie::get('laika')]);
         $str = '';
@@ -26,6 +26,7 @@ class Access
         }
         $str = trim($str, '>>>');
         self::$token = Vault::encrypt($str);
+        return self::$token;
     }
 
     // Get Access Key Value
