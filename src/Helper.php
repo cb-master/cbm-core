@@ -11,7 +11,6 @@ namespace CBM\Core;
 use CBM\Core\Response\Response;
 use CBM\Core\Uri\Uri;
 use CBM\Core\Option;
-use CBM\Session\Session;
 use CBM\Core\Support\Cookie;
 use CBM\Core\Vault\Vault;
 
