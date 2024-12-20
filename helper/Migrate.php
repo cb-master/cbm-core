@@ -122,6 +122,10 @@ class Migrate
         if(!Option::get('app_name')){
             Option::set('app_name', 'Cloud Bill Master');
         }
+        // Set Language If Not Exist
+        if(!Option::get('language')){
+            Option::set('language', 'en');
+        }
         // Set App Timezone If Not Exist
         if(!Option::get('time_zone')){
             Option::set('time_zone', date_default_timezone_get());
