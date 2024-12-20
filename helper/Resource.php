@@ -55,9 +55,9 @@ class Resource
     {
         $redirect = $redirect ?: Uri::app_uri();
         if($errors){
-            echo "<body style=\"margin:0;\">
-            <div style=\"max-width: 80%;margin:30px 0\">
-            <h2 style=\"text-align:center;padding:10px 0;color:red;\">APP ERROR!</h2>";
+            echo "<body style=\"display:flex;justify-content:center;align-items:center;margin:0;\">
+            <div>
+            <h2 style=\"text-align:center;color:red;\">APP ERROR!</h2>";
 
             foreach($errors as $error):
                 echo "<center style=\"font-size: 18px;\">{$error}</center></br>";
