@@ -8,8 +8,6 @@
 // Namespace
 namespace CBM\Core;
 
-use CBM\CoreHelper\Error;
-
 class Config
 {
     // Instance

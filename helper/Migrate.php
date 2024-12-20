@@ -44,7 +44,7 @@ class Migrate
 						->column('created', 'datetime', false, false, 'current_timestamp()')
 						->column('updated', 'datetime', true, false, "NULL ON UPDATE current_timestamp()")
 						->column('last_login', 'datetime', true)
-						->column('token', 'varchar(255)', true)
+						->column('token', 'text', true)
 						->column('api_access', 'enum(\'enabled\', \'disabled\')', false, false, 'disabled')
 						->column('api_key', 'varchar(255)', true)
 						->column('note', 'varchar(255)', true)
