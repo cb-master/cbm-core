@@ -55,9 +55,6 @@ class Filter
      */
     public static function add_action(string $action, callable $callback):void
     {
-        if(isset(self::$actions[$action])){
-            throw new Error("'{$action}' Action Already Exists!");
-        }
         self::$actions[$action] = $callback;
     }
 
