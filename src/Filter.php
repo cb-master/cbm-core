@@ -11,6 +11,9 @@ use CBM\CoreHelper\Error;
 
 class Filter
 {
+    // Output
+    $output = [];
+
     // Filters
     private static $filters = [];
 
@@ -36,7 +39,8 @@ class Filter
         }
         
         foreach(self::$filters[$filter] as $callback){
-            call_user_func($callback, ...$args);
+            $output[] = call_user_func($callback, ...$args);
         }
+        return $output;
     }
 }
