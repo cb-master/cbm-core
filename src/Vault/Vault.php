@@ -27,7 +27,7 @@ class Vault
     /**
      * @param string $string - Required Argument.
      */
-    public static function encrtpt(string $string):string
+    public static function encrypt(string $string):string
     {
         return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), Option::get('secret'), 0, Option::get('key')));
     }

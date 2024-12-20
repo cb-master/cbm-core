@@ -11,6 +11,9 @@ namespace CBM\Core;
 use CBM\Core\Response\Response;
 use CBM\Core\Uri\Uri;
 use CBM\Core\Option;
+use CBM\Session\Session;
+use CBM\Core\Support\Cookie;
+use CBM\Core\Vault\Vault;
 
 class Helper
 {
@@ -96,5 +99,20 @@ class Helper
             $ip = $remote;
         }
         return $ip;
+    }
+
+    // Check Valid Token
+    public static function isValidToken(string $token):bool
+    {
+        $values = Vault::decrypt($token);
+        $arr = explode('>>>', $values);
+        return end($arr) === Cookie::get('laika');
+    }
+
+    // To Token
+    public static function toToken(string $value):string
+    {
+        $value = "{$value}>>>".Cookie::get('laika');
+        return Vault::encrypt($value);
     }
 }
