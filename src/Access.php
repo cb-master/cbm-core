@@ -8,37 +8,44 @@
 // Namespace
 namespace CBM\Core;
 
+use CBM\Session\Session;
 use CBM\Core\Support\Cookie;
 use CBM\Core\Vault\Vault;
 
 class Access
 {
-    // Token
-    private static $token = '';
-
     // Set Token for Application
-    public static function set(array $array):string
+    public static function set(array $array, $for = 'APP'):string
     {
-        $array = array_merge($array, ['validator'=>Cookie::get('laika')]);
+        $for = strtoupper($for);
+        $array = array_merge($array, ['validator'=>Vault::hash(Cookie::get('laika'))]);
         $str = '';
         foreach($array as $key => $value){
             $str .= "{$key}={$value}>>>";
         }
         $str = trim($str, '>>>');
-        self::$token = Vault::encrypt($str);
-        return self::$token;
+        Session::set(['token' => Vault::encrypt($str)], $for);
+        return Session::get('token', $for);
     }
 
     // Get Access Key Value
-    public static function get(string $key):string|bool
+    public static function get(string $key, string $for = 'APP'):string
     {
-        $token = Vault::decrypt(self::$token);
+        $for = strtoupper($for);
+        $token = Vault::decrypt(Session::get('token', $for));
         $token = explode('>>>', $token);
         $data = new \stdClass;
         foreach($token as $value){
             $value = explode('=', $value);
-            $data->{$value[0]} = $value[1] ?? false;
+            $data->{$value[0]} = $value[1] ?? '';
         }
-        return $data->$key ?? false;
+        return $data->$key ?? '';
+    }
+
+    // Validate Token
+    public static function validate(string $for = 'APP'):bool
+    {
+        $str = strtoupper($for);
+        return hash_equals(self::get('validator', $str), Vault::hash(Cookie::get('laika')));
     }
 }
