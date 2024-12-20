@@ -34,6 +34,7 @@ class Access
         $for = strtoupper($for);
         $token = Vault::decrypt(Session::get('token', $for));
         $token = explode('>>>', $token);
+        // Store Data to Object
         $data = new \stdClass;
         foreach($token as $value){
             $value = explode('=', $value);
