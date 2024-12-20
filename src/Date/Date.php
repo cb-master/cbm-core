@@ -24,7 +24,7 @@ class Date Extends Format
     {
         $date = self::current();
         $days = (int) $days;
-        return date(self::db(), strtotime("{$date} +{$days} days"));
+        return date(parent::db(), strtotime("{$date} +{$days} days"));
     }
 
     // Get Past/Present/Future Date
