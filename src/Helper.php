@@ -65,6 +65,16 @@ class Helper
         die();
     }
 
+    // Location
+    /**
+     * @param string $slug - Required Argument
+     */
+    public static function location(string $slug):string
+    {
+        $uri = ltrim($slug, '/');
+        return (Option::webhost() ?: Uri::app_uri()) . "/$uri";
+    }
+
     // Get Visitor IP
     public static function get_client_ip():string
     {
