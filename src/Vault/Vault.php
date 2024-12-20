@@ -22,6 +22,12 @@ class Vault
         return bin2hex(random_bytes($byte));
     }
 
+    // Get a Random Hash
+    public static function hash(string $value):string
+    {
+        return hash_hmac("sha256", $value, Option::get('secret'));
+    }
+
 
     // Encrypt String
     /**
