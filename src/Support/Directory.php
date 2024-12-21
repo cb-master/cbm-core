@@ -11,16 +11,15 @@ namespace CBM\Core\Support;
 // Directory Hndler
 class Directory
 {
-    // Get All Directories
-    public static function configs():array
+    // Require All Files
+    /**
+     * @param string $path - Required Argument as Directory
+     * @param string $ext - Required Argument as File Extension. As Example 'php'
+     */
+    public static function requires(string $path, string $ext):array
     {
-        return self::files(ROOTPATH.'/config/*', 'php');
-    }
-
-    // Get All Directories
-    public static function requires():array
-    {
-        return self::files(ROOTPATH."/resources/requires/*", 'php');
+        $path = ROOTPATH . '/' . trim($path, '/') . '/*';
+        return self::files($path, $ext);
     }
 
     // Get Directory Folder
