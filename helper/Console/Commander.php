@@ -25,10 +25,12 @@ class Commander
         // Check Inout 1 and set action
         if(isset($inputs[0])){
             switch($inputs[0]){
+                // Help
                 case '-h':
                     Help::show();
                     break;
     
+                // Controller 
                 case 'create:controller':
                     Controller::create($inputs);
                     break;
@@ -41,6 +43,7 @@ class Commander
                     Controller::pop($inputs);
                     break;
 
+                // Middleware
                 case 'create:middleware':
                     Middleware::create($inputs);
                     break;
@@ -53,6 +56,7 @@ class Commander
                     Middleware::pop($inputs);
                     break;
 
+                // Model
                 case 'create:model':
                     Model::create($inputs);
                     break;
@@ -65,6 +69,20 @@ class Commander
                     Model::pop($inputs);
                     break;
 
+                // Factory
+                case 'create:factory':
+                    Model::create($inputs);
+                    break;
+    
+                case 'rename:factory':
+                    Model::rename($inputs);
+                    break;
+    
+                case 'pop:factory':
+                    Model::pop($inputs);
+                    break;
+
+                // View
                 case 'create:view':
                     View::create($inputs);
                     break;
@@ -77,14 +95,17 @@ class Commander
                     View::pop($inputs);
                     break;
     
+                // Migrate
                 case 'migrate':
                     Migrate::tables();
                     break;
     
+                // Framework Initiate
                 case 'initiate':
                     Framework::initiate();
                     break;
                 
+                // Default
                 default:
                     Help::toHelp();
                     break;
