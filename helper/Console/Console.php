@@ -16,12 +16,7 @@ class Console Extends Commander
     public static function run(array $array)
     {
         array_shift($array);
-        $inputs = [];
-        foreach($array as $val){
-            $inputs[] = strtolower($val);
-        }
-
         // Set Commander To Complete Tasks
-        self::set($inputs);
+        self::set($array);
     }
 }
