@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\App\Model;
+namespace CBM\Model\Model;
 
 // Forbidden Access
 defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
