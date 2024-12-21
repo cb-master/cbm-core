@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Model\Model;
+namespace CBM\App\Model;
 
 use CBM\Model\Model;
 
