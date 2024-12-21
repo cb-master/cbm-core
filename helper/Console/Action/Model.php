@@ -28,8 +28,7 @@ class Model
         }
 
         // Get Model File
-        $name = ucfirst($inputs[1]);
-        $model_file = self::$path."/{$name}.php";
+        $model_file = self::$path."/{$inputs[1]}.php";
         // Shoe Error If Model Already Exist
         if(file_exists($model_file)){
             Message::message("MODEL EXIST", "Model '{$inputs[1]}' Already Exist.", "red");
@@ -37,10 +36,10 @@ class Model
 
         // Create Model
         $example = file_get_contents(__DIR__."/../../samples/model.php.sample", "red");
-        $example = str_replace('{class}', $name, $example);
+        $example = str_replace('{class}', $inputs[1], $example);
         file_put_contents($model_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Model '{$name}' Created Successfully.");
+        Message::message("SUCCESS", "Model '{$inputs[1]}' Created Successfully.");
     }
 
     // Rename Model
@@ -61,12 +60,11 @@ class Model
         }
 
         // Get Old Model File
-        $old_name = ucfirst($inputs[1]);
-        $old_model_file = self::$path."/{$old_name}.php";
+
+        $old_model_file = self::$path."/{$inputs[1]}.php";
 
         // Get New Model File
-        $new_name = ucfirst($inputs[2]);
-        $new_model_file = self::$path."/{$new_name}.php";
+        $new_model_file = self::$path."/{$inputs[2]}.php";
         // Show Message If Model Does Not Exist
         if(!file_exists($old_model_file)){
             Message::message("NOT FOUND", "Model '{$inputs[1]}' Does Not Exist.", "red");
@@ -74,13 +72,13 @@ class Model
 
         // Create New Model
         $content = file_get_contents($old_model_file);
-        $content = str_replace("class {$old_name}", "class {$new_name}", $content);
+        $content = str_replace("class {$inputs[1]}", "class {$inputs[2]}", $content);
         file_put_contents($new_model_file, $content);
 
         // Remove Old File
         unlink($old_model_file);
         // Show Message
-        Message::message("SUCCESS", "Model '{$old_name}' Renamed To '{$inputs[2]}' Successfully.");
+        Message::message("SUCCESS", "Model '{$inputs[1]}' Moved To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Model
@@ -97,8 +95,7 @@ class Model
         }
 
         // Get Model File
-        $name = ucfirst($inputs[1]);
-        $model_file = self::$path."/{$name}.php";
+        $model_file = self::$path."/{$inputs[1]}.php";
         // Show Message If Model Does Not Exist
         if(!file_exists($model_file)){
             Message::message("NOT FOUND", "Model '{$inputs[1]}' Does Not Exist.", "red");
@@ -107,6 +104,6 @@ class Model
         // Remove Model
         unlink($model_file);
         // Show Message
-        Message::message("SUCCESS", "Model '{$name}' Removed Successfully.");
+        Message::message("SUCCESS", "Model '{$inputs[1]}' Removed Successfully.");
     }
 }
