@@ -7,10 +7,12 @@
 
 namespace CBM\CoreHelper\Console;
 
+use CBM\CoreHelper\Console\Action\Interfaceclass;
 use CBM\CoreHelper\Console\Action\Controller;
 use CBM\CoreHelper\Console\Action\Middleware;
 use CBM\CoreHelper\Console\Action\Framework;
 use CBM\CoreHelper\Console\Action\Migrate;
+use CBM\CoreHelper\Console\Action\Factory;
 use CBM\CoreHelper\Console\Action\Model;
 use CBM\CoreHelper\Console\Action\View;
 
@@ -71,15 +73,28 @@ class Commander
 
                 // Factory
                 case 'create:factory':
-                    Model::create($inputs);
+                    Factory::create($inputs);
                     break;
     
                 case 'rename:factory':
-                    Model::rename($inputs);
+                    Factory::rename($inputs);
                     break;
     
                 case 'pop:factory':
-                    Model::pop($inputs);
+                    Factory::pop($inputs);
+                    break;
+
+                // Interface
+                case 'create:interface':
+                    Interfaceclass::create($inputs);
+                    break;
+    
+                case 'rename:interface':
+                    Interfaceclass::rename($inputs);
+                    break;
+    
+                case 'pop:interface':
+                    Interfaceclass::pop($inputs);
                     break;
 
                 // View

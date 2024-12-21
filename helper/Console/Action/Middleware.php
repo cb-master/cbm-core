@@ -80,7 +80,7 @@ class Middleware
         // Remove Old File
         unlink($old_middleware_file);
         // Show Message
-        Message::message("SUCCESS", "Middleware '{$old_name}' Moved Successfully.", "red");
+        Message::message("SUCCESS", "Middleware '{$old_name}' Renamed To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Middleware

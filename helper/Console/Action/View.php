@@ -92,7 +92,7 @@ class View
         // Remove Old File
         unlink($old_view_file);
         // Show Message
-        Message::message("SUCCESS", "View '{$inputs[1]}' Moved To '{$inputs[2]}' Successfully");
+        Message::message("SUCCESS", "View '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully");
     }
 
     // Remove View

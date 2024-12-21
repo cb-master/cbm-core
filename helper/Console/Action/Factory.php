@@ -27,9 +27,7 @@ class Factory
             Message::message("INVALID FACTORY", "Invalid Factory Name! Input Should Contain Only Alphabets.", "red");
         }
 
-        // Get Factory File
-        $name = ucfirst($inputs[1]);
-        $factory_file = self::$path."/{$name}.php";
+        $factory_file = self::$path."/{$inputs[1]}.php";
         // Shoe Error If Factory Already Exist
         if(file_exists($factory_file)){
             Message::message("FACTORY EXIST", "Factory '{$inputs[1]}' Already Exist.", "red");
@@ -37,10 +35,10 @@ class Factory
 
         // Create Factory
         $example = file_get_contents(__DIR__."/../../samples/factory.php.sample");
-        $example = str_replace('{class}', $name, $example);
+        $example = str_replace('{class}', $inputs[1], $example);
         file_put_contents($factory_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Factory '{$name}' Created Successfully.");
+        Message::message("SUCCESS", "Factory '{$inputs[1]}' Created Successfully.");
     }
 
     // Rename Factory
@@ -61,12 +59,10 @@ class Factory
         }
 
         // Get Old Factory File
-        $old_name = ucfirst($inputs[1]);
-        $old_factory_file = self::$path."/{$old_name}.php";
+        $old_factory_file = self::$path."/{$inputs[1]}.php";
 
         // Get New Factory File
-        $new_name = ucfirst($inputs[2]);
-        $new_factory_file = self::$path."/{$new_name}.php";
+        $new_factory_file = self::$path."/{$inputs[2]}.php";
 
         // Show Message If Factory Does Not Exist
         if(!file_exists($old_factory_file)){
@@ -74,13 +70,13 @@ class Factory
         }
         // Create New Factory
         $content = file_get_contents($old_factory_file);
-        $content = str_replace("class {$old_name}", "class {$new_name}", $content);
+        $content = str_replace("class {$inputs[1]}", "class {$inputs[2]}", $content);
         file_put_contents($new_factory_file, $content);
 
         // Remove Old File
         unlink($old_factory_file);
         // Show Message
-        Message::message("SUCCESS", "Factory '{$old_name}' Moved Successfully.", "red");
+        Message::message("SUCCESS", "Factory '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Factory
@@ -97,8 +93,7 @@ class Factory
         }
 
         // Get Factory File
-        $name = ucfirst($inputs[1]);
-        $factory_file = self::$path."/{$name}.php";
+        $factory_file = self::$path."/{$inputs[1]}.php";
         // Show Message If Factory Does Not Exist
         if(!file_exists($factory_file)){
             Message::message("NOT FOUND", "Factory '{$inputs[1]}' Does Not Exist.", "red");
@@ -107,6 +102,6 @@ class Factory
         // Remove Factory
         unlink($factory_file);
         // Show Message
-        Message::message("SUCCESS", "Factory '{$name}' Removed Successfully.");
+        Message::message("SUCCESS", "Factory '{$inputs[1]}' Removed Successfully.");
     }
 }

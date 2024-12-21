@@ -83,7 +83,7 @@ class Controller
         // Remove Old File
         unlink($old_controller_file);
         // Show Message
-        Message::message("SUCCESS", "Controller '{$old_name}' Moved Successfully.");
+        Message::message("SUCCESS", "Controller '{$old_name}' Renamed To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Controller
