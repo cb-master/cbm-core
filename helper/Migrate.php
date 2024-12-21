@@ -47,7 +47,7 @@ class Migrate
 						->column('token', 'text', true)
 						->column('api_access', 'enum(\'enabled\', \'disabled\')', false, false, 'disabled')
 						->column('api_key', 'varchar(255)', true)
-						->column('note', 'varchar(255)', true)
+						->column('notes', 'varchar(255)', true)
 						->primary('id')
 						->unique('uuid')
 						->unique('username')
