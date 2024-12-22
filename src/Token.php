@@ -13,7 +13,7 @@ use CBM\Core\Support\Cookie;
 use CBM\Core\Vault\Vault;
 use CBM\Model\Model;
 
-class Access
+class Token
 {
     // Set Token for Application
     public static function set(array $array, $for = 'APP'):string
