@@ -97,7 +97,7 @@ class Uri Extends Resource
     /**
      * @param string $value - Required Argument
      */
-    public static function key(string $value):int
+    public static function key(string $value):int|bool
     {
         $array = self::slugs();
         $exist_key = false;
