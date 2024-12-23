@@ -100,16 +100,15 @@ class Uri Extends Resource
     public static function key(string $value):int
     {
         $array = self::slugs();
-        $return_key = 1000000;
+        $exist_key = false;
 
         foreach($array as $key => $val){
             if($value == $val){
-                $return_key = $key;
+                $exist_key = $key;
                 break;
             }
         }
-
-        return $return_key;
+        return $exist_key;
     }
 
     // Create Path if Does Not Exist
