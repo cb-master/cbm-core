@@ -45,7 +45,7 @@ class Migrate
 						->column('updated', 'datetime', true, false)
 						->column('last_login', 'datetime', true)
 						->column('token', 'text', true)
-						->column('api_access', 'enum(\'enabled\', \'disabled\')', false, false, 'disabled')
+						->column('api_access', 'enum(\'enable\', \'disable\')', false, false, 'disable')
 						->column('api_key', 'varchar(255)', true)
 						->column('notes', 'varchar(255)', true)
 						->primary('id')
