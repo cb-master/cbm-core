@@ -148,4 +148,10 @@ class Request Extends Resource
         // Return Request Data
         return $request_data;
     }
+
+    // Check If Request For Api
+    public static function apiOnly():bool
+    {
+        return $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'];
+    }
 }
