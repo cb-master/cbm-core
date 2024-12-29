@@ -18,6 +18,8 @@ class Directory
      */
     public static function requires(string $path, string $ext):array
     {
+        $path = str_replace('*', '', $path);
+        $path = str_replace(ROOTPATH, '', $path);
         $path = ROOTPATH . '/' . trim($path, '/') . '/*';
         return self::files($path, $ext);
     }
