@@ -39,10 +39,21 @@ class Uri Extends Resource
         return $request_uri;
     }
 
-    // Query Strings
-    public static function queries():string|array
+    // Queries
+    public static function queries():array
     {
         return (Request::isGet() && Request::data()) ? Request::data() : [];
+    }
+
+    // Query String
+    public static function query_string():string
+    {
+        $queries = self::queries();
+        $query_str = "?";
+        foreach($queries as $key=>$val){
+            $query_str .= "{$key}={$val}&";
+        }
+        return trim($query_str, '&');
     }
 
     // Application Uri
