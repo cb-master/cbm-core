@@ -88,9 +88,9 @@ class Uri Extends Resource
     /**
      * @param string $value - Required Argument
      */
-    public static function in_slug(string $value)
+    public static function in_slug(string $value):int|string|bool
     {
-        return in_array($value, self::slugs());
+        return array_search($value, self::slugs());
     }
 
     // Get Slug Key By Value
