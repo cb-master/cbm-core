@@ -49,11 +49,11 @@ class Uri Extends Resource
     public static function query_string():string
     {
         $queries = self::queries();
-        $query_str = "?";
+        $str = "";
         foreach($queries as $key=>$val){
-            $query_str .= "{$key}={$val}&";
+            $str .= "{$key}={$val}&";
         }
-        return trim($query_str, '&');
+        return $str ? "?".trim($str, '&') : "";
     }
 
     // Application Uri
