@@ -52,8 +52,7 @@ class Migrate
 						->unique('uuid')
 						->unique('username')
 						->unique('email')
-						->unique('uuid')
-						->unique('api_access')
+						->key('api_access')
 						->unique('api_key')
 						->create();
 
