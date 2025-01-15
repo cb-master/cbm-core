@@ -10,6 +10,19 @@ namespace CBM\Core\Date;
 
 class Date Extends Format
 {
+    // Get Time Zone
+    public static function getTimezone():string
+    {
+        return date_default_timezone_get();
+    }
+
+    // Set Time Zone
+    public static function setTimezone(?string $timezoneId = null):bool
+    {
+        $zone = $timezoneId ?: self::getTimezone();
+        return date_default_timezone_set($zone);
+    }
+    
     // Get The Current Date & Time
     public static function current():string
     {
