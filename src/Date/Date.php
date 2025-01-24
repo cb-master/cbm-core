@@ -22,7 +22,7 @@ class Date Extends Format
         $zone = $timezoneId ?: self::getTimezone();
         return date_default_timezone_set($zone);
     }
-    
+
     // Get The Current Date & Time
     public static function current():string
     {

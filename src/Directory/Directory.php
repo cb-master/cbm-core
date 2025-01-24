@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Support;
+namespace CBM\Core\Directory;
 
 // Directory Hndler
 class Directory

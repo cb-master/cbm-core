@@ -6,12 +6,12 @@
  */
 
 // Namespace
-namespace CBM\Core;
+namespace CBM\Core\Helper;
 
 use CBM\Core\Response\Response;
 use CBM\Core\Uri\Uri;
-use CBM\Core\Option;
-use CBM\Core\Support\Cookie;
+use CBM\Core\Option\Option;
+use CBM\Core\Cookie\Cookie;
 use CBM\Core\Vault\Vault;
 
 class Helper

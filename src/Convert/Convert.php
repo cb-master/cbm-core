@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Support;
+namespace CBM\Core\Convert;
 
 // Data Convert Hndler
 class Convert

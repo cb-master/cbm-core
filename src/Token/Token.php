@@ -6,10 +6,10 @@
  */
 
 // Namespace
-namespace CBM\Core;
+namespace CBM\Core\Token;
 
 use CBM\Session\Session;
-use CBM\Core\Support\Cookie;
+use CBM\Core\Cookie\Cookie;
 use CBM\Core\Vault\Vault;
 use CBM\Model\Model;
 

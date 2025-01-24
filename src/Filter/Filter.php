@@ -5,7 +5,7 @@
  * Author Email: riyadhtayf@gmail.com
  */
 
-namespace CBM\Core;
+namespace CBM\Core\Filter;
 
 use CBM\CoreHelper\Error;
 
@@ -16,6 +16,9 @@ class Filter
 
     // Actions
     private static $actions = [];
+
+    // Hooks
+    private static $hooks = [];
 
     // Add Filter
     /**
@@ -66,7 +69,7 @@ class Filter
     public static function do_action(string $action, mixed ...$args):mixed
     {
         if(!isset(self::$actions[$action])){
-            throw new Error("'{$action}' Filter Does Not Exist!");
+            throw new Error("'{$action}' Action Does Not Exist!");
         }        
         return call_user_func(self::$actions[$action], ...$args);
     }

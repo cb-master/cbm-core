@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core;
+namespace CBM\Core\Option;
 
 use CBM\Model\Model;
 

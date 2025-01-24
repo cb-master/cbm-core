@@ -6,7 +6,7 @@
  */
 
  // Namespace
-namespace CBM\Core\Support;
+namespace CBM\Core\Meta;
 
 // Meta Hndler
 class Meta
