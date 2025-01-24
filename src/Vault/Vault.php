@@ -8,8 +8,8 @@
 // Namespace
 namespace CBM\Core\Vault;
 
-use CBM\Core\Option;
-use CBM\Core\Config;
+use CBM\Core\Option\Option;
+use CBM\Core\Config\Config;
 
 class Vault
 {
