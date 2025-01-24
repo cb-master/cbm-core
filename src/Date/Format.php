@@ -8,7 +8,7 @@
 // Namespace
 namespace CBM\Core\Date;
 
-use CBM\Core\Option;
+use CBM\Core\Option\Option;
 
 class Format
 {
