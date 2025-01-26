@@ -35,7 +35,13 @@ class App
 
         // Get Class & Method
         $method = Uri::slug(1) ?: 'index';
-        $acceptedMethods = get_class_methods($controller);
+
+        try{
+            $acceptedMethods = get_class_methods($controller);
+        }catch(\Throwable $th){
+            $acceptedMethods = [];
+        }
+        
         $class = (class_exists($controller) && in_array($method, $acceptedMethods)) ? $controller : $_404;
 
         ($class == $_404) ? Response::set(404) : Response::set(200);
