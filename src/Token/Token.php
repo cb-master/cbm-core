@@ -62,7 +62,7 @@ class Token
         // Get Key Value
         $keyVal = self::getFromSession($key, $for);
         // Get Existing DB Token Value
-        $model = Model::table($table)->select('token')->where([$key=>$keyVal])->single();
+        $model = Model::table($table)->where([$key=>$keyVal])->single('token');
         $token = self::getFromSession('token', $for);
         // Check & Get Token
         if($token && $model){

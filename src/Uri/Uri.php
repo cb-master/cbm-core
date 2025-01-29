@@ -8,8 +8,8 @@
 // Namespace
 namespace CBM\Core\Uri;
 
-use CBM\CoreHelper\Resource;
 use CBM\Core\Request\Request;
+use CBM\CoreHelper\Resource;
 
 class Uri Extends Resource
 {

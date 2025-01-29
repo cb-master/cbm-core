@@ -8,10 +8,10 @@
 // Namespace
 namespace CBM\CoreHelper;
 
-use CBM\Model\Model;
-use CBM\Core\Option;
-use CBM\Core\Config;
+use CBM\Core\Option\Option;
+use CBM\Core\Config\Config;
 use CBM\Core\Vault\Vault;
+use CBM\Model\Model;
 
 // Database Migrate Class
 class Migrate
@@ -31,31 +31,30 @@ class Migrate
     {
         if(!Model::table('admins')->exist()){
             Model::table('admins')
-                        ->column('id', 'int(11)', false, true)
-						->column('uuid', 'varchar(255)')
-						->column('fname', 'varchar(255)', true)
-						->column('lname', 'varchar(255)', true)
-						->column('username', 'varchar(255)')
-						->column('email', 'varchar(255)')
-						->column('password', 'varchar(255)')
-						->column('password_token', 'varchar(255)', true)
-						->column('role_id', 'int(11)')
-						->column('status', 'enum("active","inactive","suspended")', false, false, 'inactive')
-						->column('created', 'datetime', false, false, 'current_timestamp()')
-						->column('updated', 'datetime', true, false)
-						->column('last_login', 'datetime', true)
-						->column('token', 'text', true)
-						->column('api_access', 'enum(\'enable\', \'disable\')', false, false, 'disable')
-						->column('api_key', 'varchar(255)', true)
-						->column('notes', 'varchar(255)', true)
-						->primary('id')
-						->unique('uuid')
-						->unique('username')
-						->unique('email')
-						->key('api_access')
-						->unique('api_key')
-						->create();
-
+                ->column('id', 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT')
+                ->column('uuid', 'VARCHAR(255) NOT NULL')
+                ->column('fname', 'VARCHAR(255) DEFAULT NULL')
+                ->column('lname', 'VARCHAR(255) DEFAULT NULL')
+                ->column('username', 'VARCHAR(255) NOT NULL')
+                ->column('email', 'VARCHAR(255) NOT NULL')
+                ->column('password', 'VARCHAR(255) NOT NULL')
+                ->column('password_token', 'VARCHAR(255) DEFAULT NULL')
+                ->column('role_id', 'INT(11) NOT NULL')
+                ->column('status', 'ENUM("active","inactive","suspended") NOT NULL DEFAULT "inactive"')
+                ->column('created', 'DATETIME NOT NULL')
+                ->column('updated', 'DATETIME DEFAULT NULL')
+                ->column('last_login', 'DATETIME DEFAULT NULL')
+                ->column('token', 'TEXT DEFAULT NULL')
+                ->column('api_access', 'ENUM("enable", "disable") NOT NULL DEFAULT "disable"')
+                ->column('api_key', 'VARCHAR(255) DEFAULT NULL')
+                ->column('notes', 'LONGTEXT DEFAULT NULL')
+                ->primary('id')
+                ->unique('uuid')
+                ->unique('username')
+                ->unique('email')
+                ->key('api_access')
+                ->unique('api_key')
+                ->create();
         }
     }
 
@@ -64,27 +63,28 @@ class Migrate
     {
         if(!Model::table('adminroles')->exist()){
             Model::table('adminroles')
-                        ->column('id', 'int(11)', false, true)
-						->column('uuid', 'varchar(255)')
-						->column('name', 'varchar(255)')
-						->column('accesses', 'longtext')
-						->column('default_role', 'enum("yes","no")', false, false, 'no')
-						->column('created', 'datetime', false, false, 'current_timestamp()')
-						->column('updated', 'datetime', true, false)
-						->column('notes', 'longtext', true)
-						->unique('id')
-						->unique('uuid')
-						->index('name')
-						->index('created')
-						->create();
+                ->column('id', 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT')
+                ->column('uuid', 'VARCHAR(255) NOT NULL')
+                ->column('type', 'VARCHAR(255) NOT NULL')
+                ->column('accesses', 'LONGTEXT')
+                ->column('default_role', 'ENUM("yes","no") DEFAULT "no"')
+                ->column('created', 'DATETIME NOT NULL')
+                ->column('updated', 'DATETIME DEFAULT NUL')
+                ->column('notes', 'LONGTEXT DEFAULT NULL')
+                ->unique('id')
+                ->unique('uuid')
+                ->index('name')
+                ->index('created')
+                ->create();
         }
         // Insert First Role If Not Exist
-        if(!Model::table('adminroles')->select()->filter('id', '=', 1)->single())
+        if(!Model::table('adminroles')->filter('id', '=', 1)->single('id'))
         {
             $data = [
                 'uuid'          =>  Model::table('adminroles')->uuid(),
-                'name'          =>  'superadmin',
+                'type'          =>  'superadmin',
                 'accesses'      =>  '{"viewStaff":1,"addStaff":1,"removeStaff":1,"editStaff":1}',
+                'created'       =>  date('Y-m-d H:i:s'),
                 'default_role'  =>  'yes'
             ];
             Model::table('adminroles')->insert($data);
@@ -95,12 +95,13 @@ class Migrate
     private static function sessions():void
     {
         if(!Model::table('sessions')->exist()){
-            Model::table('sessions')->column('id', 'varchar(50)')
-						->column('last_access', 'int(12)')
-						->column('session_data', 'longtext')
-						->primary('id')
-						->index('last_access')
-						->create();
+            Model::table('sessions')
+                ->column('id', 'VARCHAR(50) NOT NULL')
+                ->column('last_access', 'INT(12) NOT NULL')
+                ->column('session_data', 'LONGTEXT NOT NULL')
+                ->primary('id')
+                ->index('last_access')
+                ->create();
         }
     }
 
@@ -108,12 +109,13 @@ class Migrate
     public static function options():void
     {
         if(!Model::table('options')->exist()){
-            Model::table('options')->column('id', 'int(11)', false, true)
-                        ->column('option_key', 'varchar(100)')
-						->column('option_value', 'text')
-                        ->primary('id')
-						->unique('option_key')
-						->create();
+            Model::table('options')
+                ->column('id', 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT')
+                ->column('option_key', 'VARCHAR(100) NOT NULL')
+                ->column('option_value', 'LONGTEXT NOT NULL')
+                ->primary('id')
+                ->unique('option_key')
+                ->create();
         }
 
         //// Set Values if Not Exist

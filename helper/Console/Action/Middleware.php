@@ -7,7 +7,7 @@
 
 namespace CBM\CoreHelper\Console\Action;
 
-use CBM\Core\Support\Validate;
+use CBM\Core\Validate\Validate;
 
 class Middleware
 {
