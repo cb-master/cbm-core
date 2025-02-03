@@ -11,17 +11,16 @@ namespace CBM\Core\Directory;
 // Directory Hndler
 class Directory
 {
-    // Require All Files
+    // Clear Path
     /**
      * @param string $path - Required Argument as Directory
-     * @param string $ext - Required Argument as File Extension. As Example 'php'
      */
-    public static function requires(string $path, string $ext):array
+    private static function clear_path(string $path):string
     {
-        $path = str_replace('*', '', $path);
-        $path = str_replace(ROOTPATH, '', $path);
-        $path = ROOTPATH . '/' . trim($path, '/') . '/*';
-        return self::files($path, $ext);
+        $path = trim(trim($path), '*');
+        $path = str_replace('\\', '/', $path);
+        $path = trim($path, '/');
+        return "{$path}/*";
     }
 
     // Get Directory Folder
@@ -30,7 +29,11 @@ class Directory
      */
     public static function folders(string $path)
     {
-        return glob($path, GLOB_ONLYDIR);
+        if(is_dir($path)){
+            $path = self::clear_path($path);
+            return glob("{$path}", GLOB_ONLYDIR);
+        }
+        return [];
     }
 
     // Get Directory Folder
@@ -38,8 +41,12 @@ class Directory
      * @param string $path - Required Argument as Directory
      * @param string $ext - Required Argument as File Extension. As Example 'php'
      */
-    public static function files(string $path, string $ext)
+    public static function files(string $path, string $ext):array
     {
-        return glob("{$path}.$ext");
+        if(is_dir($path)){
+            $path = self::clear_path($path);
+            return glob("{$path}.{$ext}");
+        }
+        return [];
     }
 }
