@@ -35,6 +35,7 @@ class App
 
         // Get Class & Method
         $method = Uri::slug(1) ?: 'index';
+        $method = str_replace('-', '_', $method);
 
         try{
             $acceptedMethods = get_class_methods($controller);
