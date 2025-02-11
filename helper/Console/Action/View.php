@@ -37,7 +37,7 @@ class View
         if(!file_exists($path)){
             Message::message("NOT FOUND", "Path '{$path}' Does Not Exist.", "red");
         }
-        $view_file = "{$path}/{$inputs[1]}.php";
+        $view_file = "{$path}/{$inputs[1]}.tpl";
         // Shoe Error If View Already Exist
         if(file_exists($view_file)){
             Message::message("VIEW EXIST", "View '{$inputs[1]}' Already Exist.", "red");
@@ -78,9 +78,9 @@ class View
         }
 
         // Get Old View File
-        $old_view_file = "{$path}/{$inputs[1]}.php";
+        $old_view_file = "{$path}/{$inputs[1]}.tpl";
         // Get New View File
-        $new_view_file = "{$path}/{$inputs[2]}.php";
+        $new_view_file = "{$path}/{$inputs[2]}.tpl";
         // Show Message If View Does Not Exist
         if(!file_exists($old_view_file)){
             Message::message("NOT FOUND", "View '{$inputs[1]}' Does Not Exist.", "red");
@@ -116,7 +116,7 @@ class View
             Message::message("NOT FOUND", "Path '{$path}' Does Not Exist.", "red");
         }
         // Get View File
-        $view_file = "{$path}/{$inputs[1]}.php";
+        $view_file = "{$path}/{$inputs[1]}.tpl";
         // Show Message If View Does Not Exist
         if(!file_exists($view_file)){
             Message::message("NOT FOUND", "View '{$inputs[1]}' Does Not Exist.", "red");

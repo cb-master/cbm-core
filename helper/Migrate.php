@@ -153,5 +153,21 @@ class Migrate
             $secret = Vault::randomKey(32);
             Option::set('secret', $secret);
         }
+        // Set Thousands Separator
+        if(!Option::get('thousands_separator')){
+            Option::set('thousands_separator', ',');
+        }
+        // Set Decimal Separator
+        if(!Option::get('decimal_separator')){
+            Option::set('decimal_separator', '.');
+        }
+        // Set Template Caching
+        if(!Option::get('template_caching')){
+            Option::set('template_caching', 'off');
+        }
+        // Set Template Caching
+        if(!Option::get('template_cache_lifetime')){
+            Option::set('template_cache_lifetime', '3600');
+        }
     }
 }

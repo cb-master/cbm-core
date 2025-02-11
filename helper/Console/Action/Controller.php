@@ -40,7 +40,6 @@ class Controller
         $example = file_get_contents(__DIR__."/../../samples/controller.php.sample");
         $example = str_replace('{class}', $name, $example);
         file_put_contents($controller_file, $example);
-
         // Show Message
         Message::message("SUCCESS", "Controller '{$name}' Created Successfully!");
     }

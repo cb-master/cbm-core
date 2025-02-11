@@ -19,7 +19,7 @@ class Option
      */
     public static function set(string $name, string $value):int
     {
-        return Model::table('options')->replace(['option_key' => $name, 'option_value' => $value]);
+        return Model::table('options')->insert(['option_key' => $name, 'option_value' => $value]);
     }
     
     // Get Option Value
