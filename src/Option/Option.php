@@ -17,9 +17,10 @@ class Option
      * @param string $name - Required Argument as Option Key.
      * @param string $value - Required Argument as Option Value.
      */
-    public static function set(string $name, string $value):int
+    public static function set(string $name, string $value, bool $default = false):int
     {
-        return Model::table('options')->insert(['option_key' => $name, 'option_value' => $value]);
+        $default_row = $default ? 'yes' : 'no';
+        return Model::table('options')->insert(['option_key' => $name, 'option_value' => $value, 'default_row'=>$default_row]);
     }
     
     // Get Option Value

@@ -52,7 +52,7 @@ class Migrate
                 ->unique('uuid')
                 ->unique('username')
                 ->unique('email')
-                ->key('api_access')
+                ->index('api_access')
                 ->unique('api_key')
                 ->create();
         }
@@ -69,11 +69,11 @@ class Migrate
                 ->column('accesses', 'LONGTEXT')
                 ->column('default_role', 'ENUM("yes","no") DEFAULT "no"')
                 ->column('created', 'DATETIME NOT NULL')
-                ->column('updated', 'DATETIME DEFAULT NUL')
+                ->column('updated', 'DATETIME DEFAULT NULL')
                 ->column('notes', 'LONGTEXT DEFAULT NULL')
                 ->unique('id')
                 ->unique('uuid')
-                ->index('name')
+                ->index('type')
                 ->index('created')
                 ->create();
         }
@@ -113,6 +113,7 @@ class Migrate
                 ->column('id', 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT')
                 ->column('option_key', 'VARCHAR(100) NOT NULL')
                 ->column('option_value', 'LONGTEXT NOT NULL')
+                ->column('default_row', 'enum("yes","no") NOT NULL DEFAULT "no"')
                 ->primary('id')
                 ->unique('option_key')
                 ->create();
@@ -121,53 +122,53 @@ class Migrate
         //// Set Values if Not Exist
         // Set App Name If Not Exist
         if(!Option::get('app_name')){
-            Option::set('app_name', 'Cloud Bill Master');
+            Option::set('app_name', 'Cloud Bill Master', 'yes');
         }
         // Set Language If Not Exist
         if(!Option::get('language')){
-            Option::set('language', 'en');
+            Option::set('language', 'en', 'yes');
         }
         // Set App Timezone If Not Exist
         if(!Option::get('time_zone')){
-            Option::set('time_zone', date_default_timezone_get());
+            Option::set('time_zone', date_default_timezone_get(), 'yes');
         }
         // Set App Date Format If Not Exist
         if(!Option::get('dateformat')){
-            Option::set('dateformat', 'Y-M-d H:i:s');
+            Option::set('dateformat', 'Y-M-d H:i:s', 'yes');
         }
         // Set App Session In Database If Not Exist
         if(!Option::get('dbsession')){
-            Option::set('dbsession', 'yes');
+            Option::set('dbsession', 'yes', 'yes');
         }
         // Set Developer Mode If Not Exist
         if(!Option::get('developermode')){
-            Option::set('developermode', 'yes');
+            Option::set('developermode', 'yes', 'yes');
         }
         // Set App IV If Not Exist
         if(!Option::get('key')){
             $key = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')));
-            Option::set('key', $key);
+            Option::set('key', $key, 'yes');
         }
         // Set App Secret If Not Exist
         if(!Option::get('secret')){
             $secret = Vault::randomKey(32);
-            Option::set('secret', $secret);
+            Option::set('secret', $secret, 'yes');
         }
         // Set Thousands Separator
         if(!Option::get('thousands_separator')){
-            Option::set('thousands_separator', ',');
+            Option::set('thousands_separator', ',', 'yes');
         }
         // Set Decimal Separator
         if(!Option::get('decimal_separator')){
-            Option::set('decimal_separator', '.');
+            Option::set('decimal_separator', '.', 'yes');
         }
         // Set Template Caching
         if(!Option::get('template_caching')){
-            Option::set('template_caching', 'off');
+            Option::set('template_caching', 'off', 'yes');
         }
         // Set Template Caching
         if(!Option::get('template_cache_lifetime')){
-            Option::set('template_cache_lifetime', '3600');
+            Option::set('template_cache_lifetime', '3600', 'yes');
         }
     }
 }
