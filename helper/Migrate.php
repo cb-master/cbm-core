@@ -164,7 +164,8 @@ class Migrate
         }
         // Set Template Caching
         if(!Option::get('template_caching')){
-            Option::set('template_caching', 'off', 'yes');
+            // Value Should Between 0, 1 or 2
+            Option::set('template_caching', 0, 'yes');
         }
         // Set Template Caching
         if(!Option::get('template_cache_lifetime')){
