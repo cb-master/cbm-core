@@ -8,6 +8,10 @@
 // Namespace
 namespace CBM\Core\Response;
 
+use CBM\Core\Request\Request;
+use CBM\Core\Vault\Vault;
+use CBM\Session\Session;
+
 class Response
 {
     // Headers
@@ -28,7 +32,7 @@ class Response
     /**
      * @param int $code - Default is 200
      */
-    public static function set(int $code = 200)
+    public static function code(int $code = 200)
     {
         http_response_code($code);
     }
@@ -51,11 +55,33 @@ class Response
         $headers = array_merge(self::$headers, $headers);
         $headers["Request-Time"] = time();
         $headers['App-Provider'] = "Cloud Bill Master";
-
+        // Get CSRF Header Token
+        $cs = 'custom';
+        if(empty($_REQUEST) || empty(Session::get('csrf'))){
+            Session::set(['csrf'=>Vault::randomKey(64)]);
+        }
+        $headers['Csrf'] = Session::get('csrf');
+        echo $headers['Csrf'];
         foreach($headers as $key => $value){
             $key = trim($key);
             $value = trim($value);
             header("{$key}: {$value}");
         }
+    }
+
+    // Get Response Header Value
+    /**
+     * @param $key - Optional Argument. Default is null. Return will be array on null or string.
+     */
+    public static function get(?string $key = null):array|string
+    {
+        $val = [];
+        $header_list = headers_list();
+        $csrf = '';
+        foreach($header_list as $header){
+            $arr = explode(':', $header);
+            $val[strtolower(trim($arr[0]))] = trim($arr[1] ?? '');
+        }
+        return $key ? ($val[$key] ?? '') : $val;
     }
 }

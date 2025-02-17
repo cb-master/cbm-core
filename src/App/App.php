@@ -45,7 +45,7 @@ class App
         
         $class = (class_exists($controller) && in_array($method, $acceptedMethods)) ? $controller : $_404;
 
-        ($class == $_404) ? Response::set(404) : Response::set(200);
+        ($class == $_404) ? Response::code(404) : Response::code(200);
 
         // Get Controller Class Object
         $object = new $class;
