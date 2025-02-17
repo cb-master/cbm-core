@@ -60,7 +60,7 @@ class Response
             Session::set(['csrf'=>Vault::randomKey(24)]);
         }
         $csrf = base64_encode(Session::get('csrf'));
-        header('app-access:'.$csrf);
+        header('access-token:'.$csrf);
         foreach($headers as $key => $value){
             $key = trim($key);
             $value = trim($value);

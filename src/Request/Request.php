@@ -169,15 +169,14 @@ class Request Extends Resource
         return $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'];
     }
 
-    // Check Token for Post Method
+    // Check Valid CSRF Token
     /**
-     * @param string $key - Optional Parameter. Default is Null.
+     * @param string $key - Required Parameter.
      */
-    public static function valid_csrf_token(?string $key = null):bool
+    public static function valid_csrf_token(string $key):bool
     {
-        if($key){
-            return ((Request::key($key) === base64_decode(Response::get('app-access'))) && (Request::key($key) === Session::get('csrf'))) ? true : false;
-        }
-        return base64_decode(Response::get('app-access')) === Session::get('csrf');
+        $csrf = Session::get('csrf');
+        Session::pop('csrf');
+        return ((Request::key($key) === base64_decode(Response::get('access-token'))) && (Request::key($key) === $csrf));
     }
 }
