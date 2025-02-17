@@ -56,12 +56,10 @@ class Response
         $headers["Request-Time"] = time();
         $headers['App-Provider'] = "Cloud Bill Master";
         // Get CSRF Header Token
-        $cs = 'custom';
         if(empty($_REQUEST) || empty(Session::get('csrf'))){
             Session::set(['csrf'=>Vault::randomKey(64)]);
         }
         $headers['Csrf'] = Session::get('csrf');
-        echo $headers['Csrf'];
         foreach($headers as $key => $value){
             $key = trim($key);
             $value = trim($value);
@@ -77,7 +75,6 @@ class Response
     {
         $val = [];
         $header_list = headers_list();
-        $csrf = '';
         foreach($header_list as $header){
             $arr = explode(':', $header);
             $val[strtolower(trim($arr[0]))] = trim($arr[1] ?? '');
