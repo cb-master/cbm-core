@@ -176,7 +176,6 @@ class Request Extends Resource
     public static function valid_csrf_token(?string $key = null):bool
     {
         if($key){
-            echo Request::key($key);
             return ((Request::key($key) === base64_decode(Response::get('app-access'))) && (Request::key($key) === Session::get('csrf'))) ? true : false;
         }
         return base64_decode(Response::get('app-access')) === Session::get('csrf');
