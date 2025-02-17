@@ -8,8 +8,10 @@
 // Namespace
 namespace CBM\Core\Request;
 
-use CBM\Core\Uri\Uri;
+use CBM\Core\Response\Response;
 use CBM\CoreHelper\Resource;
+use CBM\Session\Session;
+use CBM\Core\Uri\Uri;
 
 class Request Extends Resource
 {
@@ -165,5 +167,18 @@ class Request Extends Resource
     public static function apiOnly():bool
     {
         return $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'];
+    }
+
+    // Check Token for Post Method
+    /**
+     * @param string $key - Optional Parameter. Default is Null.
+     */
+    public static function valid_csrf_token(?string $key = null):bool
+    {
+        if($key){
+            echo Request::key($key);
+            return ((Request::key($key) === base64_decode(Response::get('app-access'))) && (Request::key($key) === Session::get('csrf'))) ? true : false;
+        }
+        return base64_decode(Response::get('app-access')) === Session::get('csrf');
     }
 }
