@@ -7,7 +7,7 @@
 
 namespace CBM\Core\Filter;
 
-use CBM\CoreHelper\Error;
+use CBM\Handler\Error\Error;
 
 class Filter
 {

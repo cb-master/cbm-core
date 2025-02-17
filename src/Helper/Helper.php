@@ -60,7 +60,7 @@ class Helper
      */
     public static function redirect(string $slug, int $response = 302)
     {
-        Response::set($response);
+        Response::code($response);
         $uri = ltrim($slug, '/');
         $uri = (Option::webhost() ?: Uri::app_uri()) . "/$uri";
         header("Location:{$uri}");
