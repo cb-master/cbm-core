@@ -56,6 +56,9 @@ class Response
         $headers["Request-Time"] = time();
         $headers['App-Provider'] = "Cloud Bill Master";
         // Get CSRF Header Token
+        if(!Session::get('csrf')){
+            Session::set(['csrf'=>Vault::randomKey(24)]);
+        }
         $csrf = base64_encode(Session::get('csrf'));
         header('access-token:'.$csrf);
         foreach($headers as $key => $value){

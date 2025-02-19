@@ -170,14 +170,6 @@ class Request Extends Resource
         return $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'];
     }
 
-    // Generate CSRF Token
-    public static function generate_csrf_token():void
-    {
-        if(!Session::get('csrf')){
-            Session::set(['csrf'=>Vault::randomKey(24)]);
-        }
-    }
-
     // Check Valid CSRF Token
     /**
      * @param string $key - Required Parameter.
@@ -185,7 +177,7 @@ class Request Extends Resource
     public static function valid_csrf_token(string $key):bool
     {
         $csrf = Session::get('csrf');
-        Session::pop('csrf');
+        Session::set(['csrf'=>Vault::randomKey(24)]);
         return ((Request::key($key) === base64_decode(Response::get('access-token'))) && (Request::key($key) === $csrf));
     }
 }
