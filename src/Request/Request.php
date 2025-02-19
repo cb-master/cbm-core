@@ -10,6 +10,7 @@ namespace CBM\Core\Request;
 
 use CBM\Core\Response\Response;
 use CBM\CoreHelper\Resource;
+use CBM\Core\Vault\Vault;
 use CBM\Session\Session;
 use CBM\Core\Uri\Uri;
 
@@ -167,6 +168,14 @@ class Request Extends Resource
     public static function apiOnly():bool
     {
         return $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'];
+    }
+
+    // Generate CSRF Token
+    public static function generate_csrf_token():void
+    {
+        if(!Session::get('csrf')){
+            Session::set(['csrf'=>Vault::randomKey(24)]);
+        }
     }
 
     // Check Valid CSRF Token
