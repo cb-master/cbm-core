@@ -20,9 +20,9 @@
             "email":"riyadhtayf@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
-        "cb-master/cbm-session": "^2.0",
-        "cb-master/cbm-handler": "^1.0"
+        "cb-master/cbm-session": "dev-main",
+        "cb-master/cbm-handler": "dev-main"
     }
 }
