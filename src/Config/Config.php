@@ -31,7 +31,7 @@ class Config
     // Get Function Value
     public static function get(string $property, ?string $key = null):mixed
     {
-        if(property_exists(self::$instance, $property)){
+        if(property_exists(self::instance(), $property)){
             return $key ? self::instance()->$property[$key] : self::instance()->$property;
         }
         return false;
