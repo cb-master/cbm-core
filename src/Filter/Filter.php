@@ -25,7 +25,7 @@ class Filter
      * @param string $filter - Required Argument as filter name.
      * @param callable $callback - Required Argument as function.
      */
-    public static function add_filter(string $filter, callable $callback)
+    public static function add_filter(string $filter, callable $callback):void
     {
         self::$filters[$filter][] = $callback;
     }
@@ -45,7 +45,7 @@ class Filter
         }
         
         foreach(self::$filters[$filter] as $callback){
-            $output[] = call_user_func($callback, ...$args);
+            $output[$callback] = call_user_func($callback, ...$args);
         }
 
         return $output;

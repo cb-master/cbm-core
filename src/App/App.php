@@ -14,12 +14,14 @@ use CBM\Core\Response\Response;
 class App
 {
     // Instance
-    private static Object|Null $instance = Null;
+    private static Object|Null $instance = null;
 
     // Load Instance
     public static function instance():object
     {
-        self::$instance = self::$instance ?: new Static;
+        if(!self::$instance){
+            self::$instance = new Static;
+        }
         return self::$instance;
     }
 
@@ -52,6 +54,7 @@ class App
 
         // Check Method Exist
         $method = method_exists($controller, $method) && in_array($method, $acceptedMethods) ? $method : 'index';
+        $method = str_replace('_','',$method);
 
         // Load Controller & Method
         call_user_func([$object, $method]);

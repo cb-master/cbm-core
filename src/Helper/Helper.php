@@ -105,13 +105,13 @@ class Helper
     {
         $values = Vault::decrypt($token);
         $arr = explode('>>>', $values);
-        return end($arr) === Cookie::get('laika');
+        return hash_equals(end($arr), Cookie::get('laika'));
     }
 
     // To Token
-    public static function toToken(string $value):string
+    public static function generateToken(array $array):string
     {
-        $value = "{$value}>>>".Cookie::get('laika');
-        return Vault::encrypt($value);
+        $str = implode('>>>', $array);
+        return Vault::encrypt("{$str}>>>".Cookie::get('laika'));
     }
 }

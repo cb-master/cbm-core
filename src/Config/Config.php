@@ -16,7 +16,9 @@ class Config
     // Initiate Instance
     private static function instance()
     {
-        self::$instance = self::$instance ?: new Static;
+        if(!self::$instance){
+            self::$instance = new Static;
+        }
         return self::$instance;
     }
 

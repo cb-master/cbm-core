@@ -66,8 +66,7 @@ class Cookie
     {
         if(isset($_COOKIE[$name])){
             unset($_COOKIE[$name]);
-            return true;
         }
-        return false;
+        return true;
     }
 }
