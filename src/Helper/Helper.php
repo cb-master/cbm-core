@@ -73,8 +73,7 @@ class Helper
      */
     public static function location(string $slug):string
     {
-        $uri = ltrim($slug, '/');
-        return (Option::webhost() ?: Uri::app_uri()) . "/$uri";
+        return (Option::webhost() ?: Uri::app_uri()) . ltrim($slug, '/');
     }
 
     // Get Visitor IP
