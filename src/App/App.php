@@ -37,6 +37,7 @@ class App
 
         // Get Class & Method
         $method = Uri::slug(1) ?: 'index';
+        $method = str_replace('_', '', $method);
         $method = str_replace('-', '_', $method);
 
         try{
@@ -54,7 +55,6 @@ class App
 
         // Check Method Exist
         $method = method_exists($controller, $method) && in_array($method, $acceptedMethods) ? $method : 'index';
-        $method = str_replace('_','',$method);
 
         // Load Controller & Method
         call_user_func([$object, $method]);
