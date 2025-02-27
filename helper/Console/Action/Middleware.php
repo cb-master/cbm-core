@@ -28,7 +28,7 @@ class Middleware
         }
 
         // Get Middleware File
-        $name = ucfirst($inputs[1]);
+        $name = ucfirst(strtolower($inputs[1]));
         $middleware_file = self::$path."/{$name}.php";
         // Shoe Error If Middleware Already Exist
         if(file_exists($middleware_file)){
@@ -61,11 +61,11 @@ class Middleware
         }
 
         // Get Old Middleware File
-        $old_name = ucfirst($inputs[1]);
+        $old_name = ucfirst(strtolower($inputs[1]));
         $old_middleware_file = self::$path."/{$old_name}.php";
 
         // Get New Middleware File
-        $new_name = ucfirst($inputs[2]);
+        $new_name = ucfirst(strtolower($inputs[2]));
         $new_middleware_file = self::$path."/{$new_name}.php";
 
         // Show Message If Middleware Does Not Exist
@@ -97,7 +97,7 @@ class Middleware
         }
 
         // Get Middleware File
-        $name = ucfirst($inputs[1]);
+        $name = ucfirst(strtolower($inputs[1]));
         $middleware_file = self::$path."/{$name}.php";
         // Show Message If Middleware Does Not Exist
         if(!file_exists($middleware_file)){

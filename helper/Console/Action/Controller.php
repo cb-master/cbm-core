@@ -28,7 +28,7 @@ class Controller
         }
 
         // Get Controller File
-        $name = ucfirst($inputs[1]);
+        $name = ucfirst(strtolower($inputs[1]));
         $controller_file = self::$path."/{$name}.php";
 
         // Shoe Error If Controller Already Exist
@@ -62,11 +62,11 @@ class Controller
         }
 
         // Get Old Controller File
-        $old_name = ucfirst($inputs[1]);
+        $old_name = ucfirst(strtolower($inputs[1]));
         $old_controller_file = self::$path."/{$old_name}.php";
 
         // Get New Controller File
-        $new_name = ucfirst($inputs[2]);
+        $new_name = ucfirst(strtolower($inputs[2]));
         $new_controller_file = self::$path."/{$new_name}.php";
 
         // Show Message If Controller Does Not Exist
@@ -98,7 +98,7 @@ class Controller
             Message::message("INVALID CONTROLLER", "Invalid Controller Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
         // Get Controller File
-        $name = ucfirst($inputs[1]);
+        $name = ucfirst(strtolower($inputs[1]));
         $controller_file = self::$path."/{$name}.php";
         // Show Message If Controller Does Not Exist
         if(!file_exists($controller_file)){

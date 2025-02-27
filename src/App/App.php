@@ -40,7 +40,11 @@ class App
         $method = str_replace('_', '', $method);
         $method = str_replace('-', '_', $method);
 
-        $acceptedMethods = get_class_methods($controller);
+        try{
+            $acceptedMethods = get_class_methods($controller);
+        }catch(\Throwable $th){
+            $acceptedMethods = [];
+        }
         
         $class = (class_exists($controller) && in_array($method, $acceptedMethods)) ? $controller : $_404;
 

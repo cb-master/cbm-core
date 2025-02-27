@@ -48,7 +48,7 @@ class View
 
         file_put_contents($view_file, $example);
         // Show Message
-        Message::message("SUCCESS", "View '{$inputs[1]}' Created Successfully.");
+        Message::message("SUCCESS", "View '{$inputs[1]}.tpl' Created Successfully.");
     }
 
     // Rename View
@@ -83,7 +83,7 @@ class View
         $new_view_file = "{$path}/{$inputs[2]}.tpl";
         // Show Message If View Does Not Exist
         if(!file_exists($old_view_file)){
-            Message::message("NOT FOUND", "View '{$inputs[1]}' Does Not Exist.", "red");
+            Message::message("NOT FOUND", "View '{$inputs[1]}.tpl' Does Not Exist.", "red");
         }
 
         // Create New View
@@ -113,17 +113,17 @@ class View
         $path = str_replace('\\', '/', $path);
         $path = $path ? self::$path."/{$path}" : self::$path;
         if(!file_exists($path)){
-            Message::message("NOT FOUND", "Path '{$path}' Does Not Exist.", "red");
+            Message::message("NOT FOUND", "Path '{$path}.tpl' Does Not Exist.", "red");
         }
         // Get View File
         $view_file = "{$path}/{$inputs[1]}.tpl";
         // Show Message If View Does Not Exist
         if(!file_exists($view_file)){
-            Message::message("NOT FOUND", "View '{$inputs[1]}' Does Not Exist.", "red");
+            Message::message("NOT FOUND", "View '{$inputs[1]}.tpl' Does Not Exist.", "red");
         }
         // Remove View
         unlink($view_file);
         // Show Message
-        Message::message("SUCCESS", "View '{$inputs[1]}' Removed Successfully");
+        Message::message("SUCCESS", "View '{$inputs[1]}.tpl' Removed Successfully");
     }
 }
