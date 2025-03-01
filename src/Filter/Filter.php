@@ -11,66 +11,39 @@ use CBM\Handler\Error\Error;
 
 class Filter
 {
-    // Filters
-    private static $filters = [];
+    // Filters Var
+    private static array $filters = [];
 
-    // Actions
-    private static $actions = [];
-
-    // Hooks
-    private static $hooks = [];
-
-    // Add Filter
+    // Add Filter Method
     /**
-     * @param string $filter - Required Argument as filter name.
-     * @param callable $callback - Required Argument as function.
+     * @param string $filter - Required Argument.
+     * @param callable $callback - Required Argument.
+     * @param int $priority - Optional Argument. Default is 10
      */
-    public static function add_filter(string $filter, callable $callback):void
+    public static function add_filter(string $filter, callable $callback, int $priority = 10)
     {
-        self::$filters[$filter][] = $callback;
+        self::$filters[$filter][$priority][] = $callback;
+        ksort(self::$filters[$filter]);
     }
 
-    // Do Filter
+    // Apply Filters
     /**
-     * @param string $filter - Required Argument as filter name.
-     * @param mixed ...$args - Required Argument as function parameters.
+     * @param string $tag - Required Argument.
+     * @param mixed $value - Required Argument.
+     * @param mixed ...$args - Optional Arguments.
      */
-    public static function do_filter(string $filter, mixed ...$args):mixed
+    public static function apply_filter(string $filter, mixed $value, mixed ...$args):mixed
     {
-        // Output
-        $output = [];
-
-        if(!isset(self::$filters[$filter])){
-            throw new Error("'{$filter}' Filter Does Not Exist!");
-        }
-        
-        foreach(self::$filters[$filter] as $callback){
-            $output[$callback] = call_user_func($callback, ...$args);
+        if (!isset(self::$filters[$filter])){
+            return $value;
         }
 
-        return $output;
-    }
+        foreach (self::$filters[$filter] as $callbacks){
+            foreach ($callbacks as $callback){
+                $value = $callback($value, ...$args);
+            }
+        }
 
-    // Add Action
-    /**
-     * @param string $action - Required Argument as action name.
-     * @param callable $callback - Required Argument as function.
-     */
-    public static function add_action(string $action, callable $callback):void
-    {
-        self::$actions[$action] = $callback;
-    }
-
-    // Do Action
-    /**
-     * @param string $action - Required Argument as action name.
-     * @param mixed ...$args - Required Argument as function parameters.
-     */
-    public static function do_action(string $action, mixed ...$args):mixed
-    {
-        if(!isset(self::$actions[$action])){
-            throw new Error("'{$action}' Action Does Not Exist!");
-        }        
-        return call_user_func(self::$actions[$action], ...$args);
+        return $value;
     }
 }
