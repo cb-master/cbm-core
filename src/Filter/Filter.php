@@ -29,10 +29,10 @@ class Filter
     // Apply Filters
     /**
      * @param string $tag - Required Argument.
-     * @param mixed $value - Required Argument.
+     * @param mixed $value - Optional Argument. Default is Null.
      * @param mixed ...$args - Optional Arguments.
      */
-    public static function apply_filter(string $filter, mixed $value, mixed ...$args):mixed
+    public static function apply_filter(string $filter, mixed $value = null, mixed ...$args):mixed
     {
         if (!isset(self::$filters[$filter])){
             return $value;
