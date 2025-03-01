@@ -14,6 +14,9 @@ class Filter
     // Filters Var
     private static array $filters = [];
 
+    // Assets
+    private static array $assets = [];
+
     // Add Filter Method
     /**
      * @param string $filter - Required Argument.
@@ -45,5 +48,27 @@ class Filter
         }
 
         return $value;
+    }
+
+    // Assign Asset
+    /**
+     * @param string $key - Required Argument.
+     * @param mixed $value - Required Argument.
+     */
+    public static function assign(string $key, mixed $value):void
+    {
+        self::$assets[$key][] = $value;
+    }
+
+    // Get Asset
+    /**
+     * @param string $key - Required Argument.
+     */
+    public static function getAsset(string $key):array
+    {
+        if(!isset(self::$assets[$key])){
+            throw new Error("Filter Asset '{$key}' not Defined!", 1000);
+        }
+        return self::$assets[$key];
     }
 }
