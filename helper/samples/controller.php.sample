@@ -26,6 +26,6 @@ class {class} Extends Controller
         Template::assign('title', 'Sample Controller Page');
 
         // Load View File
-        Template::display('sample');
+        Template::display(apply_filter('load_view', 'sample_file_name'));
     }
 }
