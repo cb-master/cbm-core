@@ -38,19 +38,15 @@ class Filter
      */
     public static function apply_filter(string $filter, mixed $value = null, mixed ...$args):mixed
     {
-        // if (!isset(self::$filters[$filter])){
-        //     return $value;
-        // }
-        try{
-            foreach (self::$filters[$filter] as $callbacks){
-                foreach ($callbacks as $callback){
-                    $value = $callback($value, ...$args);
-                }
-            }    
-            return $value;
-        }catch(Throwable $th) {
-            throw $th;
+        if (!isset(self::$filters[$filter])){
+            throw new Error("Filter '{$filter}' Does Not Exist.", 80000);
         }
+        foreach (self::$filters[$filter] as $callbacks){
+            foreach ($callbacks as $callback){
+                $value = $callback($value, ...$args);
+            }
+        }    
+        return $value;
 
     }
 
