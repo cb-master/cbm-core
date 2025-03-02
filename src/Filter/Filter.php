@@ -63,10 +63,10 @@ class Filter
     /**
      * @param string $key - Required Argument.
      */
-    public static function getAsset(string $key):array
+    public static function getAssignedFilter(string $key):array
     {
         if(!isset(self::$assets[$key])){
-            throw new Error("Filter Asset '{$key}' not Defined!", 1000);
+            throw new Error("Assigned Filter '{$key}' Does Not Exist!", 80000);
         }
         return self::$assets[$key];
     }
