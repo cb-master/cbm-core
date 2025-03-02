@@ -8,6 +8,7 @@
 namespace CBM\Core\Filter;
 
 use CBM\Handler\Error\Error;
+use Throwable;
 
 class Filter
 {
@@ -37,17 +38,20 @@ class Filter
      */
     public static function apply_filter(string $filter, mixed $value = null, mixed ...$args):mixed
     {
-        if (!isset(self::$filters[$filter])){
+        // if (!isset(self::$filters[$filter])){
+        //     return $value;
+        // }
+        try{
+            foreach (self::$filters[$filter] as $callbacks){
+                foreach ($callbacks as $callback){
+                    $value = $callback($value, ...$args);
+                }
+            }    
             return $value;
+        }catch(Throwable $th) {
+            throw $th;
         }
 
-        foreach (self::$filters[$filter] as $callbacks){
-            foreach ($callbacks as $callback){
-                $value = $callback($value, ...$args);
-            }
-        }
-
-        return $value;
     }
 
     // Assign Asset
