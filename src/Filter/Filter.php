@@ -8,7 +8,6 @@
 namespace CBM\Core\Filter;
 
 use CBM\Handler\Error\Error;
-use Throwable;
 
 class Filter
 {
