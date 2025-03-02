@@ -38,7 +38,7 @@ class Filter
     public static function apply_filter(string $filter, mixed $value = null, mixed ...$args):mixed
     {
         if (!isset(self::$filters[$filter])){
-            throw new Error("Filter '{$filter}' Does Not Exist.", 80000);
+            return $value;
         }
         foreach (self::$filters[$filter] as $callbacks){
             foreach ($callbacks as $callback){
