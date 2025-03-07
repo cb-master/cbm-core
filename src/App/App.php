@@ -8,6 +8,7 @@
 // Namespace
 namespace CBM\Core\App;
 
+use CBm\Core\Response\Response;
 use CBM\Handler\Error\Error;
 use CBM\Core\Uri\Uri;
 
@@ -79,8 +80,12 @@ class App
 
         // $class = (class_exists($controller) && in_array($method, $acceptedMethods)) ? $controller : $_404;
         if(in_array(strtolower($controller), self::instance()->api)){
+            // Set Header Type
+            Response::setHeader(['Content-Type'=>'application/json']);
+            // Set Class
             $class = (class_exists($class) && method_exists($class, $method))? $class : '\\CBM\\Core\\App\\Api';
         }else{
+            // Set Class
             $class = (class_exists($class) && method_exists($class, $method)) ? $class : self::instance()->_404;
         }
         $method = method_exists($class, $method) ? $method : strtolower(self::$index);

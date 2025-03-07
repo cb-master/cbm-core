@@ -46,13 +46,22 @@ class Response
         header("X-Powered-By:{$str}");
     }
 
-    // Response Header Set
+    // Set Header
     /**
-     * @param array $headers - Custom Headers to Add New or Edit
+     * @param array $headers - Custom Headers to Add New or Replace Header
      */
-    public static function header(array $headers = [])
+    public static function setHeader(array $headers = []):void
     {
-        $headers = array_merge(self::$headers, $headers);
+        foreach($headers as $key => $value){
+            $key = trim($key);
+            $value = trim($value);
+            header("{$key}: {$value}");
+        }
+    }
+
+    // Response Header Set
+    public static function header()
+    {
         $headers["Request-Time"] = time();
         $headers['App-Provider'] = "Cloud Bill Master";
         // Get CSRF Header Token
