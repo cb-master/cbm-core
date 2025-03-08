@@ -16,7 +16,7 @@ defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
 class {class}
 {
     // Table Name
-    public static $table = 'table_name';
+    public static string $table = 'table_name';
     
     // Start Writing Your Methods Here
 }
