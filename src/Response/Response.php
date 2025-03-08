@@ -32,9 +32,10 @@ class Response
     /**
      * @param int $code - Default is 200
      */
-    public static function code(int $code = 200)
+    public static function code(int $code = 200):int
     {
         http_response_code($code);
+        return $code;
     }
 
     // Powered By Response
