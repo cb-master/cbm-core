@@ -164,20 +164,14 @@ class Request Extends Resource
         return $request_data;
     }
 
-    // Check If Request For Api
-    public static function apiOnly():bool
-    {
-        return $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'];
-    }
-
     // Check Valid CSRF Token
     /**
-     * @param string $key - Required Parameter.
+     * @param string $csrf - Required Parameter.
      */
-    public static function valid_csrf_token(string $key):bool
+    public static function valid_csrf_token(string $csrf):bool
     {
-        $csrf = Session::get('csrf');
+        $existing_csrf = Session::get('csrf');
         Session::set(['csrf'=>Vault::randomKey(24)]);
-        return ((Request::key($key) === base64_decode(Response::get('access-token'))) && (Request::key($key) === $csrf));
+        return (($csrf === base64_decode(Response::get('access-token'))) && ($csrf === $existing_csrf));
     }
 }
