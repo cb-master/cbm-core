@@ -8,6 +8,8 @@
 // Namespace
 namespace CBM\Core\Config;
 
+#[\AllowDynamicProperties]
+
 class Config
 {
     // Instance

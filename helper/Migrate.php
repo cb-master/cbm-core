@@ -31,29 +31,27 @@ class Migrate
     {
         if(!Model::table('admins')->exist()){
             Model::table('admins')
-                ->column('id', 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT')
-                ->column('uuid', 'VARCHAR(255) NOT NULL')
-                ->column('fname', 'VARCHAR(255) DEFAULT NULL')
-                ->column('lname', 'VARCHAR(255) DEFAULT NULL')
-                ->column('username', 'VARCHAR(255) NOT NULL')
-                ->column('email', 'VARCHAR(255) NOT NULL')
-                ->column('password', 'VARCHAR(255) NOT NULL')
-                ->column('password_token', 'VARCHAR(255) DEFAULT NULL')
-                ->column('role_id', 'INT(11) NOT NULL')
-                ->column('status', 'ENUM("active","inactive","suspended") NOT NULL DEFAULT "inactive"')
-                ->column('created', 'DATETIME NOT NULL')
-                ->column('updated', 'DATETIME DEFAULT NULL')
-                ->column('last_login', 'DATETIME DEFAULT NULL')
-                ->column('token', 'TEXT DEFAULT NULL')
-                ->column('api_access', 'ENUM("enable", "disable") NOT NULL DEFAULT "disable"')
-                ->column('api_key', 'VARCHAR(255) DEFAULT NULL')
-                ->column('notes', 'LONGTEXT DEFAULT NULL')
-                ->primary('id')
-                ->unique('uuid')
-                ->unique('username')
-                ->unique('email')
-                ->index('api_access')
-                ->unique('api_key')
+                ->column('aid', 'BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT')
+                ->column('afname', 'TEXT DEFAULT NULL')
+                ->column('alname', 'TEXT DEFAULT NULL')
+                ->column('ausername', 'TEXT NOT NULL')
+                ->column('aemail', 'TEXT NOT NULL')
+                ->column('apassword', 'TEXT NOT NULL')
+                ->column('apassword_token', 'TEXT DEFAULT NULL')
+                ->column('arole_id', 'INT(11) NOT NULL')
+                ->column('astatus', 'ENUM("active","inactive","suspended") NOT NULL DEFAULT "inactive"')
+                ->column('acreated', 'DATETIME NOT NULL')
+                ->column('aupdated', 'DATETIME DEFAULT NULL')
+                ->column('alast_login', 'DATETIME DEFAULT NULL')
+                ->column('atoken', 'TEXT DEFAULT NULL')
+                ->column('aapi_access', 'ENUM("enable", "disable") NOT NULL DEFAULT "disable"')
+                ->column('aapi_key', 'TEXT DEFAULT NULL')
+                ->column('anotes', 'LONGTEXT DEFAULT NULL')
+                ->primary('aid')
+                ->unique('ausername')
+                ->unique('aemail')
+                ->index('aapi_access')
+                ->unique('aapi_key')
                 ->create();
         }
     }
@@ -63,29 +61,26 @@ class Migrate
     {
         if(!Model::table('adminroles')->exist()){
             Model::table('adminroles')
-                ->column('id', 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT')
-                ->column('uuid', 'VARCHAR(255) NOT NULL')
-                ->column('type', 'VARCHAR(255) NOT NULL')
-                ->column('accesses', 'LONGTEXT')
-                ->column('default_role', 'ENUM("yes","no") DEFAULT "no"')
-                ->column('created', 'DATETIME NOT NULL')
-                ->column('updated', 'DATETIME DEFAULT NULL')
-                ->column('notes', 'LONGTEXT DEFAULT NULL')
-                ->unique('id')
-                ->unique('uuid')
-                ->index('type')
-                ->index('created')
+                ->column('arid', 'INT(10) UNSIGNED NOT NULL AUTO_INCREMENT')
+                ->column('artype', 'TEXT NOT NULL')
+                ->column('araccesses', 'LONGTEXT')
+                ->column('ardefault', 'ENUM("yes","no") DEFAULT "no"')
+                ->column('arcreated', 'DATETIME NOT NULL')
+                ->column('arupdated', 'DATETIME DEFAULT NULL')
+                ->column('arnotes', 'LONGTEXT DEFAULT NULL')
+                ->unique('arid')
+                ->index('artype')
+                ->index('arcreated')
                 ->create();
         }
         // Insert First Role If Not Exist
-        if(!Model::table('adminroles')->filter('id', '=', 1)->single('id'))
+        if(!Model::table('adminroles')->filter('arid', '=', 1)->single('arid'))
         {
             $data = [
-                'uuid'          =>  Model::table('adminroles')->uuid(),
-                'type'          =>  'superadmin',
-                'accesses'      =>  '{"viewStaff":1,"addStaff":1,"removeStaff":1,"editStaff":1}',
-                'created'       =>  date('Y-m-d H:i:s'),
-                'default_role'  =>  'yes'
+                'artype'    =>  'superadmin',
+                'araccesses'=>  'a:4:{s:9:"viewStaff";i:1;s:8:"addStaff";i:1;s:11:"removeStaff";i:1;s:9:"editStaff";i:1;}',
+                'arcreated' =>  date('Y-m-d H:i:s'),
+                'ardefault' =>  'yes'
             ];
             Model::table('adminroles')->insert($data);
         }
@@ -96,11 +91,11 @@ class Migrate
     {
         if(!Model::table('sessions')->exist()){
             Model::table('sessions')
-                ->column('id', 'VARCHAR(50) NOT NULL')
-                ->column('last_access', 'INT(12) NOT NULL')
-                ->column('session_data', 'LONGTEXT NOT NULL')
-                ->primary('id')
-                ->index('last_access')
+                ->column('ses_id', 'VARCHAR(50) NOT NULL')
+                ->column('ses_last_access', 'INT(10) NOT NULL')
+                ->column('ses_data', 'LONGTEXT NOT NULL')
+                ->primary('ses_id')
+                ->index('ses_last_access')
                 ->create();
         }
     }
@@ -110,12 +105,12 @@ class Migrate
     {
         if(!Model::table('options')->exist()){
             Model::table('options')
-                ->column('id', 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT')
-                ->column('option_key', 'VARCHAR(100) NOT NULL')
-                ->column('option_value', 'LONGTEXT NOT NULL')
-                ->column('default_row', 'enum("yes","no") NOT NULL DEFAULT "no"')
-                ->primary('id')
-                ->unique('option_key')
+                ->column('opt_id', 'BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT')
+                ->column('opt_key', 'TEXT NOT NULL')
+                ->column('opt_value', 'TEXT NOT NULL DEFAULT NULL')
+                ->column('opt_default', 'enum("yes","no") NOT NULL DEFAULT "no"')
+                ->primary('opt_id')
+                ->unique('opt_key')
                 ->create();
         }
 
