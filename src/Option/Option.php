@@ -28,9 +28,9 @@ class Option
     // Set/Get Option Value
     /**
      * @param string $name - Required Argument as Option Key.
-     * @param ?string $value - Required Argument as Option Value.
+     * @param int|string $value - Required Argument as Option Value.
      */
-    public static function key(string $name, ?string $value = null, bool $default = false):bool|string
+    public static function key(string $name, int|string $value = null, bool $default = false):bool|int|string
     {
         // Set Option Key if $value is Set
         if($value !== null){
