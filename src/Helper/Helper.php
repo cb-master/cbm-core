@@ -62,7 +62,7 @@ class Helper
     {
         Response::code($response);
         $uri = ltrim($slug, '/');
-        $uri = (Option::webhost() ?: Uri::app_uri()) . "/$uri";
+        $uri = (Option::key('webhost') ?: Uri::app_uri()) . "/$uri";
         header("Location:{$uri}");
         die();
     }
@@ -74,7 +74,7 @@ class Helper
     public static function location(string $slug):string
     {
         $slug = ltrim($slug, '/');
-        return (Option::webhost() ?: Uri::app_uri()) . "/{$slug}";
+        return (Option::key('webhost') ?: Uri::app_uri()) . "/{$slug}";
     }
 
     // Get Visitor IP

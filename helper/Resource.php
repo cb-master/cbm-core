@@ -8,6 +8,7 @@
  // Namespace
 namespace CBM\CoreHelper;
 
+use CBM\Handler\Error\Error;
 use CBM\Core\Uri\Uri;
 
 class Resource

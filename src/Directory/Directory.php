@@ -8,7 +8,7 @@
 // Namespace
 namespace CBM\Core\Directory;
 
-use Error;
+use Exception;
 
 // Directory Hndler
 class Directory
@@ -32,7 +32,7 @@ class Directory
     public static function folders(string $path)
     {
         if(!is_dir($path)){
-            throw new Error("Invalid Directory '{$path}'");
+            throw new Exception("Invalid Directory '{$path}'");
         }
         $path = self::clear_path($path);
         return glob("{$path}", GLOB_ONLYDIR);
@@ -46,7 +46,7 @@ class Directory
     public static function files(string $path, string $ext):array
     {
         if(!is_dir($path)){
-            throw new Error("Invalid Directory '{$path}'");
+            throw new Exception("Invalid Directory '{$path}'");
         }
         $path = self::clear_path($path);
         return glob("{$path}.{$ext}");

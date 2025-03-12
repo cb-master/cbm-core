@@ -8,15 +8,16 @@
 // Namespace
 namespace CBM\Core\App;
 
+use CBM\Core\Response\Response;
+
 class Api
 {
     public function index()
     {
         // Set Response Code
-        http_response_code(404);
         
         print(json_encode([
-            'code'      =>  404,
+            'code'      =>  Response::code(404),
             'status'    =>  'failed',
             'message'   =>  'You Have Entered an Invalid Uri.',
             'data'      =>  []

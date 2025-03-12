@@ -8,7 +8,6 @@
 // Namespace
 namespace CBM\Core\Response;
 
-use CBM\Core\Request\Request;
 use CBM\Core\Vault\Vault;
 use CBM\Session\Session;
 

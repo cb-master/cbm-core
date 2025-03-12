@@ -25,32 +25,32 @@ class Vault
     // Get a Random Hash
     public static function hash(string $value):string
     {
-        return hash_hmac("sha256", $value, Option::get('secret'));
+        return hash_hmac("sha256", $value, Option::key('secret'));
     }
 
     // Encrypt String
     /**
      * @param string $string Required Argument.
-     * @param string $secret Optional Argument.
-     * @param string $iv Optional Argument.
+     * @param ?string $secret Optional Argument.
+     * @param ?string $iv Optional Argument.
      */
-    public static function encrypt(string $string, string $secret = null, string $iv = null):string
+    public static function encrypt(string $string, ?string $secret = null, ?string $iv = null):string
     {
-        $secret = $secret ?: Option::get('secret');
-        $iv = $iv ?: Option::get('key');
+        $secret = $secret ?: Option::key('secret');
+        $iv = $iv ?: Option::key('key');
         return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), $secret, 0, $iv));
     }
 
     // Decrypt Encrypted String
     /**
      * @param string $string Required Argument.
-     * @param string $secret Optional Argument. Pass the Secret Key
-     * @param string $iv Optional Argument.
+     * @param ?string $secret Optional Argument. Pass the Secret Key
+     * @param ?string $iv Optional Argument.
      */
-    public static function decrypt(string $string, string $secret = null, string $iv = null):string
+    public static function decrypt(string $string, ?string $secret = null, ?string $iv = null):string
     {
-        $secret = $secret ?: Option::get('secret');
-        $iv = $iv ?: Option::get('key');
+        $secret = $secret ?: Option::key('secret');
+        $iv = $iv ?: Option::key('key');
         return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), $secret, 0, $iv);
     }
 

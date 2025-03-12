@@ -114,57 +114,29 @@ class Migrate
                 ->create();
         }
 
-        //// Set Values if Not Exist
         // Set App Name If Not Exist
-        if(!Option::get('app_name')){
-            Option::set('app_name', 'Cloud Bill Master', 'yes');
-        }
+        Option::key('app_name', 'Cloud Bill Master', true);
         // Set Language If Not Exist
-        if(!Option::get('language')){
-            Option::set('language', 'en', 'yes');
-        }
+        Option::key('language', 'en', true);
         // Set App Timezone If Not Exist
-        if(!Option::get('time_zone')){
-            Option::set('time_zone', date_default_timezone_get(), 'yes');
-        }
+        Option::key('time_zone', date_default_timezone_get(), true);
         // Set App Date Format If Not Exist
-        if(!Option::get('dateformat')){
-            Option::set('dateformat', 'Y-M-d H:i:s', 'yes');
-        }
+        Option::key('dateformat', 'Y-M-d H:i:s', true);
         // Set App Session In Database If Not Exist
-        if(!Option::get('dbsession')){
-            Option::set('dbsession', 'yes', 'yes');
-        }
+        Option::key('dbsession', 'yes', true);
         // Set Developer Mode If Not Exist
-        if(!Option::get('developermode')){
-            Option::set('developermode', 'yes', 'yes');
-        }
+        Option::key('developermode', 'yes', true);
         // Set App IV If Not Exist
-        if(!Option::get('key')){
-            $key = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')));
-            Option::set('key', $key, 'yes');
-        }
+        Option::key('key', openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method'))), true);
         // Set App Secret If Not Exist
-        if(!Option::get('secret')){
-            $secret = Vault::randomKey(32);
-            Option::set('secret', $secret, 'yes');
-        }
+        Option::key('secret', Vault::randomKey(32), true);
         // Set Thousands Separator
-        if(!Option::get('thousands_separator')){
-            Option::set('thousands_separator', ',', 'yes');
-        }
+        Option::key('thousands_separator', ',', true);
         // Set Decimal Separator
-        if(!Option::get('decimal_separator')){
-            Option::set('decimal_separator', '.', 'yes');
-        }
+        Option::key('decimal_separator', '.', true);
         // Set Template Caching
-        if(!Option::get('template_caching')){
-            // Value Should Between 0, 1 or 2
-            Option::set('template_caching', 0, 'yes');
-        }
+        Option::key('template_caching', 0, true); // Value Should Between 0, 1 or 2
         // Set Template Caching
-        if(!Option::get('template_cache_lifetime')){
-            Option::set('template_cache_lifetime', '3600', 'yes');
-        }
+        Option::key('template_cache_lifetime', '3600', true);
     }
 }

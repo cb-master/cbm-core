@@ -28,7 +28,7 @@ class Format
     public static function default():string
     {
         if(!isset(self::$default)){
-            $default = Option::dateformat();
+            $default = Option::key('dateformat');
             self::$default = $default ?: self::$format;
         }
         return self::$default;

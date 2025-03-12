@@ -8,6 +8,7 @@
 // Namespace
 namespace CBM\Core\App;
 
+use CBM\Core\Response\Response;
 use CBM\Core\Uri\Uri;
 
 class _404
@@ -15,7 +16,7 @@ class _404
     public function index()
     {
         // Set Response Code
-        http_response_code(404);
+        Response::code(404);
         
         echo '<!DOCTYPE html>
 <html lang="en">
