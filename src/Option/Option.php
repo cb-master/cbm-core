@@ -38,7 +38,7 @@ class Option
             $exist = Model::table(self::$table)->filter(self::$key, '=', $name)->single(self::$key);
             if(!$exist){
                 Model::table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
-                return true;
+                return $value;
             }
             return false;
         }
