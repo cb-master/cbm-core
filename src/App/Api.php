@@ -18,7 +18,8 @@ class Api
         print(json_encode([
             'code'      =>  404,
             'status'    =>  'failed',
-            'message'   =>  'You Have Entered an Invalid Uri.'
+            'message'   =>  'You Have Entered an Invalid Uri.',
+            'data'      =>  []
         ], JSON_FORCE_OBJECT | JSON_PRETTY_PRINT));
     }
 }
