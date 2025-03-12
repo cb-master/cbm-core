@@ -9,36 +9,41 @@
 namespace CBM\Core\Option;
 
 use CBM\Model\Model;
+use Exception;
 
 class Option
 {
-    // Set Option
-    /**
-     * @param string $name - Required Argument as Option Key.
-     * @param string $value - Required Argument as Option Value.
-     */
-    public static function set(string $name, string $value, bool $default = false):int
-    {
-        $default_row = $default ? 'yes' : 'no';
-        return Model::table('options')->insert(['option_key' => $name, 'option_value' => $value, 'default_row'=>$default_row]);
-    }
-    
-    // Get Option Value
-    /**
-     * @param string $name - Required Argument as Option Key.
-     */
-    public static function get(string $name):string
-    {
-        $option = Model::table('options')->filter('option_key', '=', $name)->single();
-        return $option->option_value ?? $option['option_value'] ?? '';
-    }
+    // Table Name
+    private static $table = 'options';
 
-    // Get Option Value
-    public static function __callStatic($name, $type)
+    // Option Key Column
+    private static string $key = 'opt_key';
+
+    // Option Value Column
+    private static string $value = 'opt_value';
+
+    // Option Default Column
+    private static string $default = 'opt_default';
+
+    // Set/Get Option Value
+    /**
+     * @param string $name - Required Argument as Option Key.
+     * @param ?string $value - Required Argument as Option Value.
+     */
+    public static function key(string $name, ?string $value = null, bool $default = false):bool|string
     {
-        if(!method_exists(__CLASS__, $name)){
-            $option = Model::table('options')->filter('option_key', '=', $name)->single();
-            return $option->option_value ?? $option['option_value'] ?? '';
+        // Set Option Key if $value is Set
+        if($value !== null){
+            $opt_default = $default ? 'yes' : 'no';
+            $exist = Model::table(self::$table)->filter(self::$key, '=', $name)->single(self::$key);
+            if(!$exist){
+                Model::table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
+                return true;
+            }
+            return false;
         }
+        $option = Model::table(self::$table)->filter(self::$key, '=', $name)->single(self::$value);
+        $option = json_decode(json_encode($option),true);
+        return $option[self::$value] ?? '';
     }
 }
