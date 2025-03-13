@@ -178,8 +178,9 @@ class Request Extends Resource
     // Get Request From PHP Iput Stream
     public static function stream():array
     {
-        // Get Request Data
+        // Get php://input Data
         $request_data = json_decode(file_get_contents('php://input'), true);
+        $request_data = !is_array($request_data) ? [$request_data] : $request_data;
         return self::instance()->purify($request_data ?: []);
     }
 }
