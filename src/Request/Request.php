@@ -174,4 +174,12 @@ class Request Extends Resource
         Session::set(['csrf'=>Vault::randomKey(24)]);
         return (($csrf === base64_decode(Response::get('access-token'))) && ($csrf === $existing_csrf));
     }
+
+    // Get Request From PHP Iput Stream
+    public static function stream():array
+    {
+        // Get Request Data
+        $request_data = json_decode(file_get_contents('php://input'), true);
+        return self::instance()->purify($request_data ?: []);
+    }
 }
