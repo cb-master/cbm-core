@@ -21,13 +21,13 @@ class Validate
     public CONST ALPHANUMERIC = 3;
 
     // Soft
-    public CONST SOFT = 4;
+    public CONST SOFT = 1;
 
     // Medium
-    public CONST MEDIUM = 5;
+    public CONST MEDIUM = 2;
 
     // Hard
-    public CONST HARD = 6;
+    public CONST HARD = 3;
 
     // Validate Mumeric
     /**
@@ -93,7 +93,7 @@ class Validate
     /**
      * @param string $value
      * @param int $length Use any number. By default Laika using 6 characters
-     * @param int $type Use Constants Validate::ALPHA or Validate::NUMERIC or Validate::ALPHANUMERIC
+     * @param int $type Use Constants Validate::ALPHA or Validate::NUMERIC or Validate::ALPHANUMERIC. Validate::ALPHA is Default
      */
     public static function username(string $value, int $length = 6, int $type = 1):string|bool
     {
@@ -121,20 +121,20 @@ class Validate
     /**
      * @param string $value
      * @param int $type Use - Constants Validate::SOFT or Validate::MEDIUM or Validate::HARD
-     * @param int $length - Use any number. By default Laika using 6 characters length
+     * @param int $length - Use any number. By default Laika using 6 characters length.
      */
-    public static function password(string $value, int $type = 6, int $length = 6):bool|string
+    public static function password(string $value, int $length = 6, int $type = 3):bool|string
     {
         switch ($type) {
-            case 4:
+            case 1:
                 $regex = "/^[a-zA-Z]{{$length},}$/";
                 break;
 
-            case 5:
+            case 2:
                 $regex = "/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{{$length},}$/";
                 break;
 
-            case 6:
+            case 3:
                 $regex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{{$length},}$/";
                 break;
             
