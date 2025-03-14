@@ -30,7 +30,7 @@ class Option
      * @param string $name - Required Argument as Option Key.
      * @param int|string $value - Required Argument as Option Value.
      */
-    public static function key(string $name, int|string $value = null, bool $default = false):bool|int|string
+    public static function key(string $name, int|string $value = null, bool $default = false):string
     {
         // Set Option Key if $value is Set
         if($value !== null){
@@ -38,9 +38,8 @@ class Option
             $exist = Model::table(self::$table)->filter(self::$key, '=', $name)->single(self::$key);
             if(!$exist){
                 Model::table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
-                return $value;
             }
-            return false;
+            return $value;
         }
         $option = Model::table(self::$table)->filter(self::$key, '=', $name)->single(self::$value);
         $option = json_decode(json_encode($option),true);
