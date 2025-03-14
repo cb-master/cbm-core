@@ -123,29 +123,20 @@ class Request Extends Resource
 
     // Validate Request Keys
     /**
-     * @param string|array $keys - Required Argument
-     * @param string $location - Required Argument. Example 'sample' or 'sample/url'
+     * @param string|array $keys Required Argument
      */
-	public static function validate(string|array $keys, string $location)
+	public static function validate(string|array $keys):array
 	{
         $keys = (is_string($keys)) ? [$keys] : $keys;
+        $errors = [];
 
-        $location = trim($location, "/");
-
-        $redirect = Uri::app_uri()."/{$location}/";
-        
-		$errors = [];
-		foreach($keys as $key):
-			if(!array_key_exists($key, self::data()))
+        foreach($keys as $key){
+            if(!array_key_exists($key, self::data()))
 			{
-				$errors[] = sprintf("Request Key '<b style='color:red'>%s</b>' Missing.", $key);
+				$errors[] = $key;
 			}
-		endforeach;
-
-		if($errors)
-		{
-            self::request_validator_message($errors, $redirect);
-		}
+        }
+        return $errors;
 	}
 
     // Request Data Purify

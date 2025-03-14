@@ -47,29 +47,6 @@ class Resource
         return $defined;
     }
 
-    // Validate Error Message
-    /**
-     * @param array $errors - Default is []
-     * @param ?string $redirect - Default is null
-     */
-    public static function request_validator_message(array $errors = [], ?string $redirect = null):void
-    {
-        $redirect = $redirect ?: Uri::app_uri();
-        if($errors){
-            echo "<body style=\"display:flex;justify-content:center;align-items:center;margin:0;\">
-            <div>
-            <h2 style=\"text-align:center;color:red;\">APP ERROR!</h2>";
-
-            foreach($errors as $error):
-                echo "<center style=\"font-size: 18px;\">{$error}</center></br>";
-            endforeach;
-
-            echo "<div style=\"text-align:center\">\n<button style=\"padding: 5px 10px;border-radius: 3px;border: none;background-color: red;color: #fff;\"><a style=\"text-decoration:none;color:#fff\" href=\"{$redirect}\">Go Back!</a></button></div>\n</div></body>\n";
-            unset($errors);
-            die();
-        }
-    }
-
     // Shutdown Handler Message
     /**
      * @param array $errors - Required Errors From Error Handler. Default is an Empty Array
