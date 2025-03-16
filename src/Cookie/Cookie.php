@@ -65,7 +65,7 @@ class Cookie
     public static function pop(string $name):bool
     {
         if(isset($_COOKIE[$name])){
-            unset($_COOKIE[$name]);
+            self::set($name, '', -1);
         }
         return true;
     }
