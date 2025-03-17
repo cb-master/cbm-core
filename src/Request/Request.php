@@ -12,10 +12,12 @@ use CBM\Core\Response\Response;
 use CBM\CoreHelper\Resource;
 use CBM\Core\Vault\Vault;
 use CBM\Session\Session;
-use CBM\Core\Uri\Uri;
 
 class Request Extends Resource
 {
+    // Invalid Keys
+    private array $invalid = [];
+
     // Instance
     private static Object|Null $instance = Null;
 
@@ -125,19 +127,34 @@ class Request Extends Resource
     /**
      * @param string|array $keys Required Argument
      */
-	public static function validate(string|array $keys):array
+	public static function validateRequestKeys(string|array $keys):bool
 	{
-        $keys = (is_string($keys)) ? [$keys] : $keys;
-        $errors = [];
-
-        foreach($keys as $key){
-            if(!array_key_exists($key, self::data()))
-			{
-				$errors[] = $key;
-			}
+        if(is_string($keys)){
+            if(str_contains($keys, ',')){
+                $keys = explode(',', $keys);
+            }elseif(str_contains('|', $keys)){
+                $keys = explode('|', $keys);
+            }else{
+                $keys = [$keys];
+            }
         }
-        return $errors;
+        array_filter($keys, function($key){
+            if(!self::key($key))
+			{
+                self::instance()->invalid[] = $key;
+			}
+        });
+        if(self::instance()->invalid){
+            return true;
+        }
+        return true;
 	}
+
+    // Get Invalid Keys
+    public static function invalidKeys():array
+    {
+        return self::instance()->invalid;
+    }
 
     // Request Data Purify
     /**
