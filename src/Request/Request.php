@@ -19,7 +19,7 @@ class Request Extends Resource
     private array $invalid = [];
 
     // Instance
-    private static Object|Null $instance = Null;
+    private static object|null $instance = null;
 
     // Method
     private string $method;
@@ -33,7 +33,8 @@ class Request Extends Resource
     // Load Instance
     public static function instance()
     {
-        return self::$instance ?: new Static;
+        self::$instance = self::$instance ?: new Static;
+        return self::$instance;
     }
 
     // Get Method
@@ -145,7 +146,7 @@ class Request Extends Resource
 			}
         });
         if(self::instance()->invalid){
-            return true;
+            return false;
         }
         return true;
 	}
@@ -153,7 +154,9 @@ class Request Extends Resource
     // Get Invalid Keys
     public static function invalidKeys():array
     {
-        return self::instance()->invalid;
+        $keys = self::instance()->invalid;
+        self::instance()->invalid = [];
+        return $keys;
     }
 
     // Request Data Purify
@@ -176,7 +179,7 @@ class Request Extends Resource
     /**
      * @param string $csrf - Required Parameter.
      */
-    public static function valid_csrf_token(string $csrf):bool
+    public static function validCsrfToken(string $csrf):bool
     {
         $existing_csrf = Session::get('csrf');
         Session::set(['csrf'=>Vault::randomKey(24)]);
