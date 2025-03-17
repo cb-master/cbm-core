@@ -6,7 +6,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "files":["helper/functions.php"],
+            "files":["functions/core.php"],
             "CBM\\Core\\": "src/",
             "CBM\\CoreHelper\\": "helper/"
         }
