@@ -6,10 +6,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "files":["functions/core.php"],
             "CBM\\Core\\": "src/",
             "CBM\\CoreHelper\\": "helper/"
-        }
+        },
+        "files":[
+            "functions/core.php"
+        ]
     },
     "authors": [
         {
