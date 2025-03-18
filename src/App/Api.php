@@ -19,7 +19,7 @@ class Api
         print(json_encode([
             'code'      =>  Response::code(404),
             'status'    =>  'failed',
-            'message'   =>  'You Have Entered an Invalid Uri.',
+            'message'   =>  'Invalid API Url!',
             'data'      =>  []
         ], JSON_FORCE_OBJECT | JSON_PRETTY_PRINT));
     }
