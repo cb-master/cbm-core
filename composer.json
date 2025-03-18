@@ -23,10 +23,9 @@
             "email":"riyadhtayf@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
-        "cb-master/cbm-session": "dev-main",
-        "cb-master/cbm-handler": "dev-main",
-        "firebase/php-jwt": "dev-main"
+        "cb-master/cbm-session": "^2.0",
+        "cb-master/cbm-handler": "^2.0"
     }
 }
