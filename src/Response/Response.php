@@ -8,8 +8,8 @@
 // Namespace
 namespace CBM\Core\Response;
 
+use CBM\Core\Cookie\Cookie;
 use CBM\Core\Vault\Vault;
-use CBM\Session\Session;
 
 class Response
 {
@@ -66,10 +66,10 @@ class Response
         $headers['App-Provider'] = "Cloud Bill Master";
         $headers = array_merge(self::$headers, $headers);
         // Get CSRF Header Token
-        if(!Session::get('csrf')){
-            Session::set(['csrf'=>Vault::randomKey(24)]);
+        if(!Cookie::get('token')){
+            Cookie::set('token', Vault::randomKey(24), 86400);
         }
-        $csrf = base64_encode(Session::get('csrf'));
+        $csrf = base64_encode(Cookie::get('token'));
         header('access-token:'.$csrf);
         foreach($headers as $key => $value){
             $key = trim($key);

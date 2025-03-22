@@ -10,8 +10,8 @@ namespace CBM\Core\Request;
 
 use CBM\Core\Response\Response;
 use CBM\CoreHelper\Resource;
+use CBM\Core\Cookie\Cookie;
 use CBM\Core\Vault\Vault;
-use CBM\Session\Session;
 
 class Request Extends Resource
 {
@@ -181,8 +181,8 @@ class Request Extends Resource
      */
     public static function validCsrfToken(string $csrf):bool
     {
-        $existing_csrf = Session::get('csrf');
-        Session::set(['csrf'=>Vault::randomKey(24)]);
+        $existing_csrf = Cookie::get('token');
+        Cookie::set('token', Vault::randomKey(24), 86400);
         return (($csrf === base64_decode(Response::get('access-token'))) && ($csrf === $existing_csrf));
     }
 
