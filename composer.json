@@ -26,6 +26,8 @@
     "minimum-stability": "dev",
     "require": {
         "cb-master/cbm-session": "dev-main",
-        "cb-master/cbm-handler": "dev-main"
+        "cb-master/cbm-handler": "dev-main",
+        "cb-master/cbm-model": "dev-main",
+        "monolog/monolog": "dev-main"
     }
 }
