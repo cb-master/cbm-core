@@ -25,23 +25,18 @@ class Cookie
      */
     public static bool $httponly = true;
 
-    // Path
-    /**
-     * @property $path - Required Path. Default is Application Directory.
-     */
-    public static ?string $path = null;
-
     // Set Cookie
     /**
-    * @param ?string $key - Required Cookie Name Key
-    * @param ?string $value - Required Cookie value
-    * @param int $expires - Default is time() + 7 Days
+    * @param ?string $key Required Cookie Name Key
+    * @param ?string $value Required Cookie value
+    * @param int $expires Default is time() + 7 Days
+    * @param ?string $path Optional Argument. Default is null
     */
-    public static function set(string $name, string $value, int $expires = 604800):bool
+    public static function set(string $name, string $value, int $expires = 604800, ?string $path = null):bool
     {
         return setcookie($name, $value, [
             'expires' => time() + $expires,
-            'path' => self::$path ?: (Uri::sub_directory() ?: '/'),
+            'path' => $path ?: '/',
             'domain' => Uri::host(),
             'secure' => self::$secure,
             'httponly' => self::$httponly,
