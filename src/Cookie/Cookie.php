@@ -30,13 +30,13 @@ class Cookie
     * @param ?string $key Required Cookie Name Key
     * @param ?string $value Required Cookie value
     * @param int $expires Default is time() + 7 Days
-    * @param ?string $path Optional Argument. Default is null
+    * @param ?string $path Optional Argument. Default is '/'.
     */
-    public static function set(string $name, string $value, int $expires = 604800, ?string $path = null):bool
+    public static function set(string $name, string $value, int $expires = 604800, string $path = '/'):bool
     {
         return setcookie($name, $value, [
             'expires' => time() + $expires,
-            'path' => $path ?: '/',
+            'path' => $path,
             'domain' => Uri::host(),
             'secure' => self::$secure,
             'httponly' => self::$httponly,
