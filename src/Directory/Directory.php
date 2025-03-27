@@ -21,7 +21,7 @@ class Directory
     {
         $path = trim(trim($path), '*');
         $path = str_replace('\\', '/', $path);
-        $path = trim($path, '/');
+        $path = ((PHP_OS_FAMILY == 'Windows') ? '' : '/').trim($path, '/');
         return "{$path}/*";
     }
 
