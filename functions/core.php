@@ -5,9 +5,6 @@
   * Author Email: riyadhtayf@gmail.com
   */
  
- // Forbidden Access
- defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
- 
  use CBM\Core\Filter\Filter;
  use CBM\Core\Option\Option;
  use CBM\Core\Helper\Helper;
