@@ -24,11 +24,14 @@ class App
     // Request
     private Request $request;
 
+    // URI
+    private Uri $uri;
+
     // API Slugs
     private array $api = ['api'];
 
     // Default 404 Page Class
-    private string $_404 = '\CBM\Core\App\_404';
+    private string $_404;
 
     // Load Instance
     public static function instance():object
@@ -36,6 +39,8 @@ class App
         if(!self::$instance){
             self::$instance = new Static;
             self::$instance->request = new Request;
+            self::$instance->uri = new Uri;
+            self::$instance->_404 = '\CBM\Core\App\_404';
         }
         return self::$instance;
     }
@@ -96,6 +101,6 @@ class App
         $method = method_exists($class, $method) ? $method : strtolower(self::$index);
 
         // Load Controller & Method
-        call_user_func([new $class, $method], self::instance()->request);
+        call_user_func([new $class, $method], self::instance()->request, self::instance()->uri);
     }
 }
