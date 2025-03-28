@@ -8,7 +8,8 @@
 // Namespace
 namespace CBM\Core\App;
 
-use CBm\Core\Response\Response;
+use CBM\Core\Response\Response;
+use CBM\Core\Request\Request;
 use CBM\Handler\Error\Error;
 use CBM\Core\Uri\Uri;
 
@@ -19,6 +20,9 @@ class App
 
     // Index
     private static string $index = 'Index';
+    
+    // Request
+    private Request $request;
 
     // API Slugs
     private array $api = ['api'];
@@ -31,6 +35,7 @@ class App
     {
         if(!self::$instance){
             self::$instance = new Static;
+            self::$instance->request = new Request;
         }
         return self::$instance;
     }
@@ -91,6 +96,6 @@ class App
         $method = method_exists($class, $method) ? $method : strtolower(self::$index);
 
         // Load Controller & Method
-        call_user_func([new $class, $method]);
+        call_user_func([new $class, $method], self::instance()->request);
     }
 }
