@@ -99,8 +99,14 @@ class App
             $class = (class_exists($class) && method_exists($class, $method)) ? $class : self::instance()->_404;
         }
         $method = method_exists($class, $method) ? $method : strtolower(self::$index);
+        
+        // Set Args to Pass
+        $args = [
+            'request'   =>  self::instance()->request,
+            'uri'       =>  self::instance()->uri
+        ];
 
         // Load Controller & Method
-        call_user_func([new $class, $method], self::instance()->request, self::instance()->uri);
+        call_user_func([new $class, $method], $args);
     }
 }
