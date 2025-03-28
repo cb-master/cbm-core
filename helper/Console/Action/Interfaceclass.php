@@ -22,15 +22,15 @@ class Interfaceclass
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Interface Name Not Found!", "red");
+            Message::show("NAME MISSING", "Interface Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID INTERFACE", "Invalid Interface Name! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID INTERFACE", "Invalid Interface Name! Input Should Contain Only Alphabets.", "red");
         }
 
         $interface_file = self::$path."/{$inputs[1]}.php";
         // Shoe Error If Interface Already Exist
         if(file_exists($interface_file)){
-            Message::message("INTERFACE EXIST", "Interface '{$inputs[1]}' Already Exist.", "red");
+            Message::show("INTERFACE EXIST", "Interface '{$inputs[1]}' Already Exist.", "red");
         }
 
         // Create Interface
@@ -38,7 +38,7 @@ class Interfaceclass
         $example = str_replace('{class}', $inputs[1], $example);
         file_put_contents($interface_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Interface '{$inputs[1]}' Created Successfully.");
+        Message::show("SUCCESS", "Interface '{$inputs[1]}' Created Successfully.");
     }
 
     // Rename Interface
@@ -49,13 +49,13 @@ class Interfaceclass
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Old Interface Name Not Found!", "red");
+            Message::show("NAME MISSING", "Old Interface Name Not Found!", "red");
         }elseif(!isset($inputs[2])){
-            Message::message("NAME MISSING", "New Interface Name Not Found!", "red");
+            Message::show("NAME MISSING", "New Interface Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID INTERFACE", "Invalid Old Interface Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID INTERFACE", "Invalid Old Interface Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }elseif(!Validate::alpha($inputs[2])){
-            Message::message("INVALID INTERFACE", "Invalid New Interface Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID INTERFACE", "Invalid New Interface Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Old Interface File
@@ -66,7 +66,7 @@ class Interfaceclass
 
         // Show Message If Interface Does Not Exist
         if(!file_exists($old_interface_file)){
-            Message::message("NOT FOUND", "Interface '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Interface '{$inputs[1]}' Does Not Exist.", "red");
         }
         // Create New Interface
         $content = file_get_contents($old_interface_file);
@@ -76,7 +76,7 @@ class Interfaceclass
         // Remove Old File
         unlink($old_interface_file);
         // Show Message
-        Message::message("SUCCESS", "Interface '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully.");
+        Message::show("SUCCESS", "Interface '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Interface
@@ -87,21 +87,21 @@ class Interfaceclass
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Interface Name Not Found!", "red");
+            Message::show("NAME MISSING", "Interface Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID INTERFACE", "Invalid Interface Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID INTERFACE", "Invalid Interface Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Interface File
         $interface_file = self::$path."/{$inputs[1]}.php";
         // Show Message If Interface Does Not Exist
         if(!file_exists($interface_file)){
-            Message::message("NOT FOUND", "Interface '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Interface '{$inputs[1]}' Does Not Exist.", "red");
         }
 
         // Remove Interface
         unlink($interface_file);
         // Show Message
-        Message::message("SUCCESS", "Interface '{$inputs[1]}' Removed Successfully.");
+        Message::show("SUCCESS", "Interface '{$inputs[1]}' Removed Successfully.");
     }
 }

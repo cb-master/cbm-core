@@ -22,9 +22,9 @@ class View
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "View Name Not Found!", "red");
+            Message::show("NAME MISSING", "View Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID VIEW", "Invalid View Name! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID VIEW", "Invalid View Name! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Path
@@ -35,12 +35,12 @@ class View
 
         $path = $path ? self::$path."/{$path}" : self::$path;
         if(!file_exists($path)){
-            Message::message("NOT FOUND", "Path '{$path}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Path '{$path}' Does Not Exist.", "red");
         }
         $view_file = "{$path}/{$inputs[1]}.tpl";
         // Shoe Error If View Already Exist
         if(file_exists($view_file)){
-            Message::message("VIEW EXIST", "View '{$inputs[1]}' Already Exist.", "red");
+            Message::show("VIEW EXIST", "View '{$inputs[1]}' Already Exist.", "red");
         }
         // Create View
         $example = file_get_contents(__DIR__."/../../samples/view.php.sample");
@@ -48,7 +48,7 @@ class View
 
         file_put_contents($view_file, $example);
         // Show Message
-        Message::message("SUCCESS", "View '{$inputs[1]}.tpl' Created Successfully.");
+        Message::show("SUCCESS", "View '{$inputs[1]}.tpl' Created Successfully.");
     }
 
     // Rename View
@@ -59,13 +59,13 @@ class View
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Old View Name Not Found!", "red");
+            Message::show("NAME MISSING", "Old View Name Not Found!", "red");
         }elseif(!isset($inputs[2])){
-            Message::message("NAME MISSING", "New View Name Not Found!", "red");
+            Message::show("NAME MISSING", "New View Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID VIEW", "Invalid Old View Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID VIEW", "Invalid Old View Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }elseif(!Validate::alpha($inputs[2])){
-            Message::message("INVALID VIEW", "Invalid New View Name '{$inputs[2]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID VIEW", "Invalid New View Name '{$inputs[2]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Path
@@ -74,7 +74,7 @@ class View
         $path = str_replace('\\', '/', $path);
         $path = $path ? self::$path."/{$path}" : self::$path;
         if(!file_exists($path)){
-            Message::message("NOT FOUND", "Path '{$path}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Path '{$path}' Does Not Exist.", "red");
         }
 
         // Get Old View File
@@ -83,7 +83,7 @@ class View
         $new_view_file = "{$path}/{$inputs[2]}.tpl";
         // Show Message If View Does Not Exist
         if(!file_exists($old_view_file)){
-            Message::message("NOT FOUND", "View '{$inputs[1]}.tpl' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "View '{$inputs[1]}.tpl' Does Not Exist.", "red");
         }
 
         // Create New View
@@ -92,7 +92,7 @@ class View
         // Remove Old File
         unlink($old_view_file);
         // Show Message
-        Message::message("SUCCESS", "View '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully");
+        Message::show("SUCCESS", "View '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully");
     }
 
     // Remove View
@@ -103,9 +103,9 @@ class View
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "View Name Not Found!", "red");
+            Message::show("NAME MISSING", "View Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID VIEW", "Invalid View Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID VIEW", "Invalid View Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
         // Get Path
         $path = trim(($inputs[2] ?? ''), '/');
@@ -113,17 +113,17 @@ class View
         $path = str_replace('\\', '/', $path);
         $path = $path ? self::$path."/{$path}" : self::$path;
         if(!file_exists($path)){
-            Message::message("NOT FOUND", "Path '{$path}.tpl' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Path '{$path}.tpl' Does Not Exist.", "red");
         }
         // Get View File
         $view_file = "{$path}/{$inputs[1]}.tpl";
         // Show Message If View Does Not Exist
         if(!file_exists($view_file)){
-            Message::message("NOT FOUND", "View '{$inputs[1]}.tpl' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "View '{$inputs[1]}.tpl' Does Not Exist.", "red");
         }
         // Remove View
         unlink($view_file);
         // Show Message
-        Message::message("SUCCESS", "View '{$inputs[1]}.tpl' Removed Successfully");
+        Message::show("SUCCESS", "View '{$inputs[1]}.tpl' Removed Successfully");
     }
 }

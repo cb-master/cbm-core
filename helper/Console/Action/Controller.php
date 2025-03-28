@@ -22,9 +22,9 @@ class Controller
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Controller Name Not Found!", "red");
+            Message::show("NAME MISSING", "Controller Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID CONTROLLER", "Invalid Controller Name! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID CONTROLLER", "Invalid Controller Name! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Controller File
@@ -33,7 +33,7 @@ class Controller
 
         // Shoe Error If Controller Already Exist
         if(file_exists($controller_file)){
-            Message::message("CONTROLLER EXIST", "Controller '{$inputs[1]}' Already Exist.", "red");
+            Message::show("CONTROLLER EXIST", "Controller '{$inputs[1]}' Already Exist.", "red");
         }
 
         // Create Controller
@@ -41,7 +41,7 @@ class Controller
         $example = str_replace('{class}', $name, $example);
         file_put_contents($controller_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Controller '{$name}' Created Successfully!");
+        Message::show("SUCCESS", "Controller '{$name}' Created Successfully!");
     }
 
     // Rename Controller
@@ -52,13 +52,13 @@ class Controller
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Old Controller Name Not Found!", "red");
+            Message::show("NAME MISSING", "Old Controller Name Not Found!", "red");
         }elseif(!isset($inputs[2])){
-            Message::message("NAME MISSING", "New Controller Name Not Found!", "red");
+            Message::show("NAME MISSING", "New Controller Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID CONTROLLER", "Invalid Old Controller Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID CONTROLLER", "Invalid Old Controller Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }elseif(!Validate::alpha($inputs[2])){
-            Message::message("INVALID CONTROLLER", "Invalid New Controller Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID CONTROLLER", "Invalid New Controller Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Old Controller File
@@ -71,7 +71,7 @@ class Controller
 
         // Show Message If Controller Does Not Exist
         if(!file_exists($old_controller_file)){
-            Message::message("NOT FOUND", "Controller '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Controller '{$inputs[1]}' Does Not Exist.", "red");
         }
 
         // Create New Controller
@@ -82,7 +82,7 @@ class Controller
         // Remove Old File
         unlink($old_controller_file);
         // Show Message
-        Message::message("SUCCESS", "Controller '{$old_name}' Renamed To '{$inputs[2]}' Successfully.");
+        Message::show("SUCCESS", "Controller '{$old_name}' Renamed To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Controller
@@ -93,20 +93,20 @@ class Controller
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Controller Name Not Found!", "red");
+            Message::show("NAME MISSING", "Controller Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID CONTROLLER", "Invalid Controller Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID CONTROLLER", "Invalid Controller Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
         // Get Controller File
         $name = ucfirst(strtolower($inputs[1]));
         $controller_file = self::$path."/{$name}.php";
         // Show Message If Controller Does Not Exist
         if(!file_exists($controller_file)){
-            Message::message("NOT FOUND", "Controller '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Controller '{$inputs[1]}' Does Not Exist.", "red");
         }
         // Remove Controller
         unlink($controller_file);
         // Show Message
-        Message::message("SUCCESS", "Controller '{$name}' Removed Successfully.");
+        Message::show("SUCCESS", "Controller '{$name}' Removed Successfully.");
     }
 }

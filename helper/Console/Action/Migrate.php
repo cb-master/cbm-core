@@ -21,6 +21,6 @@ class Migrate
         DB::run();
 
         // Show Message
-        Message::message("SUCCESS", "Database Migrated Successfully.");
+        Message::show("SUCCESS", "Database Migrated Successfully.");
     }
 }

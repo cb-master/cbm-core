@@ -22,16 +22,16 @@ class Model
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Model Name Not Found!", "red");
+            Message::show("NAME MISSING", "Model Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID MODEL", "Invalid Model Name! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID MODEL", "Invalid Model Name! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Model File
         $model_file = self::$path."/{$inputs[1]}.php";
         // Shoe Error If Model Already Exist
         if(file_exists($model_file)){
-            Message::message("MODEL EXIST", "Model '{$inputs[1]}' Already Exist.", "red");
+            Message::show("MODEL EXIST", "Model '{$inputs[1]}' Already Exist.", "red");
         }
 
         // Create Model
@@ -39,7 +39,7 @@ class Model
         $example = str_replace('{class}', $inputs[1], $example);
         file_put_contents($model_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Model '{$inputs[1]}' Created Successfully.");
+        Message::show("SUCCESS", "Model '{$inputs[1]}' Created Successfully.");
     }
 
     // Rename Model
@@ -50,13 +50,13 @@ class Model
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Old Model Name Not Found.", "red");
+            Message::show("NAME MISSING", "Old Model Name Not Found.", "red");
         }elseif(!isset($inputs[2])){
-            Message::message("NAME MISSING", "New Model Name Not Found.", "red");
+            Message::show("NAME MISSING", "New Model Name Not Found.", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID MODEL", "Invalid Old Model Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID MODEL", "Invalid Old Model Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }elseif(!Validate::alpha($inputs[2])){
-            Message::message("INVALID MODEL", "Invalid New Model Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID MODEL", "Invalid New Model Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Old Model File
@@ -67,7 +67,7 @@ class Model
         $new_model_file = self::$path."/{$inputs[2]}.php";
         // Show Message If Model Does Not Exist
         if(!file_exists($old_model_file)){
-            Message::message("NOT FOUND", "Model '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Model '{$inputs[1]}' Does Not Exist.", "red");
         }
 
         // Create New Model
@@ -78,7 +78,7 @@ class Model
         // Remove Old File
         unlink($old_model_file);
         // Show Message
-        Message::message("SUCCESS", "Model '{$inputs[1]}' Moved To '{$inputs[2]}' Successfully.");
+        Message::show("SUCCESS", "Model '{$inputs[1]}' Moved To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Model
@@ -89,21 +89,21 @@ class Model
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Model Name Not Found.", "red");
+            Message::show("NAME MISSING", "Model Name Not Found.", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID MODEL", "Invalid Model Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID MODEL", "Invalid Model Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Model File
         $model_file = self::$path."/{$inputs[1]}.php";
         // Show Message If Model Does Not Exist
         if(!file_exists($model_file)){
-            Message::message("NOT FOUND", "Model '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Model '{$inputs[1]}' Does Not Exist.", "red");
         }
 
         // Remove Model
         unlink($model_file);
         // Show Message
-        Message::message("SUCCESS", "Model '{$inputs[1]}' Removed Successfully.");
+        Message::show("SUCCESS", "Model '{$inputs[1]}' Removed Successfully.");
     }
 }

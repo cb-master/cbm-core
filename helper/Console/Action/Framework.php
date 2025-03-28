@@ -18,6 +18,6 @@ class Framework
         exec('composer update', $var, $result);
 
         // Show Message
-        Message::message("SUCCESS", "Framework Initiated Successfully. Please Run 'php laika migrate'.");
+        Message::show("SUCCESS", "Framework Initiated Successfully. Please Run 'php laika migrate'.");
     }
 }

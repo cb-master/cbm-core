@@ -22,15 +22,15 @@ class Factory
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Factory Name Not Found!", "red");
+            Message::show("NAME MISSING", "Factory Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID FACTORY", "Invalid Factory Name! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID FACTORY", "Invalid Factory Name! Input Should Contain Only Alphabets.", "red");
         }
 
         $factory_file = self::$path."/{$inputs[1]}.php";
         // Shoe Error If Factory Already Exist
         if(file_exists($factory_file)){
-            Message::message("FACTORY EXIST", "Factory '{$inputs[1]}' Already Exist.", "red");
+            Message::show("FACTORY EXIST", "Factory '{$inputs[1]}' Already Exist.", "red");
         }
 
         // Create Factory
@@ -38,7 +38,7 @@ class Factory
         $example = str_replace('{class}', $inputs[1], $example);
         file_put_contents($factory_file, $example);
         // Show Message
-        Message::message("SUCCESS", "Factory '{$inputs[1]}' Created Successfully.");
+        Message::show("SUCCESS", "Factory '{$inputs[1]}' Created Successfully.");
     }
 
     // Rename Factory
@@ -49,13 +49,13 @@ class Factory
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Old Factory Name Not Found!", "red");
+            Message::show("NAME MISSING", "Old Factory Name Not Found!", "red");
         }elseif(!isset($inputs[2])){
-            Message::message("NAME MISSING", "New Factory Name Not Found!", "red");
+            Message::show("NAME MISSING", "New Factory Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID FACTORY", "Invalid Old Factory Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID FACTORY", "Invalid Old Factory Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }elseif(!Validate::alpha($inputs[2])){
-            Message::message("INVALID FACTORY", "Invalid New Factory Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID FACTORY", "Invalid New Factory Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Old Factory File
@@ -66,7 +66,7 @@ class Factory
 
         // Show Message If Factory Does Not Exist
         if(!file_exists($old_factory_file)){
-            Message::message("NOT FOUND", "Factory '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Factory '{$inputs[1]}' Does Not Exist.", "red");
         }
         // Create New Factory
         $content = file_get_contents($old_factory_file);
@@ -76,7 +76,7 @@ class Factory
         // Remove Old File
         unlink($old_factory_file);
         // Show Message
-        Message::message("SUCCESS", "Factory '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully.");
+        Message::show("SUCCESS", "Factory '{$inputs[1]}' Renamed To '{$inputs[2]}' Successfully.");
     }
 
     // Remove Factory
@@ -87,21 +87,21 @@ class Factory
     {
         // Validate Inputs
         if(!isset($inputs[1])){
-            Message::message("NAME MISSING", "Factory Name Not Found!", "red");
+            Message::show("NAME MISSING", "Factory Name Not Found!", "red");
         }elseif(!Validate::alpha($inputs[1])){
-            Message::message("INVALID FACTORY", "Invalid Factory Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
+            Message::show("INVALID FACTORY", "Invalid Factory Name '{$inputs[1]}'! Input Should Contain Only Alphabets.", "red");
         }
 
         // Get Factory File
         $factory_file = self::$path."/{$inputs[1]}.php";
         // Show Message If Factory Does Not Exist
         if(!file_exists($factory_file)){
-            Message::message("NOT FOUND", "Factory '{$inputs[1]}' Does Not Exist.", "red");
+            Message::show("NOT FOUND", "Factory '{$inputs[1]}' Does Not Exist.", "red");
         }
 
         // Remove Factory
         unlink($factory_file);
         // Show Message
-        Message::message("SUCCESS", "Factory '{$inputs[1]}' Removed Successfully.");
+        Message::show("SUCCESS", "Factory '{$inputs[1]}' Removed Successfully.");
     }
 }

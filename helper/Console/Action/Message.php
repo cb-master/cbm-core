@@ -35,7 +35,7 @@ class Message
     }
 
     // Show Error Message With Color
-    public static function message(string $type, string $message, string $color = 'green')
+    public static function show(string $type, string $message, string $color = 'green')
     {
         // Get Exact Values
         $type = strtoupper($type);
@@ -65,7 +65,28 @@ class Message
                     break;
             }
         }else{
-            echo "\n[{$type}] - {$message}\n\n";
+            switch($color)
+            {
+                case 'green':
+                    echo "\n\033[1;32m[{$type}]\033[0m - {$message}\n\n";
+                    break;
+
+                case 'red':
+                    echo "\n\033[1;31m[{$type}]\033[0m - {$message}\n\n";
+                    break;
+
+                case 'yellow':
+                    echo "\n\033[1;33m[{$type}]\033[0m - {$message}\n\n";
+                    break;
+
+                case 'blue':
+                    echo "\n\033[1;34m[{$type}]\033[0m - {$message}\n\n";
+                    break;
+
+                default:
+                    echo "\n\033[1;0m[{$type}] - {$message}\n\n";
+                    break;
+            }
         }
         die;
     }

@@ -7,6 +7,8 @@
 
 namespace CBM\CoreHelper\Console;
 
+use CBM\CoreHelper\Console\Action\Message;
+
 class Help
 {
     // Show Help Information
@@ -30,7 +32,7 @@ class Help
     // Help Message
     public static function toHelp()
     {
-        echo "\n** [COMMAND ERROR] - Laika Denied Your Command. Please Type 'php laika -h' to Get Help.\n\n";
+        Message::show('COMMAND ERROR', 'Laika Denied Your Command. Please Type \'php laika -h\' for Help', 'red');
     }
 
     // Initiate Laika Framework
