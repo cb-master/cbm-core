@@ -67,4 +67,10 @@ class Controller
         require_once($path);
         
     }
+
+    // Load Facrory
+    protected function factory(string $factory, string $method, mixed ...$args):mixed
+    {
+        return call_user_func(["\\CBM\\App\\Factory\\{$factory}", $method], ...$args);
+    }
 }
