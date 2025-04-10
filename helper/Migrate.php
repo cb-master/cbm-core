@@ -32,26 +32,29 @@ class Migrate
         if(!Model::table('admins')->exist()){
             Model::table('admins')
                 ->column('aid', 'BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT')
-                ->column('afname', 'TEXT DEFAULT NULL')
-                ->column('alname', 'TEXT DEFAULT NULL')
-                ->column('ausername', 'TEXT NOT NULL')
-                ->column('aemail', 'TEXT NOT NULL')
+                ->column('afname', 'VARCHAR(255) DEFAULT NULL')
+                ->column('alname', 'VARCHAR(255) DEFAULT NULL')
+                ->column('ausername', 'VARCHAR(255) NOT NULL')
+                ->column('aemail', 'VARCHAR(255) NOT NULL')
                 ->column('apassword', 'TEXT NOT NULL')
-                ->column('apassword_token', 'TEXT DEFAULT NULL')
+                ->column('apassword_token', 'VARCHAR(255) DEFAULT NULL')
                 ->column('arole_id', 'INT(11) NOT NULL')
                 ->column('astatus', 'ENUM("active","inactive","suspended") NOT NULL DEFAULT "inactive"')
                 ->column('acreated', 'DATETIME NOT NULL')
                 ->column('aupdated', 'DATETIME DEFAULT NULL')
                 ->column('alast_login', 'DATETIME DEFAULT NULL')
-                ->column('atoken', 'TEXT DEFAULT NULL')
+                ->column('atoken', 'VARCHAR(500) DEFAULT NULL')
                 ->column('aapi_access', 'ENUM("enable", "disable") NOT NULL DEFAULT "disable"')
-                ->column('aapi_key', 'TEXT DEFAULT NULL')
+                ->column('aapi_key', 'VARCHAR(500) DEFAULT NULL')
                 ->column('anotes', 'LONGTEXT DEFAULT NULL')
                 ->primary('aid')
-                ->unique('ausername')
-                ->unique('aemail')
+                ->index('afname')
+                ->index('alname')
+                ->index('ausername')
+                ->index('aemail')
+                ->index('acreated')
                 ->index('aapi_access')
-                ->unique('aapi_key')
+                ->index('aapi_key')
                 ->create();
         }
     }
@@ -62,7 +65,7 @@ class Migrate
         if(!Model::table('adminroles')->exist()){
             Model::table('adminroles')
                 ->column('arid', 'INT(10) UNSIGNED NOT NULL AUTO_INCREMENT')
-                ->column('artype', 'TEXT NOT NULL')
+                ->column('artype', 'VARCHAR(255) NOT NULL')
                 ->column('araccesses', 'LONGTEXT')
                 ->column('ardefault', 'ENUM("yes","no") DEFAULT "no"')
                 ->column('arcreated', 'DATETIME NOT NULL')
@@ -106,11 +109,11 @@ class Migrate
         if(!Model::table('options')->exist()){
             Model::table('options')
                 ->column('opt_id', 'BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT')
-                ->column('opt_key', 'TEXT NOT NULL')
-                ->column('opt_value', 'TEXT NOT NULL DEFAULT NULL')
+                ->column('opt_key', 'VARCHAR(255) NOT NULL')
+                ->column('opt_value', 'TEXT DEFAULT NULL')
                 ->column('opt_default', 'enum("yes","no") NOT NULL DEFAULT "no"')
                 ->primary('opt_id')
-                ->unique('opt_key')
+                ->index('opt_key')
                 ->create();
         }
 
@@ -127,16 +130,12 @@ class Migrate
         // Set Developer Mode If Not Exist
         Option::key('developermode', 'yes', true);
         // Set App IV If Not Exist
-        Option::key('key', openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method'))), true);
+        Option::key('key', base64_encode(openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')))), true);
         // Set App Secret If Not Exist
         Option::key('secret', Vault::randomKey(32), true);
         // Set Thousands Separator
         Option::key('thousands_separator', ',', true);
         // Set Decimal Separator
         Option::key('decimal_separator', '.', true);
-        // Set Template Caching
-        Option::key('template_caching', 0, true); // Value Should Between 0, 1 or 2
-        // Set Template Caching
-        Option::key('template_cache_lifetime', '3600', true);
     }
 }

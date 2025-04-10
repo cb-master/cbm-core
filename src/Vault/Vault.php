@@ -32,12 +32,11 @@ class Vault
     /**
      * @param string $string Required Argument.
      * @param ?string $secret Optional Argument.
-     * @param ?string $iv Optional Argument.
      */
-    public static function encrypt(string $string, ?string $secret = null, ?string $iv = null):string
+    public static function encrypt(string $string, ?string $secret = null):string
     {
         $secret = $secret ?: Option::key('secret');
-        $iv = $iv ?: Option::key('key');
+        $iv = base64_decode(Option::key('key'));
         return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), $secret, 0, $iv));
     }
 
@@ -47,10 +46,10 @@ class Vault
      * @param ?string $secret Optional Argument. Pass the Secret Key
      * @param ?string $iv Optional Argument.
      */
-    public static function decrypt(string $string, ?string $secret = null, ?string $iv = null):string
+    public static function decrypt(string $string, ?string $secret = null):string
     {
         $secret = $secret ?: Option::key('secret');
-        $iv = $iv ?: Option::key('key');
+        $iv = base64_decode(Option::key('key'));
         return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), $secret, 0, $iv);
     }
 

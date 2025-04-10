@@ -9,6 +9,7 @@
  use CBM\Core\Option\Option;
  use CBM\Core\Helper\Helper;
  use CBM\Session\Session;
+ use CBM\Core\Uri\Uri;
  
  // Dump Data & Die
  function dd($data, bool $die = false):void
@@ -111,9 +112,9 @@
      return Filter::apply_filter($filter, $value, ...$args);
  }
  
- //////////////////////////
- //////// FILTERS /////////
- //////////////////////////
+//////////////////////////
+//////// FILTERS /////////
+//////////////////////////
  
  // Theme Slug
  add_filter('load_view', function($view){
