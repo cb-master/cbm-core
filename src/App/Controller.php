@@ -53,7 +53,7 @@ class Controller
         extract($this->items);
 
         // Theme File
-        $path = ROOTPATH . "/views/{$view}.php";
+        $path = ROOTPATH . "/views/{$view}.view.php";
         $functions_dir = dirname($path).'/functions';
         if(file_exists($functions_dir)){
             array_filter(Directory::files($functions_dir, 'php'), function($file){
@@ -61,7 +61,7 @@ class Controller
             });
         }
         if(!file_exists($path)){
-            throw new \Exception(ROOTPATH."{$view}.php File Not Found!");
+            throw new \Exception("View File Not Found '{$view}.view.php'!");
             die;
         }
         require_once($path);
