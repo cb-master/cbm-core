@@ -61,7 +61,7 @@ class Controller
             });
         }
         if(!file_exists($path)){
-            throw new \Exception("View File Not Found '{$view}.view.php'!");
+            throw new \Exception("View File Not Found: '{$path}'!");
             die;
         }
         require_once($path);
