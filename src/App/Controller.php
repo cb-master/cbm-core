@@ -19,9 +19,19 @@ class Controller
     private array $items = [];
 
     // Assign Parameters
-    public function assign(string|array $param, mixed $value = null)
+    /**
+     * @param string|array|object $param Required Argument as key name or array or object
+     * @param mixed $value Optional Argument as key value
+     */
+    public function assign(string|array|object $param, mixed $value = null):void
     {
-        $this->items = is_string($param) ? array_merge($this->items, [$param=>$value]) : array_merge($this->items, $param);
+        if(is_object($param)){
+            $this->items = array_merge($this->items, json_decode(json_encode($param), true));
+        }elseif(is_array($param)){
+            $this->items = array_merge($this->items, $param);
+        }else{
+            $this->items = array_merge($this->items, [$param => $value]);
+        }
     }
 
     // Load Middleware and Execute
