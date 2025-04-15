@@ -34,6 +34,12 @@ class Controller
         }
     }
 
+    // Get Assigned Data
+    public function get_assigned_data():array
+    {
+        return $this->items;
+    }
+
     // Load Middleware and Execute
     /**
      * @param string $class - Required Argument as Middleware Class Name Like 'Client'.
