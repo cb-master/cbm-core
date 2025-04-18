@@ -13,7 +13,11 @@
  use CBM\Session\Session;
  
  // Dump Data & Die
- function dd($data, bool $die = false):void
+ /**
+  * @param mixed $data - Required Argument
+  * @param bool $die - Default is false
+  */
+ function dd(mixed $data, bool $die = false):void
  {
      echo '<pre style="background-color:#000;color:#fff;">';
      var_dump($data);
@@ -22,7 +26,11 @@
  }
  
  // Show Data & Die
- function show($data, bool $die = false):void
+ /**
+  * @param mixed $data - Required Argument
+  * @param bool $die - Default is false
+  */
+ function show(mixed $data, bool $die = false):void
  {
      echo '<pre style="background-color:#000;color:#fff;">';
      print_r($data);

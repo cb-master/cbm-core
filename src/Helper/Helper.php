@@ -16,32 +16,6 @@ use CBM\Core\Uri\Uri;
 
 class Helper
 {
-    // Show Data
-    /**
-     * @param mixed $data - Required Argument
-     * @param bool $die - Default is false
-     */
-    public static function show(mixed $data, bool $die = false)
-    {
-        echo "<pre style=\"background-color:#000;color:#fff;\">";
-        print_r($data);
-        echo "</pre>";
-        $die ? die() : $die;
-    }
-
-    // Dump Data & Die
-    /**
-     * @param mixed $data - Required Argument
-     * @param bool $die - Default is false
-     */
-    public static function dd(mixed $data, bool $die = false):void
-    {
-        echo '<pre style="background-color:#000;color:#fff;">';
-        var_dump($data);
-        echo '</pre>';
-        $die ? die() : $die;
-    }
-
     // Check Values Are Same
     /**
      * @param mixed $value - Required Argument
