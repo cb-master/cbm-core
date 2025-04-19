@@ -25,7 +25,7 @@ class Vault
     // Get a Random Hash
     public static function hash(string $value):string
     {
-        return hash_hmac("sha256", $value, Option::key('secret'));
+        return hash_hmac("sha256", $value, Config::get('app','secret'));
     }
 
     // Encrypt String
@@ -35,7 +35,7 @@ class Vault
      */
     public static function encrypt(string $string, ?string $secret = null):string
     {
-        $secret = $secret ?: Option::key('secret');
+        $secret = $secret ?: Config::get('app','secret');
         $iv = base64_decode(Option::key('key'));
         return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), $secret, 0, $iv));
     }
@@ -48,9 +48,34 @@ class Vault
      */
     public static function decrypt(string $string, ?string $secret = null):string
     {
-        $secret = $secret ?: Option::key('secret');
+        $secret = $secret ?: Config::get('app','secret');
         $iv = base64_decode(Option::key('key'));
         return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), $secret, 0, $iv);
+    }
+
+    // Generate Secret Key
+    /**
+     * @param int $byte Default Value is 16.
+     * @return string
+     */
+    public static function generateSecretKey(int $byte = 32):string
+    {
+        $secret = self::randomKey($byte);
+        $change = Config::change('app', 'secret', $secret);
+        if(!$change){
+            throw new \Exception("Unable to change the System Property 'secret' key.");
+        }
+        return $secret;
+    }
+
+    // Generate IV
+    /**
+     * @param int $byte Default Value is 16.
+     * @return string
+     */
+    public static function generateIV():string
+    {
+        return base64_encode(openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method'))));
     }
 
 }
