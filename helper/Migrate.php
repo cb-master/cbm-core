@@ -130,9 +130,7 @@ class Migrate
         // Set Developer Mode If Not Exist
         Option::key('developermode', 'yes', true);
         // Set App IV If Not Exist
-        Option::key('key', base64_encode(openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method')))), true);
-        // Set App Secret If Not Exist
-        Option::key('secret', Vault::randomKey(32), true);
+        Option::key('key', Vault::generateIV(), true);
         // Set Thousands Separator
         Option::key('thousands_separator', ',', true);
         // Set Decimal Separator
