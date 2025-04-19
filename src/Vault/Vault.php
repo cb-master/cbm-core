@@ -16,6 +16,7 @@ class Vault
     // Get a Random Key
     /**
      * @param int $byte Default Value is 16.
+     * @return string
      */
     public static function randomKey(int $byte = 16):string
     {
@@ -23,6 +24,10 @@ class Vault
     }
 
     // Get a Random Hash
+    /**
+     * @param string $value Required Argument.
+     * @return string
+     */
     public static function hash(string $value):string
     {
         return hash_hmac("sha256", $value, Config::get('app','secret'));
