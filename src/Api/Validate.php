@@ -10,9 +10,10 @@ namespace CBM\Core\Api;
 // Forbidden Access
 defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
 
+// use CBM\Model\ConnectionManager;
 use CBM\Core\Response\Response;
 use CBM\Core\Request\Request;
-use CBM\Model\Model;
+use CBM\Model\DB;
 
 class Validate Extends APIMessage
 {
@@ -89,7 +90,8 @@ class Validate Extends APIMessage
         if(empty($user) || empty($pass)){
             self::set(Response::code(401), 'Invalid Auth Token!');
         }else{
-            $staff = Model::table('admins')->where([self::$username_column=>$user, self::$token_column=>$pass])->get(self::$token_column);
+            $db = DB::getInstance();
+            $staff = $db->table('admins')->where([self::$username_column=>$user, self::$token_column=>$pass])->first();
 
             if(count($staff) !== 1){
                 self::set(Response::code(401), 'Invalid Auth Token!');

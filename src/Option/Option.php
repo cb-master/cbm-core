@@ -8,7 +8,7 @@
 // Namespace
 namespace CBM\Core\Option;
 
-use CBM\Model\Model;
+use CBM\Model\DB;
 use Exception;
 
 class Option
@@ -32,19 +32,24 @@ class Option
      */
     public static function key(string $name, int|string $value = null, bool $default = false):string
     {
-        // Set Option Key if $value is Set
-        if($value !== null){
-            $opt_default = $default ? 'yes' : 'no';
-            $exist = Model::table(self::$table)->filter(self::$key, '=', $name)->single(self::$key);
-            if(!$exist){
-                Model::table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
-            }else{
-                Model::table(self::$table)->filter(self::$key, '=', $name)->update([self::$value=>$value]);
+        try{
+            $db = DB::getInstance();
+            // Set Option Key if $value is Set
+            if($value !== null){
+                $opt_default = $default ? 'yes' : 'no';
+                $exist = $db->table(self::$table)->where(self::$key, '=', $name)->first();
+                // $exist = $db->table(self::$table)->filter(self::$key, '=', $name)->single(self::$key);
+                if(!$exist){
+                    $db->table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
+                }else{
+                    $db->table(self::$table)->where(self::$key, '=', $name)->update([self::$value=>$value]);
+                }
+                return $value;
             }
-            return $value;
+            $option = $db->table(self::$table)->where(self::$key, '=', $name)->first(self::$value);
+            return $option[self::$value] ?? '';
+        }catch(\Throwable $th){
+            return '';
         }
-        $option = Model::table(self::$table)->filter(self::$key, '=', $name)->single(self::$value);
-        $option = json_decode(json_encode($option),true);
-        return $option[self::$value] ?? '';
     }
 }

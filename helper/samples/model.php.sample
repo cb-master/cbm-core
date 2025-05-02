@@ -13,10 +13,13 @@ use CBM\Model\Model;
 // Forbidden Access
 defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
 
-class {class}
+class {class} extends Model
 {
     // Table Name
-    public static string $table = 'table_name';
+    public static string $table = 'table';
+
+    // Table ID
+    public static string $table = 'id';
     
     // Start Writing Your Methods Here
 }
