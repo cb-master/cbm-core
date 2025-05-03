@@ -62,7 +62,7 @@ class App
     /**
      * @param string $slugs - Required Argument. It will add api slugs. As example if you want api url like http://localhost/backendapi/your_method use this method with parameter 'backendapi' in 'includes/Init.php' file.
      */
-    public static function registerPageNotFound(string $classname):void
+    public static function fallback(string $classname):void
     {
         $classname = '\\CBM\\App\\Controller\\'.ucfirst($classname);
         if(!class_exists($classname)){
@@ -74,8 +74,8 @@ class App
     // Run Application
     public static function run()
     {
-        $controller = ucfirst(Uri::slug(0) ?: self::$index);
-        $method = strtolower(Uri::slug(1) ?: self::$index);
+        $controller = ucfirst(Uri::segment(1) ?: self::$index);
+        $method = strtolower(Uri::segment(2) ?: self::$index);
         $method = str_replace('_', '', $method);
         $method = str_replace('-', '_', $method);
 

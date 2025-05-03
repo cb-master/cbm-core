@@ -11,7 +11,7 @@ namespace CBM\Core\App;
 // Forbidden Access
 defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
 
-use CBM\COre\Directory\Directory;
+use CBM\Core\Directory\Directory;
 
 class Controller
 {

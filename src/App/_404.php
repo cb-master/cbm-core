@@ -53,7 +53,7 @@ class _404
 <body>
     <div class="body">
         <div>
-            <img src="'.Uri::app_uri().'/assets/images/page-not-found.svg" alt="" width="400">
+            <img src="'.Uri::base().'/assets/images/page-not-found.svg" alt="" width="400">
             <h1>Page Not Found!</h1>
         </div>
     </div>
