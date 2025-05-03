@@ -117,12 +117,13 @@ class ErrorHandler
         $extra = '';
 
         // Special handling for PDOException
-        if ($ex instanceof PDOException) {
+        if($ex instanceof PDOException){
             $sqlState = $ex->getCode();
             $extra .= "<tr><th>SQLSTATE</th><td>" . htmlspecialchars($sqlState) . "</td></tr>";
 
-            if (isset($ex->errorInfo) && is_array($ex->errorInfo)) {
-                $extra .= "<tr><th>Driver Error Info</th><td><pre>" . htmlspecialchars(print_r($ex->errorInfo, true)) . "</pre></td></tr>";
+            if(isset($ex->errorInfo) && is_array($ex->errorInfo)){
+                $str = implode(' >> ', $ex->errorInfo);
+                $extra .= "<tr><th>Driver Error Info</th><td><pre>" . htmlspecialchars($str) . "</pre></td></tr>";
             }
         }
 
