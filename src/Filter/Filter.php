@@ -7,7 +7,10 @@
 
 namespace CBM\Core\Filter;
 
-use CBM\Handler\Error\Error;
+// Forbidden Access
+defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
+
+use Exception;
 
 class Filter
 {
@@ -66,7 +69,7 @@ class Filter
     public static function getAssignedFilter(string $key):array
     {
         if(!isset(self::$assets[$key])){
-            throw new Error("Assigned Filter '{$key}' Does Not Exist!", 80000);
+            throw new Exception("Assigned Filter '{$key}' Does Not Exist!", 80000);
         }
         return self::$assets[$key];
     }

@@ -175,17 +175,6 @@ class Request Extends Resource
         return $request_data;
     }
 
-    // Check Valid CSRF Token
-    /**
-     * @param string $csrf - Required Parameter.
-     */
-    public static function validCsrfToken(string $csrf):bool
-    {
-        $existing_csrf = Cookie::get('token');
-        Cookie::set('token', Vault::randomKey(24), 86400);
-        return (($csrf === base64_decode(Response::get('access-token'))) && ($csrf === $existing_csrf));
-    }
-
     // Get Request From PHP Iput Stream
     public static function stream():array
     {

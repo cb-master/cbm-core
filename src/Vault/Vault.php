@@ -78,7 +78,7 @@ class Vault
      * @param int $byte Default Value is 16.
      * @return string
      */
-    public static function generateIV():string
+    public static function encodedIv():string
     {
         return base64_encode(openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method'))));
     }
