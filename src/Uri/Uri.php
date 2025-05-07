@@ -164,22 +164,26 @@ class Uri
 
     // Get URL With Incremented Query String
     /**
-     * * @return string Get URL With Incremented Query String
+     * @param string $key - Required Argument as String
+     * @param int $maximum - Optional Argument as Integer
+     * @return string Get URL With Incremented Query String
      */
-    public static function incrementQuery(string $key): string
+    public static function incrementQuery(string $key, int $maximum = 10):string
     {
         $queries = self::query();
         $queries[$key] = isset($queries[$key]) && is_numeric($queries[$key])
             ? (int)$queries[$key] + 1
             : 1;
-
+        $queries[$key] = min($queries[$key], $maximum);
         $path = trim(self::path(), '/');
         return self::base() . $path . '?' . http_build_query($queries);
     }
 
     // Get URL With Decremented Query String
     /**
-     * * @return string Get URL With Decremented Query String
+     * @param string $key - Required Argument as String
+     * @param int $minimum - Optional Argument as Integer
+     * @return string Get URL With Decremented Query String
      */
     public static function decrementQuery(string $key, int $minimum = 1): string
     {

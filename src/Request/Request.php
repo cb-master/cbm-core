@@ -8,10 +8,7 @@
 // Namespace
 namespace CBM\Core\Request;
 
-use CBM\Core\Response\Response;
 use CBM\CoreHelper\Resource;
-use CBM\Core\Cookie\Cookie;
-use CBM\Core\Vault\Vault;
 
 class Request Extends Resource
 {

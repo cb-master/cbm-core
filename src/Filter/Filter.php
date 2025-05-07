@@ -7,9 +7,6 @@
 
 namespace CBM\Core\Filter;
 
-// Forbidden Access
-defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
-
 use Exception;
 
 class Filter

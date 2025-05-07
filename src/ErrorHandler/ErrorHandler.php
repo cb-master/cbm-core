@@ -8,9 +8,6 @@
 // Namespace
 namespace CBM\Core\ErrorHandler;
 
-// Forbidden Access
-defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
-
 use ErrorException;
 use PDOException;
 use Throwable;

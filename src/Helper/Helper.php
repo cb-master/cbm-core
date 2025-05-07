@@ -10,8 +10,6 @@ namespace CBM\Core\Helper;
 
 use CBM\Core\Response\Response;
 use CBM\Core\Option\Option;
-use CBM\Core\Cookie\Cookie;
-use CBM\Core\Vault\Vault;
 use CBM\Core\Uri\Uri;
 
 class Helper
@@ -35,7 +33,7 @@ class Helper
     public static function redirect(string $slug, int $response = 302)
     {
         Response::code($response);
-        $uri = ltrim($slug, '/');
+        $uri = trim($slug, '/');
         $uri = (Option::key('webhost') ?: Uri::base()) . "/$uri";
         header("Location:{$uri}");
         die();

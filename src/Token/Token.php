@@ -8,9 +8,6 @@
 // Namespace
 namespace CBM\Core\Token;
 
-// Forbidden Access
-defined('ROOTPATH') || http_response_code(403).die('403 Forbidden Access!');
-
 use CBM\Core\Config\Config;
 use CBM\Core\Cookie\Cookie;
 use CBM\Core\Helper\Helper;
@@ -41,7 +38,7 @@ class Token
     // Register CSRF Token and Session
     public static function register():void
     {
-        if(!Cookie::get(self::COOKIE_NAME) || !Cookie::get(self::CSRF_COOKIE)){
+        if(!Cookie::get(self::COOKIE_NAME) || !Cookie::get(self::CSRF_COOKIE) || !Session::get(self::CSRF_SESSION, 'csrf')){
             $issuedAt = time();
             $payload = [
                 'iss' => self::$issuer,

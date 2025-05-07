@@ -8,9 +8,6 @@
 // Namespace
 namespace CBM\Core\Response;
 
-use CBM\Core\Cookie\Cookie;
-use CBM\Core\Vault\Vault;
-
 class Response
 {
     // Headers
