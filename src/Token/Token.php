@@ -18,9 +18,10 @@ use Exception;
 
 class Token
 {
-    private const COOKIE_NAME = 'APP_TOKEN';
-    private const CSRF_COOKIE = 'CSRF_TOKEN';
-    private const CSRF_SESSION = 'XSRF-TOKEN';
+    private const COOKIE_NAME = 'app_token';
+    private const CSRF_COOKIE = 'csrf_token';
+    private const CSRF_SESSION = 'token';
+    private const FORM_HANDLER = 'handler';
 
     private static string $issuer = 'laika';
     private static int $expire = 1800; // 30 Minutes
@@ -35,7 +36,7 @@ class Token
         self::$expire = $expire;
     }
 
-    // Register CSRF Token and Session
+    // Register APP Token and Session
     public static function register():void
     {
         if(!Cookie::get(self::COOKIE_NAME) || !Cookie::get(self::CSRF_COOKIE) || !Session::get(self::CSRF_SESSION, 'csrf')){
@@ -56,6 +57,38 @@ class Token
             Cookie::set(self::CSRF_COOKIE, $csrf, self::$expire);
             Session::set(self::CSRF_SESSION, $csrf, 'csrf');
         }
+    }
+
+    // Remove Tokens
+    public static function unregister()
+    {
+        Cookie::pop(self::COOKIE_NAME);
+        Cookie::pop(self::CSRF_COOKIE);
+        Cookie::pop(self::FORM_HANDLER);
+    }
+
+    // Generate CSRF Token
+    public static function generateFormToken():void
+    {
+        if(!Cookie::get(self::FORM_HANDLER)){
+            $issuedAt = time();
+            $payload = [
+                'iss' => self::$issuer,
+                'iat' => $issuedAt,
+                'exp' => $issuedAt + self::$expire
+            ];
+    
+            $token = JWT::encode($payload, Config::get('app', 'secret'), 'HS256');
+    
+            // Set secure JWT cookie
+            Cookie::set(self::FORM_HANDLER, $token, self::$expire);
+        }
+    }
+
+    // Get CSRF Token
+    public static function getFormToken():string
+    {
+        return Cookie::get(self::FORM_HANDLER);
     }
 
     /**
