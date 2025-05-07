@@ -30,7 +30,7 @@ class Option
      * @param string $name - Required Argument as Option Key.
      * @param int|string $value - Required Argument as Option Value.
      */
-    public static function key(string $name, int|string $value = null, bool $default = false):string
+    public static function key(string $name, int|string $value = null, bool $default = false):?string
     {
         try{
             $db = DB::getInstance();
@@ -41,15 +41,13 @@ class Option
                 // $exist = $db->table(self::$table)->filter(self::$key, '=', $name)->single(self::$key);
                 if(!$exist){
                     $db->table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
-                }else{
-                    $db->table(self::$table)->where(self::$key, '=', $name)->update([self::$value=>$value]);
                 }
                 return $value;
             }
             $option = $db->table(self::$table)->where(self::$key, '=', $name)->first(self::$value);
-            return $option[self::$value] ?? '';
+            return $option[self::$value] ?? null;
         }catch(\Throwable $th){
-            return '';
+            return null;
         }
     }
 }

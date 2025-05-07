@@ -36,7 +36,7 @@ class Helper
     {
         Response::code($response);
         $uri = ltrim($slug, '/');
-        $uri = (Option::key('webhost') ?: Uri::app_uri()) . "/$uri";
+        $uri = (Option::key('webhost') ?: Uri::base()) . "/$uri";
         header("Location:{$uri}");
         die();
     }
@@ -48,11 +48,11 @@ class Helper
     public static function location(string $slug):string
     {
         $slug = ltrim($slug, '/');
-        return (Option::key('webhost') ?: Uri::app_uri()) . "/{$slug}";
+        return (Option::key('webhost') ?: Uri::base()) . "/{$slug}";
     }
 
     // Get Visitor IP
-    public static function get_client_ip():string
+    public static function getClientIp():string
     {
         $ip = 'Not Found';
         if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
@@ -73,19 +73,25 @@ class Helper
         }
         return $ip;
     }
-
-    // Check Valid Token
-    public static function isValidToken(string $token):bool
+    
+    // Get Visitor IP
+    public static function getUserAgent():string
     {
-        $values = Vault::decrypt($token);
-        $arr = explode('>>>', $values);
-        return hash_equals(end($arr), Cookie::get('laika'));
-    }
+        $agent = $_SERVER["HTTP_USER_AGENT"];
 
-    // To Token
-    public static function generateToken(array $array):string
-    {
-        $str = implode('>>>', $array);
-        return Vault::encrypt("{$str}>>>".Cookie::get('laika'));
+        if( preg_match('/MSIE (\d+\.\d+);/', $agent) ) {
+            return 'Explorer';
+        }elseif(preg_match('/Chrome[\/\s](\d+\.\d+)/', $agent)){
+            return 'Chrome';
+        }elseif(preg_match('/Edge\/\d+/', $agent)){
+            return 'MS Edge';
+        }elseif( preg_match('/Firefox[\/\s](\d+\.\d+)/', $agent)){
+            return 'Firefox';
+        }elseif( preg_match('/OPR[\/\s](\d+\.\d+)/', $agent)){
+            return 'Opera';
+        }elseif(preg_match('/Safari[\/\s](\d+\.\d+)/', $agent)){
+            return 'Safari';
+        }
+        return 'Unknown';
     }
 }
