@@ -19,7 +19,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Exception;
 
-class AuthFactory
+class Token
 {
     private const COOKIE_NAME = 'APP_TOKEN';
     private const CSRF_COOKIE = 'CSRF_TOKEN';
