@@ -62,8 +62,9 @@ class Token
      * Generate and store JWT in a secure cookie
      *
      * @param array $data Optional Arguent
+     * @return string
      */
-    public static function login(array $data = []):void
+    public static function login(array $data = []):string
     {
         $data = array_merge($data, [
             'ip' => Helper::getClientIp(),
@@ -87,6 +88,7 @@ class Token
         $csrf = bin2hex(random_bytes(64));
         Cookie::set(self::CSRF_COOKIE, $csrf, self::$expire);
         Session::set(self::CSRF_SESSION, $csrf, 'csrf');
+        return $token;
     }
     
 
