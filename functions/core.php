@@ -5,10 +5,10 @@
   * Author Email: riyadhtayf@gmail.com
   */
  
- use CBM\Core\Filter\Filter;
- use CBM\Core\Option\Option;
- use CBM\Core\Helper\Helper;
- use CBM\Session\Session;
+use CBM\Core\Filter\Filter;
+use CBM\Core\Option\Option;
+use CBM\Core\Helper\Helper;
+use CBM\Session\Session;
  
  // Dump Data & Die
  /**
@@ -17,10 +17,10 @@
   */
  function dd(mixed $data, bool $die = false):void
  {
-     echo '<pre style="background-color:#000;color:#fff;">';
-     var_dump($data);
-     echo '</pre>';
-     $die ? die() : $die;
+    echo '<pre style="background-color:#000;color:#fff;">';
+    var_dump($data);
+    echo '</pre>';
+    $die ? die() : $die;
  }
  
  // Show Data & Die
@@ -30,10 +30,10 @@
   */
  function show(mixed $data, bool $die = false):void
  {
-     echo '<pre style="background-color:#000;color:#fff;">';
-     print_r($data);
-     echo '</pre>';
-     $die ? die() : $die;
+    echo '<pre style="background-color:#000;color:#fff;">';
+    print_r($data);
+    echo '</pre>';
+    $die ? die() : $die;
  }
  
  // Convert To Float Number
@@ -43,10 +43,10 @@
   */
  function to_decimal(int|string|float|null $number, int $decimal = 2):string
  {
-     $number = (float) $number;
-     $thousands_separator = Option::key('thousands_separator');
-     $decimal_seperator = Option::key('decimal_separator');
-     return number_format($number, $decimal, $decimal_seperator, $thousands_separator);
+    $number = (float) $number;
+    $thousands_separator = Option::key('thousands_separator');
+    $decimal_seperator = Option::key('decimal_separator');
+    return number_format($number, $decimal, $decimal_seperator, $thousands_separator);
  }
  
  // Get Currency Prefix
@@ -63,8 +63,8 @@
   */
  function to_price(string|int|float $price = null, int $decimal = 2):string
  {
-     $price = to_decimal($price, $decimal);
-     return currency_prefix() . $price;
+    $price = to_decimal($price, $decimal);
+    return currency_prefix() . $price;
  }
  
  // Location
@@ -73,7 +73,7 @@
   */
  function location(string $slug):string
  {
-     return Helper::location($slug);
+    return Helper::location($slug);
  }
  
  // Redirect
@@ -83,7 +83,7 @@
   */
  function redirect(string $slug, int $response = 302):void
  {
-     Helper::redirect($slug, $response);
+    Helper::redirect($slug, $response);
  }
  
  // Check Staff Has Access
@@ -93,8 +93,8 @@
   */
  function access(string $access, string $for):bool
  {
-     $accessList = unserialize(Session::get('access', $for));
-     return $accessList[$access] ?? false;
+    $list = Session::get('accesses', $for);
+    return (bool) ($list[$access] ?? false);
  }
  
  // Add Filter
@@ -105,7 +105,7 @@
   */
  function add_filter(string $filter, callable $callback, int $priority = 10):void
  {
-     Filter::add_filter($filter, $callback, $priority);
+    Filter::add_filter($filter, $callback, $priority);
  }
  
  // Apply Filter
@@ -125,5 +125,5 @@
  
  // Theme Slug
  add_filter('load_view', function($view){
-     return $view;
+    return $view;
  });
