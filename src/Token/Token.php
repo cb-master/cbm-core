@@ -43,7 +43,7 @@ class Token
      *
      * @param array $data Optional Arguent
      */
-    public static function initiate(array $data = []):void
+    public static function register(array $data = []):void
     {
         $data = array_merge($data, [
             'ip' => Helper::getClientIp(),
