@@ -23,10 +23,10 @@ class Token
 {
     private const COOKIE_NAME = 'APP_TOKEN';
     private const CSRF_COOKIE = 'CSRF_TOKEN';
-    private const CSRF_HEADER = 'XSRF-TOKEN';
+    private const CSRF_SESSION = 'XSRF-TOKEN';
 
     private static string $issuer = 'laika';
-    private static int $expire = 86400; // 1 Day
+    private static int $expire = 1800; // 30 Minutes
 
     // Set Expire Time
     /**
@@ -38,12 +38,35 @@ class Token
         self::$expire = $expire;
     }
 
+    // Register CSRF Token and Session
+    public static function register():void
+    {
+        if(!Cookie::get(self::COOKIE_NAME) || !Cookie::get(self::CSRF_COOKIE)){
+            $issuedAt = time();
+            $payload = [
+                'iss' => self::$issuer,
+                'iat' => $issuedAt,
+                'exp' => $issuedAt + self::$expire
+            ];
+    
+            $token = JWT::encode($payload, Config::get('app', 'secret'), 'HS256');
+    
+            // Set secure JWT cookie
+            Cookie::set(self::COOKIE_NAME, $token, self::$expire);
+    
+            // Set CSRF token cookie
+            $csrf = bin2hex(random_bytes(64));
+            Cookie::set(self::CSRF_COOKIE, $csrf, self::$expire);
+            Session::set(self::CSRF_SESSION, $csrf, 'csrf');
+        }
+    }
+
     /**
      * Generate and store JWT in a secure cookie
      *
      * @param array $data Optional Arguent
      */
-    public static function register(array $data = []):void
+    public static function login(array $data = []):void
     {
         $data = array_merge($data, [
             'ip' => Helper::getClientIp(),
@@ -54,9 +77,9 @@ class Token
         $payload = [
             'iss' => self::$issuer,
             'iat' => $issuedAt,
-            'exp' => $issuedAt + self::$expire
+            'exp' => $issuedAt + self::$expire,
+            'data'=>    $data
         ];
-        $payload = $data ? array_merge($payload, $data) : $payload;
 
         $token = JWT::encode($payload, Config::get('app', 'secret'), 'HS256');
 
@@ -66,26 +89,34 @@ class Token
         // Set CSRF token cookie
         $csrf = bin2hex(random_bytes(64));
         Cookie::set(self::CSRF_COOKIE, $csrf, self::$expire);
-        Session::set(self::CSRF_HEADER, $csrf, 'csrf');
+        Session::set(self::CSRF_SESSION, $csrf, 'csrf');
     }
     
 
     /**
      * @return array
      */
-    public static function getUser():?array
+    public static function getUser():array
     {
         $token = Cookie::get(self::COOKIE_NAME);
         if(!$token){
-            return null;
+            return [];
         }
 
-        try{
-            $decoded = JWT::decode($token, new Key(Config::get('app', 'secret'), 'HS256'));
-            return (array) $decoded->data;
-        }catch(Exception $e){
-            return null;
+        if(self::validateCsrf()){
+            try{
+                $decoded = JWT::decode($token, new Key(Config::get('app', 'secret'), 'HS256'));
+                return (array) $decoded->data ?? [];
+            }catch(Exception $e){
+                return [];
+            }
+        }else{
+            Cookie::pop(self::COOKIE_NAME);
+            Cookie::pop(self::CSRF_COOKIE);
+            Session::pop(self::CSRF_SESSION);
+            self::register();
         }
+        return [];
     }
 
     /**
@@ -112,7 +143,7 @@ class Token
      */
     public static function validateCsrf():bool
     {
-        $sessionToken = Session::get(self::CSRF_HEADER, 'csrf');
+        $sessionToken = Session::get(self::CSRF_SESSION, 'csrf');
         $cookieToken = Cookie::get(self::CSRF_COOKIE);
 
         return hash_equals($sessionToken, $cookieToken);
