@@ -26,7 +26,7 @@ class Uri
     // Script name
     protected string $scriptName;
     // Script directory
-    protected string $scriptDir;
+    protected string $directory;
 
     // Constructor
     public function __construct()
@@ -37,9 +37,9 @@ class Uri
         $this->queryString = $_SERVER['QUERY_STRING'] ?? '';
 
         $this->scriptName = $_SERVER['SCRIPT_NAME'] ?? ($_SERVER['PHP_SELF'] ?? '/index.php');
-        $this->scriptDir = rtrim(str_replace('\\', '/', dirname($this->scriptName)), '/');
+        $this->directory = rtrim(str_replace('\\', '/', dirname($this->scriptName)), '/');
 
-        $this->baseUrl = $this->scheme . '://' . $this->host . $this->scriptDir . '/';
+        $this->baseUrl = $this->scheme . '://' . $this->host . $this->directory . '/';
     }
 
     // Get Instance
@@ -69,13 +69,22 @@ class Uri
         return self::instance()->baseUrl;
     }
 
+    // Get Sub Directory
+    /**
+     * @return string
+     */
+    public static function directory():string
+    {
+        return trim(self::instance()->directory, '/');
+    }
+
     // Get Path
     /**
      * * @return string Path/Sub Folder
      */
     public static function path():string
     {
-        return rtrim(str_replace(self::instance()->scriptDir, '', self::instance()->path), '/');
+        return rtrim(str_replace(self::instance()->directory, '', self::instance()->path), '/');
     }
 
     // Get Query Strings
