@@ -81,9 +81,16 @@ class Controller
         
     }
 
-    // Load Facrory
+    // Call Factory & Method
     protected function factory(string $factory, string $method, mixed ...$args):mixed
     {
         return call_user_func(["\\CBM\\App\\Factory\\{$factory}", $method], ...$args);
+    }
+
+    // Call Model & Method
+    protected function model(string $factory, string $method, mixed ...$args):mixed
+    {
+        $class = "\\CBM\\App\\Model\\{$factory}";
+        return call_user_func([new $class, $method], ...$args);
     }
 }
