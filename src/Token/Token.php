@@ -8,6 +8,7 @@
 // Namespace
 namespace CBM\Core\Token;
 
+use CBM\Core\Request\Request;
 use CBM\Core\Config\Config;
 use CBM\Core\Cookie\Cookie;
 use CBM\Core\Helper\Helper;
@@ -21,10 +22,10 @@ class Token
     private const COOKIE_NAME = 'app_token';
     private const CSRF_COOKIE = 'csrf_token';
     private const CSRF_SESSION = 'token';
-    private const FORM_HANDLER = 'handler';
+    private const FORM_HANDLER = 'form_token';
 
     private static string $issuer = 'laika';
-    private static int $expire = 1800; // 30 Minutes
+    private static int $expire = 86400; // 1 Day
 
     // Set Expire Time
     /**
@@ -39,7 +40,7 @@ class Token
     // Register APP Token and Session
     public static function register():void
     {
-        if(!Cookie::get(self::COOKIE_NAME) || !Cookie::get(self::CSRF_COOKIE) || !Session::get(self::CSRF_SESSION, 'csrf')){
+        if(!Cookie::get(self::COOKIE_NAME) || !Cookie::get(self::CSRF_COOKIE) || !Session::get(self::CSRF_SESSION, 'csrf') || !Session::get('start_time')){
             $issuedAt = time();
             $payload = [
                 'iss' => self::$issuer,
@@ -56,6 +57,7 @@ class Token
             $csrf = bin2hex(random_bytes(64));
             Cookie::set(self::CSRF_COOKIE, $csrf, self::$expire);
             Session::set(self::CSRF_SESSION, $csrf, 'csrf');
+            Session::set('start_time', time());
         }
     }
 
@@ -70,7 +72,11 @@ class Token
     // Generate CSRF Token
     public static function generateFormToken():void
     {
-        if(!Cookie::get(self::FORM_HANDLER)){
+        if((time() - (int) (Session::get('start_time')) > 300)){
+            Session::set('start_time', time());
+            Session::pop(self::FORM_HANDLER);
+        }
+        if(!Session::get(self::FORM_HANDLER)){
             $issuedAt = time();
             $payload = [
                 'iss' => self::$issuer,
@@ -81,14 +87,44 @@ class Token
             $token = JWT::encode($payload, Config::get('app', 'secret'), 'HS256');
     
             // Set secure JWT cookie
-            Cookie::set(self::FORM_HANDLER, $token, self::$expire);
+            Session::set(self::FORM_HANDLER, $token);
         }
     }
 
+    // Reset CSRF Token
+    public static function resetFormToken():void
+    {
+        $issuedAt = time();
+        $payload = [
+            'iss' => self::$issuer,
+            'iat' => $issuedAt,
+            'exp' => $issuedAt + self::$expire
+        ];
+
+        $token = JWT::encode($payload, Config::get('app', 'secret'), 'HS256');
+
+        // Set secure JWT cookie
+        Session::set(self::FORM_HANDLER, $token);
+    }
+
     // Get CSRF Token
+    /**
+     * @return string
+     */
     public static function getFormToken():string
     {
-        return Cookie::get(self::FORM_HANDLER);
+        return Session::get(self::FORM_HANDLER);
+    }
+
+    // Validate Form Token
+    public static function validateFormToken()
+    {
+        $token = self::getFormToken();
+        self::resetFormToken();
+        if(Request::key('token') != $token){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -109,7 +145,7 @@ class Token
             'iss' => self::$issuer,
             'iat' => $issuedAt,
             'exp' => $issuedAt + self::$expire,
-            'data'=>    $data
+            'data'=> $data
         ];
 
         $token = JWT::encode($payload, Config::get('app', 'secret'), 'HS256');
@@ -135,10 +171,10 @@ class Token
             return [];
         }
 
-        if(self::validateCsrf()){
+        if(self::validateAppToken()){
             try{
                 $decoded = JWT::decode($token, new Key(Config::get('app', 'secret'), 'HS256'));
-                return (array) $decoded->data ?? [];
+                return (array) ($decoded->data ?? []);
             }catch(Exception $e){
                 return [];
             }
@@ -166,35 +202,17 @@ class Token
     {
         Cookie::pop(self::COOKIE_NAME);
         Cookie::pop(self::CSRF_COOKIE);
-
         Session::end();
     }
 
     /**
-     * Validate CSRF token
+     * Validate App token
      */
-    public static function validateCsrf():bool
+    public static function validateAppToken():bool
     {
         $sessionToken = Session::get(self::CSRF_SESSION, 'csrf');
         $cookieToken = Cookie::get(self::CSRF_COOKIE);
 
         return hash_equals($sessionToken, $cookieToken);
-    }
-
-    /**
-     * Enforce auth and CSRF protection
-     */
-    public static function requireAuth():void
-    {
-        if(!self::isLoggedIn()){
-            http_response_code(401);
-            die(json_encode(['error' => 'Unauthorized']));
-        }
-
-        if(!self::validateCsrf()){
-            http_response_code(403);
-            self::logout();
-            die(json_encode(['error' => 'Invalid CSRF token']));
-        }
     }
 }
