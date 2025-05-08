@@ -13,18 +13,6 @@ use CBM\Core\Uri\Uri;
 // Cookie Hndler
 class Cookie
 {
-    // Secured
-    /**
-     * @property $secure - Required Bool. Default is True
-     */
-    public static bool $secure = true;
-
-    // HTTP Only
-    /**
-     * @property $httponly - Required HTTP Only. Default is True
-     */
-    public static bool $httponly = true;
-
     // Set Cookie
     /**
     * @param ?string $key Required Cookie Name Key
@@ -38,8 +26,8 @@ class Cookie
             'expires' => time() + $expires,
             'path' => $path,
             'domain' => Uri::host(),
-            'secure' => self::$secure,
-            'httponly' => self::$httponly,
+            'secure' => Uri::isHttps(),
+            'httponly' => true,
             'samesite' => 'Strict'
         ]);
     }
