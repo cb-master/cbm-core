@@ -58,12 +58,12 @@ class Vault
         return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), $secret, 0, $iv);
     }
 
-    // Generate Secret Key
+    // Change Config Secret Key
     /**
      * @param int $byte Default Value is 16.
      * @return string
      */
-    public static function generateSecretKey(int $byte = 32):string
+    public static function resetConfigSecret(int $byte = 32):string
     {
         $secret = self::randomKey($byte);
         $change = Config::change('app', 'secret', $secret);
