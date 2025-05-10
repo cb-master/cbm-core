@@ -116,12 +116,12 @@ class Token
         return Session::get(self::FORM_HANDLER);
     }
 
-    // Validate Form Token
-    public static function validateFormToken()
+    // Check Form Token is Not Invalid
+    public static function isInvalidFormToken(string $key = 'csrf')
     {
         $token = self::getFormToken();
         self::resetFormToken();
-        if(Request::key('token') != $token){
+        if(Request::key($key) != $token){
             return false;
         }
         return true;
