@@ -117,7 +117,10 @@ class Token
     }
 
     // Check Form Token is Valid
-    public static function validFormToken(string $key = 'csrf')
+    /**
+     * @return bool
+     */
+    public static function validFormToken(string $key = 'csrf'): bool
     {
         $token = self::getFormToken();
         self::resetFormToken();
