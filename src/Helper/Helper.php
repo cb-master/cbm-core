@@ -33,8 +33,7 @@ class Helper
     public static function redirect(string $slug, int $response = 302)
     {
         Response::code($response);
-        $uri = trim($slug, '/');
-        $uri = (Option::key('webhost') ?: Uri::base()) . "/$uri";
+        $uri = (Option::key('webhost') ?: Uri::base()) . trim($slug, '/');
         header("Location:{$uri}");
         die();
     }
@@ -45,8 +44,7 @@ class Helper
      */
     public static function location(string $slug):string
     {
-        $slug = ltrim($slug, '/');
-        return (Option::key('webhost') ?: Uri::base()) . "/{$slug}";
+        return (Option::key('webhost') ?: Uri::base()) . trim($slug, '/');
     }
 
     // Get Visitor IP
