@@ -84,7 +84,7 @@ class Uri
      */
     public static function path():string
     {
-        return rtrim(str_replace(self::instance()->directory, '', self::instance()->path), '/');
+        return trim(str_replace(self::instance()->directory, '', self::instance()->path), '/');
     }
 
     // Get Query Strings
@@ -152,8 +152,8 @@ class Uri
     public static function withQuery(array $params):string
     {
         $queries = array_merge(self::query(), $params);
-        $path = trim(self::path(), '/');
-        return self::base() . $path . '?' . http_build_query($queries);
+
+        return self::base() . self::path() . '?' . http_build_query($queries);
     }
 
     // Get URL Without Query String(s)
@@ -167,43 +167,37 @@ class Uri
         foreach ($keys as $key) {
             unset($queries[$key]);
         }
-        $path = trim(self::path(), '/');
-        return self::base() . $path . (empty($queries) ? '' : '?' . http_build_query($queries));
+        return self::base() . self::path() . (empty($queries) ? '' : '?' . http_build_query($queries));
     }
 
     // Get URL With Incremented Query String
     /**
-     * @param string $key - Required Argument as String
-     * @param int $maximum - Optional Argument as Integer
+     * @param ?string $key Optional Argument. Default is null
      * @return string Get URL With Incremented Query String
      */
-    public static function incrementQuery(string $key, int $maximum = 10):string
+    public static function incrementQuery(?string $key = null):string
     {
+        $key = $key ?: 'page';
         $queries = self::query();
-        $queries[$key] = isset($queries[$key]) && is_numeric($queries[$key])
-            ? (int)$queries[$key] + 1
-            : 1;
-        $queries[$key] = min($queries[$key], $maximum);
-        $path = trim(self::path(), '/');
-        return self::base() . $path . '?' . http_build_query($queries);
+        $queries[$key] = isset($queries[$key]) && is_numeric($queries[$key]) && (int) $queries[$key] > 1
+            ? (int)$queries[$key] + 1 : 2;
+
+        return self::base() . self::path() . '?' . http_build_query($queries);
     }
 
     // Get URL With Decremented Query String
     /**
-     * @param string $key - Required Argument as String
-     * @param int $minimum - Optional Argument as Integer
+     * @param ?string $key Optional Argument. Default is null
      * @return string Get URL With Decremented Query String
      */
-    public static function decrementQuery(string $key, int $minimum = 1): string
+    public static function decrementQuery(?string $key = null): string
     {
+        $key = $key ?: 'page';
         $queries = self::query();
-        $queries[$key] = isset($queries[$key]) && is_numeric($queries[$key])
-            ? (int)$queries[$key] - 1
-            : 1;
-        $queries[$key] = max($queries[$key], $minimum);
+        $queries[$key] = isset($queries[$key]) && is_numeric($queries[$key]) && (int) $queries[$key] > 1
+            ? (int)$queries[$key] - 1 : 1;
 
-        $path = trim(self::path(), '/');
-        return self::base() . $path . '?' . http_build_query($queries);
+        return self::base() . self::path() . '?' . http_build_query($queries);
     }
 
     // Get Host Name
