@@ -36,17 +36,27 @@ use CBM\Session\Session;
     $die ? die() : $die;
  }
  
+ // Show Decimal Number
+ /**
+  * @param int|string|float|null $number - Required Argument
+  * @param int|string $decimal - Default is 2
+  */
+ function show_decimal(int|string|float|null $number, int $decimal = 2):string
+ {
+     $number = (float) $number;
+     $thousands_separator = Option::key('thousands_separator');
+     $decimal_seperator = Option::key('decimal_separator');
+     return number_format($number, $decimal, $decimal_seperator, $thousands_separator);
+ }
+
  // Convert To Float Number
  /**
   * @param int|string|float|null $number - Required Argument
   * @param int|string $decimal - Default is 2
   */
- function to_decimal(int|string|float|null $number, int $decimal = 2):string
+ function decimal(int|string|float|null $number, int $decimal = 2):string
  {
-    $number = (float) $number;
-    $thousands_separator = Option::key('thousands_separator');
-    $decimal_seperator = Option::key('decimal_separator');
-    return number_format($number, $decimal, $decimal_seperator, $thousands_separator);
+     return number_format((float) $number, $decimal, '.', '');
  }
  
  // Get Currency Prefix
@@ -63,7 +73,7 @@ use CBM\Session\Session;
   */
  function to_price(string|int|float $price = null, int $decimal = 2):string
  {
-    $price = to_decimal($price, $decimal);
+    $price = decimal($price, $decimal);
     return currency_prefix() . $price;
  }
  
