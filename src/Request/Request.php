@@ -137,6 +137,7 @@ class Request Extends Resource
             }
         }
         array_filter($keys, function($key){
+            $key = trim($key);
             if(!self::key($key))
 			{
                 self::instance()->invalid[] = $key;
