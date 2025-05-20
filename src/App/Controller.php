@@ -8,6 +8,7 @@
 // Namespace
 namespace CBM\Core\App;
 
+use CBM\Core\Config\Config;
 use Exception;
 
 class Controller
@@ -109,9 +110,10 @@ class Controller
             throw new Exception("'{$path}' Not Found!", 8404);
         }
 
-        // Set Default Title
+        // Set Default Variables
         $this->items['title'] = $this->items['title'] ?? 'Title Not Found!';
         $this->items = $args ? array_merge($args, $this->items) : $this->items;
+        $this->items['app'] = Config::get('app', 'info');
         // Extract Data
         extract($this->items);
 
