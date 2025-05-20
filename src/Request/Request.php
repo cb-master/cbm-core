@@ -8,9 +8,7 @@
 // Namespace
 namespace CBM\Core\Request;
 
-use CBM\CoreHelper\Resource;
-
-class Request Extends Resource
+class Request
 {
     // Invalid Keys
     private array $invalid = [];
