@@ -106,6 +106,13 @@ use CBM\Session\Session;
     $list = Session::get('accesses', $for);
     return (bool) ($list[$access] ?? false);
  }
+
+// Get Assets Directory
+ function asests(): string
+ {
+   $path = USERPATH ? 'web/'.USERPATH . "/assets" : "assets";
+   return WEBHOST . $path;
+ }
  
  // Add Filter
  /**
