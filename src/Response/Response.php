@@ -8,6 +8,8 @@
 // Namespace
 namespace CBM\Core\Response;
 
+use CBM\Core\Config\Config;
+
 class Response
 {
     // Headers
@@ -60,7 +62,7 @@ class Response
     public static function header()
     {
         $headers["Request-Time"] = time();
-        $headers['App-Provider'] = "Cloud Bill Master";
+        $headers['App-Provider'] = Config::get('app', 'provider');
         $headers = array_merge(self::$headers, $headers);
         foreach($headers as $key => $value){
             $key = trim($key);
