@@ -46,7 +46,7 @@ class Route
             self::$userpath = array_shift(self::$segments);
             $class = self::$segments[0] ?? 'index';
             $path .= '/'.$class;
-            self::$language_path = ROOTPATH . '/' . self::$userpath . '/lang';
+            self::$language_path = ROOTPATH . '/web/' . self::$userpath . '/lang';
         }
 
         // $class = ($class);
