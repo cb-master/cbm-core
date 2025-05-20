@@ -7,6 +7,7 @@ defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
 use CBM\Core\Request\Request;
 use CBM\Core\Uri\Uri;
+use Exception;
 
 class Route
 {
@@ -38,7 +39,7 @@ class Route
         // Class
         $class = strtolower(Uri::segment(1) ?: 'index');
 
-        $path = ROOTPATH."/controller/{$class}";
+        $path = ROOTPATH."/web/{$class}";
 
         // Check if Controller is A Directory
         if(is_dir($path)){
@@ -56,15 +57,20 @@ class Route
         if(!file_exists(self::$path)){
             $class = '_404';
             $method = 'index';
-            self::$path = self::$userpath ? ROOTPATH.'/controller/'.self::$userpath.'/_404.php' : ROOTPATH.'/controller/_404.php';
+            self::$path = self::$userpath ? ROOTPATH.'/web/'.self::$userpath.'/_404.php' : ROOTPATH.'/web/_404.php';
         }
 
-        // Load Language File if Exists
-        $language_path = self::$language_path . '/' . App::getLanguage() . '.language.php';
-        if($language_path && file_exists($language_path)){
-            require_once($language_path);
+        // Load Language File
+        $language_path = self::$language_path . '/' . App::getLanguage() . '.local.php';
+        if(!file_exists($language_path)){
+            throw new Exception("Language Path '{$language_path}' Missing!", 8404);
         }
-        ////////////////////////////////////
+        require_once($language_path);
+
+        // Define DOCPATH
+        define('DOCPATH', self::$userpath ? dirname(self::$path) : ROOTPATH);
+        define('HOSTPATH', self::$userpath ? Uri::base() . self::$userpath : trim(Uri::base(), '/'));
+
         // Require Controller
         require(self::$path);
 
