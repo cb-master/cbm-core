@@ -11,7 +11,7 @@ namespace CBM\Core\App;
 class App
 {
     // App Language
-    private static ?string $language = null;
+    private static string $language = 'en';
 
     // Run Application
     public static function run()
@@ -26,7 +26,7 @@ class App
     }
 
     // Get App Language
-    public static function getLanguage(): ?string
+    public static function getLanguage(): string
     {
         return self::$language;
     }
