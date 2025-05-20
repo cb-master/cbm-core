@@ -49,6 +49,7 @@ class Directory
             throw new Exception("Invalid Directory '{$path}'");
         }
         $path = self::clear_path($path);
+        $ext = ltrim($ext, '.');
         return glob("{$path}.{$ext}");
     }
 }
