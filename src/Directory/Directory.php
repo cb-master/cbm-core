@@ -48,8 +48,8 @@ class Directory
         if(!is_dir($path)){
             throw new Exception("Invalid Directory '{$path}'");
         }
-        $path = self::clear_path($path);
         $ext = ltrim($ext, '.');
+        $path = self::clear_path($path);
         return glob("{$path}.{$ext}");
     }
 }

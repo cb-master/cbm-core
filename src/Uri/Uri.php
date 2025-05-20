@@ -137,11 +137,12 @@ class Uri
 
     // Get All Segments
     /**
-     * @return string Get All Segments
+     * @return array Get All Segments
      */
-    public static function segments():array
+    public static function segments(): array
     {
-        return explode('/', trim(self::instance()->path(), '/'));
+        $segments = explode('/', trim(self::instance()->path(), '/'));
+        return $segments[0] ? $segments : [];
     }
 
     // Get URL With Query String(s)

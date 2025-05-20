@@ -8,7 +8,7 @@
 // Namespace
 namespace CBM\Core\App;
 
-use CBM\Core\Directory\Directory;
+use Exception;
 
 class Controller
 {
@@ -20,7 +20,7 @@ class Controller
      * @param string|array|object $param Required Argument as key name or array or object
      * @param mixed $value Optional Argument as key value
      */
-    public function assign(string|array|object $param, mixed $value = null):void
+    protected function assign(string|array|object $param, mixed $value = null):void
     {
         if(is_object($param)){
             $this->items = array_merge($this->items, json_decode(json_encode($param), true));
@@ -31,66 +31,91 @@ class Controller
         }
     }
 
-    // Get Assigned Data
-    public function get_assigned_data():array
-    {
-        return $this->items;
-    }
-
-    // Load Middleware and Execute
+    // Load Middleware and Method
     /**
      * @param string $class - Required Argument as Middleware Class Name Like 'Client'.
      * @param string $method - Required Argument as Middleware Method Name.
      * @param array $args - Optionsl Argument. Default is Blank Array.
      */
-    protected function middleware(string $class, string $method, mixed ...$args):void
+    protected function middleware(string $class, string $method, mixed ...$args): void
     {
         // Create Middleware Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Middleware')){
             mkdir(ROOTPATH.'/app/Middleware');
+            copy(ROOTPATH.'/app/index.php', ROOTPATH.'/app/Middleware/index.php');
         }
         // Load Middleware if Exist
-        $class = ucfirst($class);
-        $class = "\\CBM\\App\\Middleware\\{$class}";
+        $class = "\\App\\Middleware\\{$class}";
+        if(!class_exists($class)){
+            throw new Exception("Middleware '{$class}' Not Found!", 8404);
+        }
         call_user_func([new $class, $method], ...$args);
-    }
-
-    // Load View
-    /**
-     * @param string $view Required Argument as view file
-     * @param array $data Optional Argument as view file data
-     */
-    protected function view(string $view):void
-    {
-        // Extract Data
-        extract($this->items);
-
-        // Theme File
-        $path = ROOTPATH . "/views/{$view}.view.php";
-        $functions_dir = dirname($path).'/functions';
-        if(file_exists($functions_dir)){
-            array_filter(Directory::files($functions_dir, 'php'), function($file){
-                require($file);
-            });
-        }
-        if(!file_exists($path)){
-            throw new \Exception("View File Not Found: '{$path}'!");
-            die;
-        }
-        require_once($path);
-        
     }
 
     // Call Factory & Method
     protected function factory(string $factory, string $method, mixed ...$args):mixed
     {
-        return call_user_func(["\\CBM\\App\\Factory\\{$factory}", $method], ...$args);
+        // Create Factory Folder if Does Not Exist
+        if(!file_exists(ROOTPATH.'/app/Factory')){
+            mkdir(ROOTPATH.'/app/Factory');
+            copy(ROOTPATH.'/app/index.php', ROOTPATH.'/app/Factory/index.php');
+        }
+        // Load Factory if Exist
+        $class = "\\App\\Factory\\{$factory}";
+        if(!class_exists($class)){
+            throw new Exception("Factory '{$class}' Not Found!", 8404);
+        }
+        return call_user_func([new $class, $method], ...$args);
     }
 
     // Call Model & Method
-    protected function model(string $factory, string $method, mixed ...$args):mixed
+    protected function model(string $model, string $method, mixed ...$args):mixed
     {
-        $class = "\\CBM\\App\\Model\\{$factory}";
+        // Create Model Folder if Does Not Exist
+        if(!file_exists(ROOTPATH.'/app/Model')){
+            mkdir(ROOTPATH.'/app/Model');
+            copy(ROOTPATH.'/app/index.php', ROOTPATH.'/app/Model/index.php');
+        }
+
+        $class = "\\App\\Model\\{$model}";
+        if(!class_exists($class)){
+            throw new Exception("Model '{$class}' Not Found!", 8404);
+        }
         return call_user_func([new $class, $method], ...$args);
+    }
+
+    // Load View
+    /**
+     * @param string $name Required Argument. Example 'view_nile_name'
+     * @return void
+     * @throws Exception
+     * @example $this->view('index')
+     */
+    protected function view(string $name, ?array $args = null): void
+    {
+        // Throw Exception if View Name is Empty
+        if(!$name){
+            throw new Exception("View Name is Required!", 8000);
+        }
+
+        // Get Theme File Path
+        $directory = (isset($args['userpath']) && $args['userpath']) ? dirname(Route::path()) : ROOTPATH;
+
+        $name = trim($name, '/');
+        $path = "{$directory}/template/{$name}.php";
+
+        // Check if View File Exists. If not, throw an Exception
+        if (!file_exists($path)) {
+            throw new Exception("'{$path}' Not Found!", 8404);
+        }
+
+        // Set Default Title
+        $this->items['title'] = $this->items['title'] ?? 'Title Not Found!';
+        $this->items = $args ? array_merge($args, $this->items) : $this->items;
+        // Extract Data
+        extract($this->items);
+
+        // Require View File
+        require_once $path;
     }
 }
