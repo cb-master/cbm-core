@@ -5,9 +5,7 @@ namespace CBM\Core\App;
 // Deny Direct Access
 defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
-use CBM\Core\Directory\Directory;
 use CBM\Core\Request\Request;
-use CBM\Core\Config\Config;
 use CBM\Core\Uri\Uri;
 
 class Route
@@ -24,8 +22,6 @@ class Route
     // Run Application
     public static function init(): void
     {
-        // Load Config
-        Config::set(Directory::files(ROOTPATH.'/configs', 'php'));
         // Load Controllers
         self::loadController();
     }
