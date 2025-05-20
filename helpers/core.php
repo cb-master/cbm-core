@@ -107,8 +107,11 @@ use CBM\Session\Session;
     return (bool) ($list[$access] ?? false);
  }
 
-// Get Assets Directory
- function asests(): string
+// Get Assets Path
+ /**
+  * @return string
+  */
+ function asset_path(): string
  {
    $path = USERPATH ? 'web/'.USERPATH . "/assets" : "assets";
    return WEBHOST . $path;
