@@ -19,6 +19,9 @@ class Route
     // Path
     public static $path = '';
 
+    // Language Path
+    private static string $language_path = ROOTPATH . '/lang';
+
     // Run Application
     public static function init(): void
     {
@@ -42,6 +45,7 @@ class Route
             self::$userpath = array_shift(self::$segments);
             $class = self::$segments[0] ?? 'index';
             $path .= '/'.$class;
+            self::$language_path = ROOTPATH . '/' . self::$userpath . '/lang';
         }
 
         // $class = ($class);
@@ -55,6 +59,12 @@ class Route
             self::$path = self::$userpath ? ROOTPATH.'/controller/'.self::$userpath.'/_404.php' : ROOTPATH.'/controller/_404.php';
         }
 
+        // Load Language File if Exists
+        $language_path = self::$language_path . '/' . App::getLanguage() . '.language.php';
+        if($language_path && file_exists($language_path)){
+            require_once($language_path);
+        }
+        ////////////////////////////////////
         // Require Controller
         require(self::$path);
 
