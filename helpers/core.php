@@ -9,6 +9,7 @@ use CBM\Core\Filter\Filter;
 use CBM\Core\Option\Option;
 use CBM\Core\Helper\Helper;
 use CBM\Session\Session;
+use CBM\Core\Uri\Uri;
  
  // Dump Data & Die
  /**
@@ -113,8 +114,7 @@ use CBM\Session\Session;
   */
  function asset_path(): string
  {
-   $path = USERPATH ? 'web/'.USERPATH . "/assets" : "assets";
-   return WEBHOST . $path;
+   return APPHOST . "/assets";
  }
  
  // Add Filter
