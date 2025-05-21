@@ -103,7 +103,7 @@ class Controller
         $directory = (isset($args['userpath']) && $args['userpath']) ? dirname(Route::path()) : ROOTPATH;
 
         $name = trim($name, '/');
-        $path = "{$directory}/template/{$name}.php";
+        $path = "{$directory}/template/{$name}.view.php";
 
         // Check if View File Exists. If not, throw an Exception
         if (!file_exists($path)) {
