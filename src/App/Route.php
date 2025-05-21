@@ -78,6 +78,9 @@ class Route
         define('DOCPATH', self::$userpath ? dirname(self::$path) : ROOTPATH);
         // Define APPHOST
         define('APPHOST', trim(self::$userpath ? Uri::base() . self::$userpath : Uri::base(), '/'));
+        // Define WEBPATH
+        $slug = self::$userpath ? 'web/'.USERPATH : '';
+        define('WEBPATH', Uri::base() . $slug);
 
         // Load Functions
         $function_folder = $function_folder ?? ROOTPATH . '/functions';

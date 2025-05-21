@@ -114,7 +114,7 @@ use CBM\Core\Uri\Uri;
   */
  function asset_path(): string
  {
-   return APPHOST . "/assets";
+   return WEBPATH . '/assets';
  }
  
  // Add Filter
