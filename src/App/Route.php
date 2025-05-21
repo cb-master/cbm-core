@@ -5,6 +5,7 @@ namespace CBM\Core\App;
 // Deny Direct Access
 defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
+use CBM\Core\Directory\Directory;
 use CBM\Core\Request\Request;
 use CBM\Core\Uri\Uri;
 use Exception;
@@ -45,6 +46,8 @@ class Route
         if(is_dir($path)){
             self::$userpath = array_shift(self::$segments);
             $class = self::$segments[0] ?? 'index';
+            // Additional Functions Folder
+            $function_folder = $path . '/functions';
             $path .= '/'.$class;
             self::$language_path = ROOTPATH . '/web/' . self::$userpath . '/lang';
         }
@@ -67,9 +70,20 @@ class Route
         }
         require_once($language_path);
 
+        // Define USERPATH
+        define('USERPATH', self::$userpath);
         // Define DOCPATH
         define('DOCPATH', self::$userpath ? dirname(self::$path) : ROOTPATH);
-        define('HOSTPATH', self::$userpath ? Uri::base() . self::$userpath : trim(Uri::base(), '/'));
+        // Define APPHOST
+        define('APPHOST', trim(self::$userpath ? Uri::base() . self::$userpath : Uri::base(), '/'));
+
+        // Load Functions
+        $function_folder = $function_folder ?? ROOTPATH . '/functions';
+        if(file_exists($function_folder)){
+            array_map(function($file){
+                require_once $file;
+            }, Directory::files($function_folder, 'php'));
+        }
 
         // Require Controller
         require(self::$path);
