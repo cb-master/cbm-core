@@ -8,7 +8,6 @@
 // Namespace
 namespace CBM\Core\App;
 
-use CBM\Core\Config\Config;
 use Exception;
 
 class Controller
