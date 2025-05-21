@@ -21,7 +21,7 @@ class Controller
      * @param string|array|object $param Required Argument as key name or array or object
      * @param mixed $value Optional Argument as key value
      */
-    protected function assign(string|array|object $param, mixed $value = null):void
+    protected function assign(string|array|object $param, mixed $value = null): void
     {
         if(is_object($param)){
             $this->items = array_merge($this->items, json_decode(json_encode($param), true));
@@ -54,7 +54,7 @@ class Controller
     }
 
     // Call Factory & Method
-    protected function factory(string $factory, string $method, mixed ...$args):mixed
+    protected function factory(string $factory, string $method, mixed ...$args): mixed
     {
         // Create Factory Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Factory')){
@@ -70,7 +70,7 @@ class Controller
     }
 
     // Call Model & Method
-    protected function model(string $model, string $method, mixed ...$args):mixed
+    protected function model(string $model, string $method, mixed ...$args): mixed
     {
         // Create Model Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Model')){
@@ -113,7 +113,6 @@ class Controller
         // Set Default Variables
         $this->items['title'] = $this->items['title'] ?? 'Title Not Found!';
         $this->items = $args ? array_merge($args, $this->items) : $this->items;
-        $this->items['app'] = Config::get('app', 'info');
         // Extract Data
         extract($this->items);
 
