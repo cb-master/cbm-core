@@ -21,7 +21,7 @@ class Controller
      * @param string|array|object $param Required Argument as key name or array or object
      * @param mixed $value Optional Argument as key value
      */
-    protected function assign(string|array|object $param, mixed $value = null): void
+    protected function assign(string|array|object $param, mixed $value = null):void
     {
         if(is_object($param)){
             $this->items = array_merge($this->items, json_decode(json_encode($param), true));
@@ -46,7 +46,7 @@ class Controller
             copy(ROOTPATH.'/app/index.php', ROOTPATH.'/app/Middleware/index.php');
         }
         // Load Middleware if Exist
-        $class = "\\App\\Middleware\\{$class}";
+        $class = "\\CBM\\App\\Middleware\\{$class}";
         if(!class_exists($class)){
             throw new Exception("Middleware '{$class}' Not Found!", 8404);
         }
@@ -54,7 +54,7 @@ class Controller
     }
 
     // Call Factory & Method
-    protected function factory(string $factory, string $method, mixed ...$args): mixed
+    protected function factory(string $factory, string $method, mixed ...$args):mixed
     {
         // Create Factory Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Factory')){
@@ -62,7 +62,7 @@ class Controller
             copy(ROOTPATH.'/app/index.php', ROOTPATH.'/app/Factory/index.php');
         }
         // Load Factory if Exist
-        $class = "\\App\\Factory\\{$factory}";
+        $class = "\\CBM\\App\\Factory\\{$factory}";
         if(!class_exists($class)){
             throw new Exception("Factory '{$class}' Not Found!", 8404);
         }
@@ -70,7 +70,7 @@ class Controller
     }
 
     // Call Model & Method
-    protected function model(string $model, string $method, mixed ...$args): mixed
+    protected function model(string $model, string $method, mixed ...$args):mixed
     {
         // Create Model Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Model')){
@@ -78,7 +78,7 @@ class Controller
             copy(ROOTPATH.'/app/index.php', ROOTPATH.'/app/Model/index.php');
         }
 
-        $class = "\\App\\Model\\{$model}";
+        $class = "\\CBM\\App\\Model\\{$model}";
         if(!class_exists($class)){
             throw new Exception("Model '{$class}' Not Found!", 8404);
         }
