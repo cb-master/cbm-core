@@ -7,6 +7,7 @@ defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
 use CBM\Core\Directory\Directory;
 use CBM\Core\Request\Request;
+use CBM\Core\Config\Config;
 use CBM\Core\Uri\Uri;
 use Exception;
 
@@ -64,12 +65,13 @@ class Route
         }
 
         // Load Language File
-        $language_path = self::$language_path . '/' . App::getLanguage() . '.local.php';
+        $lang = App::getLanguage() ?: 'en';
+        $language_path = self::$language_path . "/{$lang}.local.php";
         if(!file_exists($language_path)){
             throw new Exception("Language Path '{$language_path}' Missing!", 8404);
         }
         require_once($language_path);
-
+        
         // Define USERPATH
         define('USERPATH', self::$userpath);
         // Define DOCPATH
@@ -87,7 +89,17 @@ class Route
 
         // Require Controller
         require(self::$path);
-
+        // Get App Configs
+        $app = Config::get('app');
+        // Unset Secrets
+        if(isset($app['secret'])){
+            unset($app['secret']);
+        }
+        if(isset($app['encryption_method'])){
+            unset($app['encryption_method']);
+        }
+        $app = is_array($app) ? $app : [];
+        // Set Default Args
         $args = [
             'userpath'  =>  self::$userpath,
             'uri'       =>  new Uri(),
@@ -98,7 +110,7 @@ class Route
         $method = method_exists($class, $method) ? $method : 'index';
 
         // Call Class Method
-        call_user_func([new $class, $method], $args);
+        call_user_func([new $class, $method], array_merge($args, $app));
     }
 
     // Get Path
