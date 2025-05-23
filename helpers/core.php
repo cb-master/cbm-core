@@ -94,7 +94,11 @@ use CBM\Core\Uri\Uri;
   */
  function redirect(string|array $slug, int $response = 302):void
  {
-   $slug = is_string($slug) ? [$slug] : $slug;
+   if(is_string($slug)){
+      $slug = trim($slug, '/');
+      $slug = explode('/', $slug);
+      $slug = array_values($slug);
+   }
    Helper::redirect(implode('/', $slug), $response);
  }
  
