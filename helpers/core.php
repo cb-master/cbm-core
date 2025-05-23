@@ -89,12 +89,13 @@ use CBM\Core\Uri\Uri;
  
  // Redirect
  /**
-  * @param string $slug - Required Argument
+  * @param string|array $slug - Required Argument
   * @param int $response - Default is 302
   */
- function redirect(string $slug, int $response = 302):void
+ function redirect(string|array $slug, int $response = 302):void
  {
-    Helper::redirect($slug, $response);
+   $slug = is_string($slug) ? [$slug] : $slug;
+   Helper::redirect(implode('/', $slug), $response);
  }
  
  // Check Staff Has Access
