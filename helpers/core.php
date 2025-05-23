@@ -92,12 +92,12 @@ use CBM\Core\Uri\Uri;
   * @param string|array $slug - Required Argument
   * @param int $response - Default is 302
   */
- function redirect(string|array $slug, int $response = 302):void
+ function redirect(string|array $slug, int $response = 302): void
  {
    if(is_string($slug)){
       $slug = trim($slug, '/');
       $slug = explode('/', $slug);
-      $slug = array_values($slug);
+      $slug = array_map('trim', $slug);
    }
    Helper::redirect(implode('/', $slug), $response);
  }
