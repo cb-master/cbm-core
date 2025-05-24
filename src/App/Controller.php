@@ -87,11 +87,12 @@ class Controller
     // Load View
     /**
      * @param string $name Required Argument. Example 'view_nile_name'
+     * @param array $args Required Argument.
      * @return void
      * @throws Exception
      * @example $this->view('index')
      */
-    protected function view(string $name, ?array $args = null): void
+    protected function view(string $name, array $args): void
     {
         // Throw Exception if View Name is Empty
         if(!$name){
@@ -99,19 +100,24 @@ class Controller
         }
 
         // Get Theme File Path
-        $directory = (isset($args['userpath']) && $args['userpath']) ? dirname(Route::path()) : ROOTPATH;
-
         $name = trim($name, '/');
-        $path = "{$directory}/template/{$name}.view.php";
+        $path = DOCPATH . "/template/{$name}.view.php";
 
         // Check if View File Exists. If not, throw an Exception
-        if (!file_exists($path)) {
-            throw new Exception("'{$path}' Not Found!", 8404);
+        if(!file_exists($path)){
+            throw new Exception("View Path: '{$path}' Not Found!", 8404);
         }
 
         // Set Default Variables
         $this->items['title'] = $this->items['title'] ?? 'Title Not Found!';
         $this->items = $args ? array_merge($args, $this->items) : $this->items;
+        // Unset Secrets
+        array_map(function($key){
+            if(isset($this->items[$key])){
+                unset($this->items[$key]);
+            }
+        }, ['secret', 'encryption_method']);
+
         // Extract Data
         extract($this->items);
 

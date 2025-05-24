@@ -22,9 +22,6 @@ class Route
     // Path
     public static $path = '';
 
-    // Language Path
-    private static string $language_path = ROOTPATH . '/lang';
-
     // Run Application
     public static function init(): void
     {
@@ -50,7 +47,7 @@ class Route
             // Additional Functions Folder
             $function_folder = $path . '/functions';
             $path .= '/'.$class;
-            self::$language_path = ROOTPATH . '/web/' . self::$userpath . '/lang';
+            App::setLanguageDirectory(ROOTPATH . '/web/' . self::$userpath . '/lang');
         }
 
         // $class = ($class);
@@ -62,15 +59,15 @@ class Route
             $class = '_404';
             $method = 'index';
             self::$path = self::$userpath ? ROOTPATH.'/web/'.self::$userpath.'/_404.php' : ROOTPATH.'/web/_404.php';
+            if(!file_exists(self::$path)){
+                throw new Exception("Controller Path: '".self::$path."' Not Found!", 8404);
+            }
         }
 
-        // Load Language File
-        $lang = App::getLanguage() ?: 'en';
-        $language_path = self::$language_path . "/{$lang}.local.php";
-        if(!file_exists($language_path)){
-            throw new Exception("Language Path '{$language_path}' Missing!", 8404);
+        // Load Language File if Exists
+        if(file_exists(App::getLanguagePath())){
+            require_once(App::getLanguagePath());
         }
-        require_once($language_path);
         
         // Define USERPATH
         define('USERPATH', self::$userpath);
@@ -94,13 +91,7 @@ class Route
         require(self::$path);
         // Get App Configs
         $app = Config::get('app');
-        // Unset Secrets
-        if(isset($app['secret'])){
-            unset($app['secret']);
-        }
-        if(isset($app['encryption_method'])){
-            unset($app['encryption_method']);
-        }
+        // Check if App is an Array
         $app = is_array($app) ? $app : [];
         // Set Default Args
         $args = [

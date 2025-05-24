@@ -13,6 +13,9 @@ class App
     // App Language
     private static string $language = 'en';
 
+    // Language Path
+    private static string $language_directory = ROOTPATH . '/lang';
+
     // Run Application
     public static function run()
     {
@@ -29,5 +32,17 @@ class App
     public static function getLanguage(): string
     {
         return self::$language;
+    }
+
+    // Set Language Path()
+    public static function setLanguageDirectory(string $directory): void
+    {
+        self::$language_directory = rtrim($directory, '/');
+    }
+
+    // Get Language Path
+    public static function getLanguagePath(): string
+    {
+        return self::$language_directory . '/' . self::$language . '.local.php';
     }
 }
