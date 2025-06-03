@@ -10,9 +10,22 @@ use CBM\Core\Request\Request;
 use CBM\Core\Config\Config;
 use CBM\Core\Uri\Uri;
 use Exception;
+use RuntimeException;
 
 class Route
 {
+    // Default Class & Method
+    private const DEFAULT = 'Index';
+
+    // Defautl Error Class
+    private const ERROR = '_404';
+
+    // Default Class
+    private static string $class;
+
+    // Default Method
+    private static string $method;
+
     // Segments
     public static array $segments = [];
 
@@ -20,7 +33,7 @@ class Route
     public static ?string $userpath = null;
 
     // Path
-    public static $path = '';
+    public static $path = ROOTPATH . "/web";
 
     // Run Application
     public static function init(): void
@@ -36,31 +49,29 @@ class Route
         self::$segments = Uri::segments();
 
         // Class
-        $class = strtolower(Uri::segment(1) ?: 'index');
+        self::$class = self::$segments[0] ?? self::DEFAULT;
 
-        $path = ROOTPATH."/web/{$class}";
 
         // Check if Controller is A Directory
-        if(is_dir($path)){
-            self::$userpath = array_shift(self::$segments);
-            $class = self::$segments[0] ?? 'index';
+        if(is_dir(self::$path.'/'.self::$class)){
+            self::$userpath = strtolower(array_shift(self::$segments));
+            self::$class = self::$segments[0] ?? self::DEFAULT;
             // Additional Functions Folder
-            $function_folder = $path . '/functions';
-            $path .= '/'.$class;
+            $function_folder = self::$path . '/functions';
+            self::$path .= '/'.self::$userpath;
             App::setLanguageDirectory(ROOTPATH . '/web/' . self::$userpath . '/lang');
         }
 
         // $class = ($class);
-        $method = self::$segments[1] ?? 'index';
+        self::$method = self::$segments[1] ?? self::DEFAULT;
 
         // Require Controller
-        self::$path = "{$path}.php";
-        if(!file_exists(self::$path)){
-            $class = '_404';
-            $method = 'index';
-            self::$path = self::$userpath ? ROOTPATH.'/web/'.self::$userpath.'/_404.php' : ROOTPATH.'/web/_404.php';
+        // self::$path = "{$path}.php";
+        if(!file_exists(self::$path . '/' . self::$class . '.php')){
+            self::$class = self::ERROR;
+            self::$method = self::DEFAULT;
             if(!file_exists(self::$path)){
-                throw new Exception("Controller Path: '".self::$path."' Not Found!", 8404);
+                throw new RuntimeException("Controller Path: '".self::$path."' Not Found!", 8404);
             }
         }
 
@@ -71,13 +82,19 @@ class Route
         
         // Define USERPATH
         define('USERPATH', self::$userpath);
+        $args['userpath'] = self::$userpath;
         // Define DOCPATH
-        define('DOCPATH', self::$userpath ? dirname(self::$path) : ROOTPATH);
+        define('DOCPATH', trim(self::$userpath ? self::$path : ROOTPATH, '/'));
+        $args['docpath'] = DOCPATH;
         // Define APPHOST
         define('APPHOST', trim(self::$userpath ? Uri::base() . self::$userpath : Uri::base(), '/'));
+        $args['apphost'] = APPHOST;
         // Define WEBPATH
         $slug = self::$userpath ? 'web/'.USERPATH : '';
-        define('WEBPATH', Uri::base() . $slug);
+        define('ASSESTPATH', trim(Uri::base() . $slug, '/'));
+        $args['assetpath'] = ASSESTPATH;
+        // Set Parameters
+        $args['params'] = array_slice(self::$segments, 2);
 
         // Load Functions
         $function_folder = $function_folder ?? ROOTPATH . '/functions';
@@ -87,24 +104,40 @@ class Route
             }, Directory::files($function_folder, 'php'));
         }
 
-        // Require Controller
-        require(self::$path);
         // Get App Configs
         $app = Config::get('app');
         // Check if App is an Array
         $app = is_array($app) ? $app : [];
-        // Set Default Args
-        $args = [
-            'userpath'  =>  self::$userpath,
-            'uri'       =>  new Uri(),
-            'request'   =>  new Request()
-        ];
+        if(isset($app['encryption_method'])){
+            unset($app['encryption_method']);
+        }
+        if(isset($app['secret'])){
+            unset($app['secret']);
+        }
 
+        // Set Default Args
+        $args = array_merge($args, $app);
+
+        // Require Controller & Execute Applicaton
+        require_once(self::$path.'/'.self::ERROR.'.php');
+        require_once(self::$path.'/'.self::$class.'.php');
+
+        // Get Available Methods
+        try {
+            $methods = array_map('ucfirst', get_class_methods(self::$class));
+        } catch (\Throwable $th) {
+            $methods[] = self::DEFAULT;
+        }
+        self::$class = ucfirst(self::$class);
+        self::$method = ucfirst(self::$method);
         // Check Method Exists
-        $method = method_exists($class, $method) ? $method : 'index';
+        if(!method_exists(self::$class, self::$method) || !in_array(self::$method, $methods)){
+            self::$class = self::ERROR;
+            self::$method = self::DEFAULT;
+        }
 
         // Call Class Method
-        call_user_func([new $class, $method], array_merge($args, $app));
+        call_user_func([new self::$class, self::$method], $args);
     }
 
     // Get Path

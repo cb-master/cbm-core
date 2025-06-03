@@ -8,6 +8,8 @@
 // Namespace
 namespace CBM\Core\App;
 
+use RuntimeException;
+
 class App
 {
     // App Language
@@ -43,6 +45,10 @@ class App
     // Get Language Path
     public static function getLanguagePath(): string
     {
-        return self::$language_directory . '/' . self::$language . '.local.php';
+        $file = self::$language_directory . '/' . self::$language . '.local.php';
+        if(!file_exists($file)){
+            throw new RuntimeException("Language File: '$file' Doesn't Exist!", 8404);
+        }
+        return $file;
     }
 }
