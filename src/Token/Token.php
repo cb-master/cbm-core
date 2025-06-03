@@ -118,13 +118,14 @@ class Token
 
     // Check Form Token is Valid
     /**
+     * @param string 
      * @return bool
      */
     public static function validFormToken(string $key = 'csrf'): bool
     {
         $token = self::getFormToken();
         self::resetFormToken();
-        if(Request::key($key) != $token){
+        if(Request::key(trim($key)) != $token){
             return false;
         }
         return true;

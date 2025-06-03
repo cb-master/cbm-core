@@ -6,10 +6,9 @@ namespace CBM\Core\App;
 defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
 use CBM\Core\Directory\Directory;
-use CBM\Core\Request\Request;
+use CBM\Core\Language\Language;
 use CBM\Core\Config\Config;
 use CBM\Core\Uri\Uri;
-use Exception;
 use RuntimeException;
 
 class Route
@@ -27,13 +26,16 @@ class Route
     private static string $method;
 
     // Segments
-    public static array $segments = [];
+    private static array $segments = [];
 
     // User Path
-    public static ?string $userpath = null;
+    private static ?string $userpath = null;
 
     // Path
-    public static $path = ROOTPATH . "/web";
+    private static $path = ROOTPATH . "/web";
+
+    // Default Functions Path
+    private static string $functions_path = ROOTPATH . '/functions';
 
     // Run Application
     public static function init(): void
@@ -57,16 +59,16 @@ class Route
             self::$userpath = strtolower(array_shift(self::$segments));
             self::$class = self::$segments[0] ?? self::DEFAULT;
             // Additional Functions Folder
-            $function_folder = self::$path . '/functions';
             self::$path .= '/'.self::$userpath;
-            App::setLanguageDirectory(ROOTPATH . '/web/' . self::$userpath . '/lang');
+            self::$functions_path = self::$path . '/functions';
+            Language::path(ROOTPATH . '/web/' . self::$userpath . '/lang');
         }
 
         // $class = ($class);
-        self::$method = self::$segments[1] ?? self::DEFAULT;
+        self::$class = ucfirst(self::$class);
+        self::$method = ucfirst(self::$segments[1] ?? self::DEFAULT);
 
         // Require Controller
-        // self::$path = "{$path}.php";
         if(!file_exists(self::$path . '/' . self::$class . '.php')){
             self::$class = self::ERROR;
             self::$method = self::DEFAULT;
@@ -76,9 +78,7 @@ class Route
         }
 
         // Load Language File if Exists
-        if(file_exists(App::getLanguagePath())){
-            require_once(App::getLanguagePath());
-        }
+        require_once(Language::path());
         
         // Define USERPATH
         define('USERPATH', self::$userpath);
@@ -91,17 +91,16 @@ class Route
         $args['apphost'] = APPHOST;
         // Define WEBPATH
         $slug = self::$userpath ? 'web/'.USERPATH : '';
-        define('ASSESTPATH', trim(Uri::base() . $slug, '/'));
-        $args['assetpath'] = ASSESTPATH;
+        define('ASSETPATH', trim(Uri::base() . $slug, '/'));
+        $args['assetpath'] = ASSETPATH;
         // Set Parameters
         $args['params'] = array_slice(self::$segments, 2);
 
         // Load Functions
-        $function_folder = $function_folder ?? ROOTPATH . '/functions';
-        if(file_exists($function_folder)){
+        if(file_exists(self::$functions_path)){
             array_map(function($file){
                 require_once $file;
-            }, Directory::files($function_folder, 'php'));
+            }, Directory::files(self::$functions_path, 'php'));
         }
 
         // Get App Configs
@@ -130,6 +129,7 @@ class Route
         }
         self::$class = ucfirst(self::$class);
         self::$method = ucfirst(self::$method);
+
         // Check Method Exists
         if(!method_exists(self::$class, self::$method) || !in_array(self::$method, $methods)){
             self::$class = self::ERROR;

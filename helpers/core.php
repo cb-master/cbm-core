@@ -92,13 +92,15 @@ use CBM\Core\Uri\Uri;
   * @param string|array $slug - Required Argument
   * @param int $response - Default is 302
   */
- function redirect(string|array $slug, int $response = 302): void
+ function redirect(string|array $slug, int $response = 302):void
  {
    if(is_string($slug)){
       $slug = trim($slug, '/');
       $slug = explode('/', $slug);
-      $slug = array_map('trim', $slug);
    }
+   $slug = array_map(function($s){
+      return trim($s, '/');
+   }, $slug);
    Helper::redirect(implode('/', $slug), $response);
  }
  
@@ -112,14 +114,14 @@ use CBM\Core\Uri\Uri;
     $list = Session::get('accesses', $for);
     return (bool) ($list[$access] ?? false);
  }
-
-// Get Assets Path
+ 
+ // Get Assets Path
  /**
   * @return string
   */
  function asset_path(): string
  {
-   return WEBPATH . '/assets';
+   return ASSETPATH . '/assets';
  }
  
  // Add Filter

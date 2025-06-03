@@ -148,7 +148,7 @@ class Request
 	}
 
     // Get Invalid Keys
-    public static function invalidKeys():array
+    public static function invalidKeys(): array
     {
         $keys = self::instance()->invalid;
         self::instance()->invalid = [];
@@ -158,8 +158,9 @@ class Request
     // Request Data Purify
     /**
      * @param array $keys - Default Value is []
+     * @return array
      */
-    public function purify(array $data = [])
+    public function purify(array $data = []): array
     {
         $request_data = [];
         // Clear Request Data
@@ -171,12 +172,13 @@ class Request
         return $request_data;
     }
 
-    // Get Request From PHP Iput Stream
-    public static function stream():array
+    // Request Data
+    /**
+     * @return array
+     */
+    public static function stream(): array
     {
-        // Get php://input Data
         $request_data = json_decode(file_get_contents('php://input'), true);
-        $request_data = !is_array($request_data) ? [$request_data] : $request_data;
         return self::instance()->purify($request_data ?: []);
     }
 }

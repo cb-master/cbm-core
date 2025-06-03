@@ -12,7 +12,7 @@ use CBM\Core\Response\Response;
 use CBM\Core\Request\Request;
 use CBM\Model\DB;
 
-class Validate Extends APIMessage
+class Validate
 {
     // Username Column Name
     public static string $username_column = 'ausername';
@@ -20,91 +20,61 @@ class Validate Extends APIMessage
     // Token Column Name
     public static string $token_column = 'atoken';
 
-    // YUnsupported Method
-    public static function unsupported_method():void
-    {
-        self::set(Response::code(405), 'Method is Not Accepted');
-    }
-
-    // Required Internal Server Request
+    // Check Method is Supprted
     /**
-     * @return array
+     * @return bool
      */
-    public static function require_internal_request():array
+    public static function methodIsSupported(): bool
     {
-        if(!in_array($_SERVER['REMOTE_ADDR'], Headers::server_ips())){
-            self::set(Response::code(403), 'Outside Request is Not Allowed');
-        }
-        return self::get();
+        return in_array(strtoupper(Request::method()), Api::acceptableMethods());
+        
     }
 
     // Authorisation Header Exists
     /**
-     * @return array
+     * @return bool
      */
-    public static function require_authorisation_header():array
+    public static function authorisationHeaderExist(): bool
     {
         if(!isset($_SERVER['HTTP_AUTHORIZATION'])){
-            self::set(Response::code(401), 'No Auth Token Found!');
+            Api::setData(Response::code(401), 'No Auth Token Found!');
+            return false;
         }
-        return self::get();
-    }
-
-    // Request Method is Accepted
-    /**
-     * @return array
-     */
-    public static function require_request_method():array
-    {
-        if(!in_array(self::method(), ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'])){
-            self::unsupported_method();
-        }
-        return self::get();
+        return true;
     }
 
     // Content Type is Supported
     /**
-     * @return array
+     * @return bool
      */
-    public static function require_content_type():array
+    public static function validContentType(): bool
     {
-        if(!isset($_SERVER['CONTENT_TYPE']) || (strtolower($_SERVER['CONTENT_TYPE']) != 'application/json')){
-            self::set(Response::code(415), 'Invalid Content Type!');
+        if(!isset($_SERVER['CONTENT_TYPE']) || !preg_match('/application\/json/i', $_SERVER['CONTENT_TYPE'])){
+            Api::setData(Response::code(415), 'Invalid Content Type!');
+            return false;
         }
-        return self::get();
+        return true;
     }
 
     // Authorisation Token is Valid
     /**
-     * @return array
+     * @return bool
      */
-    public static function check_authorized():array
+    public static function isAuthorised(): bool
     {
-        $cred = explode(':',Token::get($_SERVER['HTTP_AUTHORIZATION'] ?? ''));
-        $user = $cred[0] ?? '';
-        $pass = $cred[1] ?? '';
-
-        if(empty($user) || empty($pass)){
-            self::set(Response::code(401), 'Invalid Auth Token!');
-        }else{
-            $db = DB::getInstance();
-            $staff = $db->table('admins')->where([self::$username_column=>$user, self::$token_column=>$pass])->first();
-
-            if(count($staff) !== 1){
-                self::set(Response::code(401), 'Invalid Auth Token!');
-            }
+        // Check if API Table Name is Configured
+        if(!isset(Api::getConfig()['table'])){
+            Api::setData(Response::code(500), "API 'table' Key Not Configured for Table Name!");
+            return false;
         }
-        return self::get();
-    }
-
-    // Request Data
-    /**
-     * @return array
-     */
-    public static function request():array
-    {
-        $request_data = json_decode(file_get_contents('php://input'), true);
-        return call_user_func([new Request, 'purify'], $request_data ?? []);
+        
+        $table = Api::getConfig()['table'];
+        $staff = DB::getInstance()->table($table)->where(['token' => Api::getBearerToken()])->first();
+        if(empty($staff)){
+            Api::setData(Response::code(401), 'Invalid Auth Token!');
+            return false;
+        }
+        return true;
     }
 
     // Request Method

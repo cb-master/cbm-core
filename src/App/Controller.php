@@ -31,6 +31,17 @@ class Controller
         }
     }
 
+    // Get Assigned Vars
+    protected function getAssignedVars(): array
+    {
+        array_map(function($key){
+            if(isset($this->items[$key])){
+                unset($this->items[$key]);
+            }
+        }, ['secret', 'encryption_method', 'request', 'uri']);
+        return $this->items;
+    }
+
     // Load Middleware and Method
     /**
      * @param string $class - Required Argument as Middleware Class Name Like 'Client'.
@@ -92,7 +103,7 @@ class Controller
      * @throws Exception
      * @example $this->view('index')
      */
-    protected function view(string $name, array $args): void
+    protected function view(string $name): void
     {
         // Throw Exception if View Name is Empty
         if(!$name){
@@ -101,7 +112,7 @@ class Controller
 
         // Get Theme File Path
         $name = trim($name, '/');
-        $path = DOCPATH . "/template/{$name}.view.php";
+        $path = '/' . DOCPATH . "/template/{$name}.view.php";
 
         // Check if View File Exists. If not, throw an Exception
         if(!file_exists($path)){
@@ -110,7 +121,6 @@ class Controller
 
         // Set Default Variables
         $this->items['title'] = $this->items['title'] ?? 'Title Not Found!';
-        $this->items = $args ? array_merge($args, $this->items) : $this->items;
         // Unset Secrets
         array_map(function($key){
             if(isset($this->items[$key])){
@@ -118,10 +128,9 @@ class Controller
             }
         }, ['secret', 'encryption_method']);
 
-        // Extract Data
+        ob_start();
         extract($this->items);
-
-        // Require View File
-        require_once $path;
+        include($path);
+        echo ob_get_clean();
     }
 }
