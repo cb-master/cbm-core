@@ -60,6 +60,9 @@ class Controller
         if(!class_exists($class)){
             throw new Exception("Middleware '{$class}' Not Found!", 8404);
         }
+        if(!method_exists($class, $method)){
+            throw new Exception("Method '{$class}::{$method}' Not Found!", 8404);
+        }
         call_user_func([new $class, $method], ...$args);
     }
 
@@ -76,6 +79,9 @@ class Controller
         if(!class_exists($class)){
             throw new Exception("Factory '{$class}' Not Found!", 8404);
         }
+        if(!method_exists($class, $method)){
+            throw new Exception("Method '{$class}::{$method}' Not Found!", 8404);
+        }
         return call_user_func([new $class, $method], ...$args);
     }
 
@@ -91,6 +97,9 @@ class Controller
         $class = "\\CBM\\App\\Model\\{$model}";
         if(!class_exists($class)){
             throw new Exception("Model '{$class}' Not Found!", 8404);
+        }
+        if(!method_exists($class, $method)){
+            throw new Exception("Method '{$class}::{$method}' Not Found!", 8404);
         }
         return call_user_func([new $class, $method], ...$args);
     }
@@ -126,7 +135,7 @@ class Controller
             if(isset($this->items[$key])){
                 unset($this->items[$key]);
             }
-        }, ['secret', 'encryption_method']);
+        }, ['secret', 'encryption_method', 'request', 'uri']);
 
         ob_start();
         extract($this->items);

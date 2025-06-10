@@ -8,75 +8,124 @@
 // Namespace
 namespace CBM\Core\Date;
 
-class Date Extends Format
+use DateTimeZone;
+use DateInterval;
+use DateTime;
+
+class Date
 {
-    // Get Time Zone
-    public static function getTimezone():string
-    {
-        return date_default_timezone_get();
-    }
+    // DateTime Object
+    protected DateTime $dateTime;
 
-    // Set Time Zone
-    public static function setTimezone(?string $timezoneId = null):bool
-    {
-        $zone = $timezoneId ?: self::getTimezone();
-        return date_default_timezone_set($zone);
-    }
+    // Date Format
+    protected string $format;
 
-    // Get The Current Date & Time
-    public static function current():string
-    {
-        return date(self::default());
-    }
+    // Timezone
+    protected string $timezone;
 
-    // Date for Database
+    // Initiate Date Class
     /**
-     * @param int|string $days - Default is 0;
+     * @param string $time Optional Argument. Default is 'now'.
+     * @param string $format Optional Argument. Default is 'Y-m-d H:i:s'.
+     * @param ?string $timezone Optional Argument. Default is null.
      */
-    public static function db(int|string $days = 0):string
+    public function __construct(string $time = 'now', string $format = 'Y-m-d H:i:s', ?string $timezone = null)
     {
-        $date = self::current();
-        $days = (int) $days;
-        return date(parent::db(), strtotime("{$date} +{$days} days"));
+        $this->timezone = $timezone ?: 'UTC';
+        $this->format = $format;
+        $this->dateTime = new DateTime($time, new DateTimeZone($this->timezone));
     }
 
-    // Get Past/Present/Future Date
+    // Get Formated DateTime
     /**
-     * @param int|string $days - Default is 0;
+     * @param string Optional Argument. Default is null
+     * @return string
      */
-    public static function new(int $days = 0):string
+    public function format(?string $format = null): string
     {
-        $realtime = self::current();
-        return date(self::default(), strtotime("{$realtime} +{$days} days"));
+        return $this->dateTime->format($format ?: $this->format);
     }
 
-    // Get Date Difference
+    // Modify DateTime.
     /**
-     * @param string $start - Required Argument as a string date like "2024-12-18";
-     * @param string $end - Required Argument as a string date like "2024-12-19";
+     * @param $modifier Required Argument. Example: '+1 day'
+     * @return object
      */
-    public static function diff(string $start, string $end):int
+    public function modify(string $modifier): static
     {
-        $diff = date_diff(date_create($start), date_create($end));
-        // Return Days Difference
-        return (int) $diff->format('%R%a');
+        $this->dateTime->modify($modifier);
+        return $this;
     }
 
-    // Check if Date is Past
+    // Set DateTime Format.
     /**
-     * @param string $date - Required Argument as a string date like "2024-12-18";
+     * @param $format Required Argument. Example: 'Y-m-d H:i:s'
+     * @return object
      */
-    public static function isPast(string $date):bool
+    public function setFormat(string $format): static
     {
-        return date(self::default(), strtotime($date)) < self::new();
+        $this->format = $format;
+        return $this;
     }
 
-    // Check if Date is Future
-    /**
-     * @param string $date - Required Argument as a string date like "2024-12-18";
-     */
-    public static function isFuture(string $date):bool
+    public function getTimestamp(): int
     {
-        return date(self::default(), strtotime($date)) > self::new();
+        return $this->dateTime->getTimestamp();
+    }
+
+    public function setTimestamp(int $timestamp): static
+    {
+        $this->dateTime->setTimestamp($timestamp);
+        return $this;
+    }
+
+    public function setTimezone(string $timezone): static
+    {
+        $this->timezone = $timezone;
+        $this->dateTime->setTimezone(new DateTimeZone($this->timezone));
+        return $this;
+    }
+
+    public function getTimezone(): string
+    {
+        return $this->timezone;
+    }
+
+    public function diff(Date $other): DateInterval
+    {
+        return $this->dateTime->diff($other->dateTime);
+    }
+
+    public function getDateTime(): DateTime
+    {
+        return $this->dateTime;
+    }
+
+    public function __toString(): string
+    {
+        return $this->format();
+    }
+
+    public static function fromFormat(
+        string $format,
+        string $time,
+        string $outputFormat = 'Y-m-d H:i:s',
+        string $timezone = 'UTC'
+    ): static {
+        $tz = new DateTimeZone($timezone);
+        $dt = DateTime::createFromFormat($format, $time, $tz);
+        $instance = new static('now', $outputFormat, $timezone);
+        $instance->dateTime = $dt ?: new DateTime('now', $tz);
+        return $instance;
+    }
+
+    public function toUtc(): static
+    {
+        return $this->setTimezone('UTC');
+    }
+
+    public function toLocal(string $timezone): static
+    {
+        return $this->setTimezone($timezone);
     }
 }

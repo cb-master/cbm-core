@@ -109,6 +109,7 @@ class ErrorHandler
             $message = htmlspecialchars($ex->getMessage());
             $file = htmlspecialchars($ex->getFile());
             $line = $ex->getLine();
+            $code = $ex->getCode();
             $trace = htmlspecialchars($ex->getTraceAsString());
 
             $extra = '';
@@ -133,6 +134,7 @@ class ErrorHandler
                         <tr><th>File</th><td>{$file}</td></tr>
                         <tr><th>Line</th><td>{$line}</td></tr>
                         {$extra}
+                        <tr><th>Code</th><td>{$code}</td></tr>
                         <tr><th>Trace</th><td><pre>{$trace}</pre></td></tr>
                     </table>
                 </div>

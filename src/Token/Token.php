@@ -8,7 +8,6 @@
 // Namespace
 namespace CBM\Core\Token;
 
-use CBM\Core\Request\Request;
 use CBM\Core\Config\Config;
 use CBM\Core\Cookie\Cookie;
 use CBM\Core\Helper\Helper;
@@ -125,7 +124,7 @@ class Token
     {
         $token = self::getFormToken();
         self::resetFormToken();
-        if(Request::key(trim($key)) != $token){
+        if(key_value($key) != $token){
             return false;
         }
         return true;

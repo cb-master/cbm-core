@@ -26,7 +26,7 @@ class Validate
      */
     public static function methodIsSupported(): bool
     {
-        return in_array(strtoupper(Request::method()), Api::acceptableMethods());
+        return in_array(strtoupper((new Request())->method()), Api::acceptableMethods());
         
     }
 

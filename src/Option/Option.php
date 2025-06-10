@@ -28,28 +28,49 @@ class Option
     // Set/Get Option Value
     /**
      * @param string $name - Required Argument as Option Key.
-     * @param int|string $value - Required Argument as Option Value.
+     * @return string
      */
-    public static function key(string $name, int|string $value = null, bool $default = false):string
+    public static function key(string $name): string
     {
         try{
             $db = DB::getInstance();
-            // Set Option Key if $value is Set
-            if($value !== null){
-                $opt_default = $default ? 'yes' : 'no';
-                $exist = $db->table(self::$table)->where(self::$key, '=', $name)->first();
-                // $exist = $db->table(self::$table)->filter(self::$key, '=', $name)->single(self::$key);
-                if(!$exist){
-                    $db->table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
-                }else{
-                    $db->table(self::$table)->where(self::$key, '=', $name)->update([self::$value=>$value]);
-                }
-                return $value;
-            }
             $option = $db->table(self::$table)->where(self::$key, '=', $name)->first(self::$value);
             return $option[self::$value] ?? '';
         }catch(\Throwable $th){
             return '';
         }
+    }
+
+    // Get Option Value
+    /**
+     * @param string $name - Required Argument as Option Key.
+     * @return string
+     */
+    public static function get(string $name): string
+    {
+        try{
+            $db = DB::getInstance();
+            $option = $db->table(self::$table)->where(self::$key, '=', $name)->first(self::$value);
+            return $option[self::$value] ?? '';
+        }catch(\Throwable $th){
+            return '';
+        }
+    }
+
+    // Set Option
+    /**
+     * @param string $name Required Argument. Option Name
+     * @param string $value Required Argument. Option Value
+     * @param bool $default Optional Argument. Default is false
+     */
+    public static function set(string $name, string $value, bool $default = false): int
+    {
+        $db = DB::getInstance();
+        $opt_default = $default ? 'yes' : 'no';
+        $exist = $db->table(self::$table)->where(self::$key, '=', $name)->first();
+        if(empty($exist)){
+            return $db->table(self::$table)->insert([self::$key => $name, self::$value => $value, self::$default=>$opt_default]);
+        }
+        return $db->table(self::$table)->where(self::$key, '=', $name)->update([self::$value=>$value]);
     }
 }

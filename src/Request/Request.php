@@ -10,175 +10,153 @@ namespace CBM\Core\Request;
 
 class Request
 {
-    // Invalid Keys
-    private array $invalid = [];
+    protected array $get;
+    protected array $post;
+    protected array $files;
+    protected array $server;
+    protected array $json;
+    protected string $rawBody;
+    protected string $method;
 
-    // Instance
-    private static object|null $instance = null;
-
-    // Method
-    private string $method;
-
-    // Initiate Request Class
     public function __construct()
     {
-        $this->method = strtolower($_SERVER['REQUEST_METHOD']);
+        $this->server = $_SERVER ?? [];
+        $this->get = $this->purify($_GET ?? []);
+        $this->post = $this->purify($_POST ?? []);
+        $this->files = $_FILES ?? [];
+        $this->rawBody = file_get_contents('php://input');
+        $this->json = $this->purify($this->detectJson());
+        $this->method = $this->detectMethod();
     }
 
-    // Load Instance
-    public static function instance()
+    protected function detectMethod(): string
     {
-        self::$instance = self::$instance ?: new Static;
-        return self::$instance;
-    }
-
-    // Get Method
-    public static function method():string
-    {       
-        // Return Value
-        return self::instance()->method;
-    }
-
-    // Method is Post
-    public static function isPost():bool
-    {
-        // Return Value
-        return self::method() === 'post';
-    }
-
-    // Method is Get
-    public static function isGet():bool
-    {
-        // Return Value
-        return self::method() === 'get';
-    }
-
-    // Requested Data
-    /**
-     * @param array $data - Default Value is []
-     */
-    public static function data():array
-    {
-        // Return Request Data
-        return self::instance()->purify($_REQUEST);
-    }
-
-    // Request Key Value
-    /**
-     * @param string $key - Required Argument
-     */
-    public static function key(string $key):string|array
-    {
-        // Return Data
-        return self::instance()->data()[$key] ?? '';
-    }
-    
-    // Get Post Data
-    /**
-     * @param string $key - Required Argument
-     */
-    public static function post(string $key):string|array
-    {
-        // Return Data
-        return self::posted()[$key] ?? '';
-    }
-
-    // Get $_POST Request Data
-    public static function posted():array
-    {
-        return self::instance()->purify($_POST);
-    }
-
-    // Get Get Data
-    /**
-     * @param string $key - Required Argument
-     */
-    public static function get(string $key):string
-    {
-        // Return Data
-        return self::inputs()[$key] ?? '';
-    }
-
-    // Get $_GET Request Data
-    public static function inputs():array
-    {
-        return self::instance()->purify($_GET);
-    }
-
-    // Get Requested Files
-    public static function files()
-    {
-        // Return Data
-        return $_FILES;
-    }
-
-    // Request Files
-    public function file(string $key):array
-    {
-        // Return Data
-        return $_FILES[$key] ?? [];
-    }
-
-    // Validate Request Keys
-    /**
-     * @param string|array $keys Required Argument
-     */
-	public static function validateRequestKeys(string|array $keys):bool
-	{
-        if(is_string($keys)){
-            if(str_contains($keys, ',')){
-                $keys = explode(',', $keys);
-            }elseif(str_contains('|', $keys)){
-                $keys = explode('|', $keys);
-            }else{
-                $keys = [$keys];
-            }
+        if (!empty($this->post['_method'])) {
+            return strtoupper($this->post['_method']);
         }
-        array_filter($keys, function($key){
-            $key = trim($key);
-            if(!self::key($key))
-			{
-                self::instance()->invalid[] = $key;
-			}
-        });
-        if(self::instance()->invalid){
-            return false;
-        }
-        return true;
-	}
 
-    // Get Invalid Keys
-    public static function invalidKeys(): array
-    {
-        $keys = self::instance()->invalid;
-        self::instance()->invalid = [];
-        return $keys;
+        return strtoupper($this->server['REQUEST_METHOD'] ?? 'GET');
     }
 
-    // Request Data Purify
-    /**
-     * @param array $keys - Default Value is []
-     * @return array
-     */
+    protected function detectJson(): array
+    {
+        $contentType = $this->server['CONTENT_TYPE'] ?? '';
+        if (str_starts_with(strtolower($contentType), 'application/json')) {
+            $decoded = json_decode($this->rawBody, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+        return [];
+    }
+
+    public function method(): string
+    {
+        return $this->method;
+    }
+
+    // Request is Post
+    public function isPost(): bool
+    {
+        return $this->method() === 'POST';
+    }
+
+    // Request is Post
+    public function isGet(): bool
+    {
+        return $this->method() === 'GET';
+    }
+
+    public function input(string $key, mixed $default = null): mixed
+    {
+        return $this->post[$key]
+            ?? $this->get[$key]
+            ?? $this->json[$key]
+            ?? $default;
+    }
+
+    public function all(): array
+    {
+        return array_merge($this->get, $this->post, $this->json);
+    }
+
+    public function only(array $keys): array
+    {
+        $data = [];
+        foreach ($keys as $key) {
+            $data[$key] = $this->input($key);
+        }
+        return $data;
+    }
+
+    public function has(string $key): bool
+    {
+        return array_key_exists($key, $this->post)
+            || array_key_exists($key, $this->get)
+            || array_key_exists($key, $this->json);
+    }
+
+    public function file(string $key): ?array
+    {
+        return $this->files[$key] ?? null;
+    }
+
+    public function header(string $key): ?string
+    {
+        $headerKey = 'HTTP_' . strtoupper(str_replace('-', '_', $key));
+        return $this->server[$headerKey] ?? null;
+    }
+
+    public function isAjax(): bool
+    {
+        return strtolower($this->header('X-Requested-With')) === 'xmlhttprequest';
+    }
+
+    public function ip(): ?string
+    {
+        return $this->server['REMOTE_ADDR'] ?? null;
+    }
+
+    public function raw(): string
+    {
+        return $this->rawBody;
+    }
+
     public function purify(array $data = []): array
     {
         $request_data = [];
-        // Clear Request Data
         $data = $data ?: $_REQUEST;
-        foreach($data as $key => $value){
-            $request_data[$key] = is_array($value) ? $this->purify($value) : htmlspecialchars(trim($value));
+
+        foreach ($data as $key => $value) {
+            $request_data[$key] = is_array($value)
+                ? $this->purify($value)
+                : htmlspecialchars(trim($value), ENT_QUOTES, 'UTF-8');
         }
-        // Return Request Data
+
         return $request_data;
     }
 
-    // Request Data
-    /**
-     * @return array
-     */
-    public static function stream(): array
+    public function validRequestKeys(array $keys): bool
     {
-        $request_data = json_decode(file_get_contents('php://input'), true);
-        return self::instance()->purify($request_data ?: []);
+        foreach($keys as $key){
+            if(!$this->input($key)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function hasBlankInput(array $keys): bool
+    {
+        foreach($keys as $key){
+            $value = $this->input($key);
+            if($value === null || $value === ''){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function validate(array $rules): object
+    {
+        return Validator::make($this->all(), $rules);
     }
 }

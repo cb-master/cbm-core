@@ -7,7 +7,9 @@ defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
 use CBM\Core\Directory\Directory;
 use CBM\Core\Language\Language;
+use CBM\Core\Request\Request;
 use CBM\Core\Config\Config;
+use CBM\Core\Date\Date;
 use CBM\Core\Uri\Uri;
 use RuntimeException;
 
@@ -87,14 +89,17 @@ class Route
         define('DOCPATH', trim(self::$userpath ? self::$path : ROOTPATH, '/'));
         $args['docpath'] = DOCPATH;
         // Define APPHOST
-        define('APPHOST', trim(self::$userpath ? Uri::base() . self::$userpath : Uri::base(), '/'));
-        $args['apphost'] = APPHOST;
+        define('APPURI', trim(self::$userpath ? Uri::base() . self::$userpath : Uri::base(), '/'));
+        $args['appuri'] = APPURI;
         // Define WEBPATH
         $slug = self::$userpath ? 'web/'.USERPATH : '';
         define('ASSETPATH', trim(Uri::base() . $slug, '/'));
         $args['assetpath'] = ASSETPATH;
         // Set Parameters
         $args['params'] = array_slice(self::$segments, 2);
+        $args['request'] = new Request();
+        $args['uri'] = new Uri();
+        $args['date'] = new Date();
 
         // Load Functions
         if(file_exists(self::$functions_path)){
