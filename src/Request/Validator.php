@@ -15,9 +15,9 @@ class Validator
      * @param array $data Required Argument. Example $_REQUEST or Any Associative Array. Example: ['email'=>'test@example.com','age'=>32]
      * @param array $rules Required Argument. Example: ['email'=>'required','age'=>'required|min:18|max:65']
      * @param array $customMessages Optional Argument. Example: ['email.required'=>'Email is Required!']
-     * @return ValidatorResult
+     * @return array
      */
-    public static function make(array $data, array $rules, array $customMessages = []): ValidatorResult
+    public static function make(array $data, array $rules, array $customMessages = []): array
     {
         $errors = [];
 
@@ -100,6 +100,7 @@ class Validator
             }
         }
 
-        return new ValidatorResult($errors);
+        // return new ValidatorResult($errors);
+        return $errors;
     }
 }
