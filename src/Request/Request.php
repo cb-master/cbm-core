@@ -80,11 +80,10 @@ class Request
 
     public function only(array $keys): array
     {
-        $data = [];
-        foreach ($keys as $key) {
-            $data[$key] = $this->input($key);
-        }
-        return $data;
+        // $data = [];
+        return array_map(function($key){
+            return $this->input($key);
+        },$keys);
     }
 
     public function has(string $key): bool
@@ -120,18 +119,13 @@ class Request
         return $this->rawBody;
     }
 
-    public function purify(array $data = []): array
+    public function purify(array $data): array
     {
-        $request_data = [];
-        $data = $data ?: $_REQUEST;
-
-        foreach ($data as $key => $value) {
-            $request_data[$key] = is_array($value)
-                ? $this->purify($value)
-                : htmlspecialchars(trim($value), ENT_QUOTES, 'UTF-8');
-        }
-
-        return $request_data;
+        return array_map(function($val){
+            return is_array($val)
+                ? $this->purify($val)
+                : htmlspecialchars(trim($val), ENT_QUOTES, 'UTF-8');
+        }, $data);
     }
 
     public function validRequestKeys(array $keys): bool
