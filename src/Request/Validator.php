@@ -10,6 +10,13 @@ namespace CBM\Core\Request;
 
 class Validator
 {
+    // Make Validator Result
+    /**
+     * @param array $data Required Argument. Example $_REQUEST or Any Associative Array. Example: ['email'=>'test@example.com','age'=>32]
+     * @param array $rules Required Argument. Example: ['email'=>'required','age'=>'required|min:18|max:65']
+     * @param array $customMessages Optional Argument. Example: ['email.required'=>'Email is Required!']
+     * @return ValidatorResult
+     */
     public static function make(array $data, array $rules, array $customMessages = []): ValidatorResult
     {
         $errors = [];
@@ -66,13 +73,7 @@ class Validator
                         }
                         break;
 
-                    case 'confirmed':
-                        if (!isset($data["{$field}_confirmation"]) || $value !== $data["{$field}_confirmation"]) {
-                            $errors[$field][] = $customMessage ?? "The {$field} confirmation does not match.";
-                        }
-                        break;
-
-                    case 'same':
+                    case 'match':
                         $other = $params[0] ?? '';
                         if (!isset($data[$other]) || $value !== $data[$other]) {
                             $errors[$field][] = $customMessage ?? "The {$field} must match {$other}.";
@@ -92,7 +93,9 @@ class Validator
                         }
                         break;
 
-                    // Extend further as needed
+                    default:
+                        $errors[$field][] = "Unknown validation rule '{$rule}' for field '{$field}'.";
+                        break;
                 }
             }
         }

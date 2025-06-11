@@ -138,6 +138,10 @@ class Request
         return true;
     }
 
+    // Check If Required Inputs Has Blank Value
+    /**
+     * @param $keys Required Argument. Example: ['username','email','password']
+     */
     public function hasBlankInput(array $keys): bool
     {
         foreach($keys as $key){
@@ -149,8 +153,13 @@ class Request
         return false;
     }
 
-    public function validate(array $rules): object
+    /**
+     * @param array $rules Required Argument. Example ['email'=>'required','age'=>'required|min:18|max:65']
+     * @param array $customMessages Optional Argument. Example: ['email.required'=>'Email is Required!']
+     * @return ValidatorResult
+     */
+    public function validate(array $rules, array $customMessages = []): ValidatorResult
     {
-        return Validator::make($this->all(), $rules);
+        return Validator::make($this->all(), $rules, $customMessages);
     }
 }
