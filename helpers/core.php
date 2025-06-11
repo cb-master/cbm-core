@@ -108,7 +108,7 @@ use CBM\Session\Session;
   * @param string $access - Required Argument
   * @param ?string $for - Optional Argument. Default is null
   */
- function access(string $access, ?string $for = null):bool
+ function access(string $access, ?string $for = null): bool
  {
    $for = $for ?: USERPATH;
     $list = Session::get('accesses', $for);
