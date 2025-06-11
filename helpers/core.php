@@ -106,10 +106,11 @@ use CBM\Session\Session;
  // Check Staff Has Access
  /**
   * @param string $access - Required Argument
-  * @param string $for - Required Argument. Default is 'staff'
+  * @param ?string $for - Optional Argument. Default is null
   */
- function access(string $access, string $for):bool
+ function access(string $access, ?string $for = null):bool
  {
+   $for = $for ?: USERPATH;
     $list = Session::get('accesses', $for);
     return (bool) ($list[$access] ?? false);
  }
