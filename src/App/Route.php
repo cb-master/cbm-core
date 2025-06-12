@@ -86,10 +86,10 @@ class Route
         define('USERPATH', self::$userpath);
         $args['userpath'] = self::$userpath;
         // Define DOCPATH
-        define('DOCPATH', trim(self::$userpath ? self::$path : ROOTPATH, '/'));
+        define('DOCPATH', rtrim(self::$userpath ? self::$path : ROOTPATH, '/'));
         $args['docpath'] = DOCPATH;
         // Define APPHOST
-        define('APPURI', trim(self::$userpath ? Uri::base() . self::$userpath : Uri::base(), '/'));
+        define('APPURI', rtrim(self::$userpath ? Uri::base() . self::$userpath : Uri::base(), '/'));
         $args['appuri'] = APPURI;
         // Define WEBPATH
         $slug = self::$userpath ? 'web/'.USERPATH : '';
