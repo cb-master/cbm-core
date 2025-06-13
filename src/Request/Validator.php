@@ -68,7 +68,7 @@ class Validator
                         $max = (int)($params[0] ?? 0);
                         if(is_numeric($value) && $value > $max){
                             $errors[$field][] = $customMessage ?? "The {$field} may not be greater than {$max}.";
-                        } elseif (is_string($value) && mb_strlen($value) > $max) {
+                        }elseif(is_string($value) && mb_strlen($value) > $max){
                             $errors[$field][] = $customMessage ?? "The {$field} may not be greater than {$max} characters.";
                         }
                         break;
@@ -81,7 +81,7 @@ class Validator
                         break;
 
                     case 'in':
-                        if(!in_array($value, $params)){
+                        if(!in_array(strtolower($value), array_map('strtolower', $params))){
                             $errors[$field][] = $customMessage ?? "The {$field} must be one of: " . implode(', ', $params);
                         }
                         break;
