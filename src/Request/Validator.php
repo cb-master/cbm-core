@@ -28,9 +28,13 @@ class Validator
             foreach($ruleList as $rule){
                 $params = [];
 
-                if(str_contains($rule, ':')){
+                if (str_contains($rule, ':')) {
                     [$rule, $paramString] = explode(':', $rule, 2);
-                    $params = explode(',', $paramString);
+
+                    // Don't explode regex pattern!
+                    $params = strtolower($rule) === 'regex'
+                        ? [$paramString]
+                        : explode(',', $paramString);
                 }
 
                 $messageKey = "{$field}.{$rule}";
@@ -88,6 +92,7 @@ class Validator
 
                     case 'regex':
                         $pattern = $params[0] ?? '';
+                        echo $pattern."\n";
                         if($pattern && !preg_match($pattern, $value)){
                             $errors[$field][] = $customMessage ?? "The {$field} format is invalid.";
                         }
