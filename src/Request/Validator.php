@@ -85,7 +85,7 @@ class Validator
                         break;
 
                     case 'in':
-                        if(!in_array(strtolower($value), array_map('strtolower', $params))){
+                        if(!in_array($value, array_map('strtolower', $params))){
                             $errors[$field][] = $customMessage ?? "The {$field} must be one of: " . implode(', ', $params);
                         }
                         break;
