@@ -92,7 +92,6 @@ class Validator
 
                     case 'regex':
                         $pattern = $params[0] ?? '';
-                        echo $pattern."\n";
                         if($pattern && !preg_match($pattern, $value)){
                             $errors[$field][] = $customMessage ?? "The {$field} format is invalid.";
                         }
