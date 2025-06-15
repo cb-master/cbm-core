@@ -48,7 +48,7 @@ class Validator
                         break;
 
                     case 'email':
-                        if($value && !filter_var($value, FILTER_VALIDATE_EMAIL)){
+                        if(!filter_var($value, FILTER_VALIDATE_EMAIL)){
                             $errors[$field][] = $customMessage ?? "The {$field} must be a valid email address.";
                         }
                         break;
