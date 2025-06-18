@@ -104,10 +104,9 @@ class Api
     /**
      * @return void
      */
-    public static function getData(): void
+    public static function getData(): string
     {
-        print(json_encode(self::$message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_FORCE_OBJECT));
-        die;
+        return json_encode(self::$message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_FORCE_OBJECT);
     }
 
     // Get Acceptable Response Codes
