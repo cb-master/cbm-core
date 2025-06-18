@@ -15,6 +15,9 @@ class Controller
     // Parameter Items
     private array $items = [];
 
+    // Remove Items
+    private array $remove = ['secret', 'encryption_method'];
+
     // Assign Parameters
     /**
      * @param string|array|object $param Required Argument as key name or array or object
@@ -38,7 +41,7 @@ class Controller
             if(isset($this->items[$key])){
                 unset($this->items[$key]);
             }
-        }, ['secret', 'encryption_method', 'request', 'uri']);
+        }, $this->remove);
         return $this->items;
     }
 
@@ -135,7 +138,7 @@ class Controller
             if(isset($this->items[$key])){
                 unset($this->items[$key]);
             }
-        }, ['secret', 'encryption_method', 'request', 'uri']);
+        }, $this->remove);
 
         ob_start();
         extract($this->items);

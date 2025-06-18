@@ -8,6 +8,7 @@
 // Namespace
 namespace CBM\Core\Token;
 
+use CBM\Core\Request\Request;
 use CBM\Core\Config\Config;
 use CBM\Core\Cookie\Cookie;
 use CBM\Core\Helper\Helper;
@@ -122,9 +123,10 @@ class Token
      */
     public static function validFormToken(string $key = 'csrf'): bool
     {
+        $request = new Request();
         $token = self::getFormToken();
         self::resetFormToken();
-        if(key_value($key) != $token){
+        if($request->input($key) != $token){
             return false;
         }
         return true;
