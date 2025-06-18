@@ -124,7 +124,7 @@ class Controller
 
         // Get Theme File Path
         $name = trim($name, '/');
-        $path = '/' . DOCPATH . "/template/{$name}.view.php";
+        $path = DOCPATH . "/template/{$name}.view.php";
 
         // Check if View File Exists. If not, throw an Exception
         if(!file_exists($path)){
