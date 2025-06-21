@@ -8,9 +8,6 @@
 // Namespace
 namespace CBM\Core\Helper;
 
-use CBM\Core\Response\Response;
-use CBM\Core\Option\Option;
-use CBM\Core\Uri\Uri;
 use Exception;
 
 class Args
@@ -25,9 +22,9 @@ class Args
     private function __construct(){}
 
     // Get Instance
-    public function getInstance(): static
+    private function getInstance(): static
     {
-        self::$instance = self::$instance ?: new static();
+        self::$instance ??= new self();
         return self::$instance;
     }
 
@@ -39,19 +36,40 @@ class Args
 
     // Set Arguments
     /**
-     * @param array $args Required Argument.
+     * @param string $key Required Argument.
+     * @param string $value Required Argument.
      * @return void
      */
-    public static function set(array $args): void
+    public static function add(string $key, mixed $value): void
     {
-        self::getInstance()->args = array_merge(self::getInstance()->args, $args);
+        self::getInstance()->args = array_merge(self::getInstance()->args, [$key => $value]);
+    }
+
+    // Has Argument
+    /**
+     * @param string $key Required Argument.
+     * @return bool
+     */
+    public static function has(string $key): bool
+    {
+        return array_key_exists($key, self::getInstance()->args);
     }
 
     // Set Arguments
     /**
-     * @return array
+     * @param string $key Required Argument.
+     * @return mixed
      */
-    public static function get(): array
+    public static function get(string $key): mixed
+    {
+        return self::getInstance()->args[$key];
+    }
+
+    // Set Arguments
+    /**
+     * @return mixed
+     */
+    public static function all(): array
     {
         return self::getInstance()->args;
     }
