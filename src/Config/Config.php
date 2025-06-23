@@ -54,21 +54,20 @@ class Config
      * @param string $key - Required Argument
      * @param string $value - Required Argument
      */
-    public static function change(string $property, string $key, string $value):int|bool
+    public static function change(string $property, string $key, string $value): int|bool
     {
-        if(property_exists(self::instance(), $property)){
-            $file = ROOTPATH."/system/{$property}.php";
-            if(!file_exists($file)){
-                throw new \Exception("System Property {$property} Does Not Exist!");
-            }
-            $content = file_get_contents($file);
-            if(preg_match("/'{$key}'\s*=>\s*'[^']*'/i", $content)){
-                $content = preg_replace("/'{$key}'\s*=>\s*'[^']*'/i", "'{$key}' => '{$value}'", $content);
-                return file_put_contents($file, $content);
-            }else{
-                throw new \Exception("Key '{$key}' Does Not Exist in System Property '{$property}'!");
-            }
+        if(!property_exists(self::instance(), $property)){
+            throw new \Exception("'{$property}' Does Not Exist!");
+        };
+        $file = ROOTPATH."/system/{$property}.php";
+        if(!file_exists($file)){
+            throw new \Exception("System Property {$property} Does Not Exist!");
         }
-        throw new \Exception("Key '{$key}' Does Not Exist in System Property '{$property}'!");
+        $content = file_get_contents($file);
+        if(!preg_match("/'{$key}'\s*=>\s*'[^']*'/i", $content)){
+            throw new \Exception("Key '{$key}' Does Not Exist in System Property '{$property}'!");
+        };
+        $content = preg_replace("/'{$key}'\s*=>\s*'[^']*'/i", "'{$key}' => '{$value}'", $content);
+        return file_put_contents($file, $content);
     }
 }
