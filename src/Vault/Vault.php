@@ -8,79 +8,79 @@
 // Namespace
 namespace CBM\Core\Vault;
 
-use CBM\Core\Option\Option;
-use CBM\Core\Config\Config;
-
 class Vault
 {
-    // Get a Random Key
-    /**
-     * @param int $byte Default Value is 16.
-     * @return string
-     */
-    public static function randomKey(int $byte = 16):string
-    {
-        return bin2hex(random_bytes($byte));
-    }
+    // Cipher Method
+    private string $cipher = 'aes-256-gcm';
 
-    // Get a Random Hash
-    /**
-     * @param string $value Required Argument.
-     * @return string
-     */
-    public static function hash(string $value):string
-    {
-        return hash_hmac("sha256", $value, Config::get('app','secret'));
-    }
+    // Encryption Key
+    private string $key;
 
-    // Encrypt String
-    /**
-     * @param string $string Required Argument.
-     * @param ?string $secret Optional Argument.
-     */
-    public static function encrypt(string $string, ?string $secret = null):string
-    {
-        $secret = $secret ?: Config::get('app','secret');
-        $iv = base64_decode(Option::key('key'));
-        return base64_encode(openssl_encrypt($string, Config::get('app', 'encryption_method'), $secret, 0, $iv));
-    }
+    // Encryption IV Length
+    private int $ivLength;
+    
+    // Encryption Tag Length
+    private int $tagLength = 16;
 
-    // Decrypt Encrypted String
-    /**
-     * @param string $string Required Argument.
-     * @param ?string $secret Optional Argument. Pass the Secret Key
-     * @param ?string $iv Optional Argument.
-     */
-    public static function decrypt(string $string, ?string $secret = null):string
+    public function __construct(string $key)
     {
-        $secret = $secret ?: Config::get('app','secret');
-        $iv = base64_decode(Option::key('key'));
-        return openssl_decrypt(base64_decode($string), Config::get('app', 'encryption_method'), $secret, 0, $iv);
-    }
-
-    // Change Config Secret Key
-    /**
-     * @param int $byte Default Value is 16.
-     * @return string
-     */
-    public static function resetConfigSecret(int $byte = 32):string
-    {
-        $secret = self::randomKey($byte);
-        $change = Config::change('app', 'secret', $secret);
-        if(!$change){
-            throw new \Exception("Unable to change the System Property 'secret' key.");
+        if(!extension_loaded('openssl')){
+            throw new \RuntimeException("'openssl' Extension Not Found!");
         }
-        return $secret;
+        if (empty($key)) {
+            throw new \InvalidArgumentException("Encryption key cannot be empty.");
+        }
+
+        // Hash The Key for Consistency
+        $this->key = hash('sha256', $key, true);
+        $this->ivLength = openssl_cipher_iv_length($this->cipher);
     }
 
-    // Generate IV
+    // Encrypt Data
     /**
-     * @param int $byte Default Value is 16.
+     * @param string $text Required Argument.
      * @return string
      */
-    public static function encodedIv():string
+    public function encrypt(string $text): string
     {
-        return base64_encode(openssl_random_pseudo_bytes(openssl_cipher_iv_length(Config::get('app', 'encryption_method'))));
+        // Get IV
+        $iv = random_bytes($this->ivLength);
+        // Make Tag
+        $tag = $this->makeTag();
+        $encrypted = openssl_encrypt($text, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv, $tag, '', $this->tagLength);
+
+        // Store IV + Encrypted Data Together (Base64 Encoded)
+        return base64_encode($iv . $tag . $encrypted);
     }
 
+    // Decrypt Data
+    /**
+     * @param string $encryptedBase64 Required Argument.
+     * @return string
+     */
+    public function decrypt(string $encryptedBase64): string
+    {
+        $data = base64_decode($encryptedBase64, true);
+        if($data === false || strlen($data) <= ($this->ivLength + $this->tagLength)){
+            throw new \RuntimeException("Invalid Encrypted Data!");
+        }
+
+        $iv = substr($data, 0, $this->ivLength);
+        $tag = substr($data, $this->ivLength, $this->tagLength);
+        $encrypted = substr($data, $this->ivLength + $this->tagLength);
+
+        $decrypted = openssl_decrypt($encrypted, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv, $tag);
+
+        if($decrypted === false){
+            throw new \RuntimeException("Decryption Failed.");
+        }
+
+        return $decrypted;
+    }
+
+    // Make Tag
+    private function makeTag(): string
+    {
+        return bin2hex(random_bytes($this->tagLength));
+    }
 }
