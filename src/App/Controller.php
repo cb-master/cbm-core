@@ -8,41 +8,44 @@
 // Namespace
 namespace CBM\Core\App;
 
+use CBM\Core\Helper\Args;
 use Exception;
 
 class Controller
 {
+    // Template
+    private string $template;
+
     // Parameter Items
     private array $items = [];
 
-    // Remove Items
-    private array $remove = ['secret', 'encryption_method'];
+    /**
+     * @param string $template Optional Argument. Default is null.
+     */
+    public function __construct(string $template = '')
+    {
+        $this->template = $template ? '/'.trim($template) : '';
+    }
 
     // Assign Parameters
     /**
      * @param string|array|object $param Required Argument as key name or array or object
      * @param mixed $value Optional Argument as key value
      */
-    protected function assign(string|array|object $param, mixed $value = null):void
+    public function assign(string|array $param, mixed $value = null): self
     {
-        if(is_object($param)){
-            $this->items = array_merge($this->items, json_decode(json_encode($param), true));
-        }elseif(is_array($param)){
+        if(is_array($param)){
             $this->items = array_merge($this->items, $param);
         }else{
             $this->items = array_merge($this->items, [$param => $value]);
         }
+        return $this;
     }
 
     // Get Assigned Vars
-    protected function getAssignedVars(): array
+    public function getAssignedVars(): array
     {
-        array_map(function($key){
-            if(isset($this->items[$key])){
-                unset($this->items[$key]);
-            }
-        }, $this->remove);
-        return $this->items;
+        return array_merge(Args::all(), $this->items);
     }
 
     // Load Middleware and Method
@@ -51,7 +54,7 @@ class Controller
      * @param string $method - Required Argument as Middleware Method Name.
      * @param array $args - Optionsl Argument. Default is Blank Array.
      */
-    protected function middleware(string $class, string $method, mixed ...$args): void
+    public function middleware(string $class, string $method, mixed ...$args): self
     {
         // Create Middleware Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Middleware')){
@@ -67,10 +70,11 @@ class Controller
             throw new Exception("Method '{$class}::{$method}' Not Found!", 8404);
         }
         call_user_func([new $class, $method], ...$args);
+        return $this;
     }
 
     // Call Factory & Method
-    protected function factory(string $factory, string $method, mixed ...$args):mixed
+    public function factory(string $factory, string $method, mixed ...$args): mixed
     {
         // Create Factory Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Factory')){
@@ -89,7 +93,7 @@ class Controller
     }
 
     // Call Model & Method
-    protected function model(string $model, string $method, mixed ...$args):mixed
+    public function model(string $model, string $method, mixed ...$args): mixed
     {
         // Create Model Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Model')){
@@ -115,7 +119,7 @@ class Controller
      * @throws Exception
      * @example $this->view('index')
      */
-    protected function view(string $name): void
+    public function view(string $name): void
     {
         // Throw Exception if View Name is Empty
         if(!$name){
@@ -123,8 +127,9 @@ class Controller
         }
 
         // Get Theme File Path
+        $template_dir = DOCPATH."/template{$this->template}";
         $name = trim($name, '/');
-        $path = DOCPATH . "/template/{$name}.view.php";
+        $path = "{$template_dir}/{$name}.view.php";
 
         // Check if View File Exists. If not, throw an Exception
         if(!file_exists($path)){
@@ -133,15 +138,9 @@ class Controller
 
         // Set Default Variables
         $this->items['title'] = $this->items['title'] ?? 'Title Not Found!';
-        // Unset Secrets
-        array_map(function($key){
-            if(isset($this->items[$key])){
-                unset($this->items[$key]);
-            }
-        }, $this->remove);
-
+        // Set Arguments
         ob_start();
-        extract($this->items);
+        extract(array_merge(Args::all(), $this->items));
         include($path);
         echo ob_get_clean();
     }

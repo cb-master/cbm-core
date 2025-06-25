@@ -22,7 +22,7 @@ class Args
     private function __construct(){}
 
     // Get Instance
-    private function getInstance(): static
+    private static function getInstance(): static
     {
         self::$instance ??= new self();
         return self::$instance;
@@ -37,7 +37,7 @@ class Args
     // Set Arguments
     /**
      * @param string $key Required Argument.
-     * @param string $value Required Argument.
+     * @param mixed $value Required Argument.
      * @return void
      */
     public static function add(string $key, mixed $value): void

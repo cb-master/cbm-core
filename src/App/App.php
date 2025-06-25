@@ -11,8 +11,12 @@ namespace CBM\Core\App;
 class App
 {
     // Run Application
-    public static function run()
+    /**
+     * @param string $appPath
+     */
+    public static function run(string $appPath)
     {
-        Route::init();
+        $route = new Route($appPath);
+        $route->dispatch();
     }
 }
