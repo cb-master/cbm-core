@@ -10,6 +10,7 @@ use CBM\Core\Language\Language;
 use CBM\Core\Response\Response;
 use CBM\Core\Request\Request;
 use CBM\Core\Config\Config;
+use CBM\Core\Option\Option;
 use CBM\Core\Helper\Args;
 use CBM\Core\Date\Date;
 use CBM\Core\Uri\Uri;
@@ -58,6 +59,8 @@ class Route
         }
 
         // Local Load if Exist
+        $lang = Option::key('language') ?: null;
+        Language::set($lang);
         require_once Language::path("{$local_path}/lang");
 
         // Set Arguments
@@ -105,7 +108,6 @@ class Route
             $controller_path = "{$this->webPath}/404.php";
             Response::code(404);
         }
-
 
         // Reqire Controller File
         require_once $controller_path;
