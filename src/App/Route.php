@@ -68,6 +68,7 @@ class Route
 
         // Define USERPATH
         define('USERPATH', $this->userpath);
+        define('ASSETPATH', $this->userpath ? Uri::base() . "web/{$this->userpath}" : rtrim(Uri::base(), '/'));
         // Define DOCPATH
         define('DOCPATH', $this->userpath ? rtrim($this->webPath) : realpath("{$this->webPath}/.."));
         // Define APPURI
@@ -76,6 +77,7 @@ class Route
         Args::add('userpath', USERPATH);
         Args::add('docpath', DOCPATH);
         Args::add('appuri', APPURI);
+        Args::add('assetpath', ASSETPATH);
         Args::add('request', new Request());
         Args::add('uri', new Uri());
         Args::add('date', new Date());
