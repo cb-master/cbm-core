@@ -121,7 +121,7 @@ use CBM\Session\Session;
   */
  function asset_path(): string
  {
-   return APPURI . '/assets';
+   return ASSETPATH . '/assets';
  }
  
  // Add Filter
