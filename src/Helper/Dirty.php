@@ -35,7 +35,7 @@ class Dirty
      * @param string|array $key Required Argument.
      * @param string $value Required Argument.
      */
-    public function set(string|array $key, mixed $value): void
+    public function set(string|array $key, mixed $value = null): void
     {
         if(is_string($key)) $key = [$key=>$value];
         foreach($key as $new_key => $val){
