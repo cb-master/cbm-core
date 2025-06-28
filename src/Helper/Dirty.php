@@ -12,10 +12,10 @@ class Dirty
 {
     // Values Var to Change
     /**
-     * @var array $attributes
+     * @var array $latest
      * This array holds the current values of the attributes that may change.
      */
-    protected array $attributes = [];
+    protected array $latest = [];
     /**
      * @var array $original
      * This array holds the original values of the attributes before any changes were made.
@@ -25,19 +25,22 @@ class Dirty
     public function __construct(array $data)
     {
         // Values to Change
-        $this->attributes = $data;
+        $this->latest = $data;
         // Original Values
         $this->original = $data;
     }
 
     // Set Changed Values
     /**
-     * @param string $key Required Argument.
+     * @param string|array $key Required Argument.
      * @param string $value Required Argument.
      */
-    public function setAttribute(string $key, mixed $value): void
+    public function set(string|array $key, mixed $value): void
     {
-        $this->attributes[$key] = $value;
+        if(is_string($key)) $key = [$key=>$value];
+        foreach($key as $new_key => $val){
+            $this->latest[$new_key] = $val;
+        }
     }
 
     // Get Changed Values
@@ -47,8 +50,8 @@ class Dirty
     public function get(): array
     {
         $dirty = [];
-        foreach($this->attributes as $key => $value){
-            if(!array_key_exists($key, $this->original) || $this->original[$key] !== $value){
+        foreach($this->latest as $key => $value){
+            if(!array_key_exists($key, $this->original) || ($this->original[$key] != $value)){
                 $dirty[$key] = $value;
             }
         }
