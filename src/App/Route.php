@@ -10,6 +10,7 @@ use CBM\Core\Language\Language;
 use CBM\Core\Response\Response;
 use CBM\Core\Request\Request;
 use CBM\Core\Config\Config;
+use CBM\Core\Option\Option;
 use CBM\Core\Helper\Args;
 use CBM\Core\Date\Date;
 use CBM\Core\Uri\Uri;
@@ -58,6 +59,8 @@ class Route
         }
 
         // Local Load if Exist
+        $lang = Option::key('language') ?: null;
+        Language::set($lang);
         require_once Language::path("{$local_path}/lang");
 
         // Set Arguments
@@ -65,6 +68,7 @@ class Route
 
         // Define USERPATH
         define('USERPATH', $this->userpath);
+        define('ASSETPATH', $this->userpath ? Uri::base() . "web/{$this->userpath}" : rtrim(Uri::base(), '/'));
         // Define DOCPATH
         define('DOCPATH', $this->userpath ? rtrim($this->webPath) : realpath("{$this->webPath}/.."));
         // Define APPURI
@@ -73,6 +77,7 @@ class Route
         Args::add('userpath', USERPATH);
         Args::add('docpath', DOCPATH);
         Args::add('appuri', APPURI);
+        Args::add('assetpath', ASSETPATH);
         Args::add('request', new Request());
         Args::add('uri', new Uri());
         Args::add('date', new Date());
@@ -105,7 +110,6 @@ class Route
             $controller_path = "{$this->webPath}/404.php";
             Response::code(404);
         }
-
 
         // Reqire Controller File
         require_once $controller_path;
