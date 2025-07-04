@@ -6,10 +6,9 @@
  */
 
 // Namespace
-namespace CBM\Core\Option;
+namespace CBM\Core;
 
 use CBM\Model\DB;
-use Exception;
 
 class Option
 {

@@ -6,11 +6,8 @@
  */
 
 // Namespace
-namespace CBM\Core\Language;
+namespace CBM\Core;
 
-use CBM\Core\Response\Response;
-use CBM\Core\Option\Option;
-use CBM\Core\Uri\Uri;
 use Exception;
 
 class Language

@@ -8,8 +8,8 @@
 namespace CBM\Core\Api;
 
 // use CBM\Model\ConnectionManager;
-use CBM\Core\Response\Response;
 use CBM\Core\Request\Request;
+use CBM\Core\Response;
 use CBM\Model\DB;
 
 class Validate

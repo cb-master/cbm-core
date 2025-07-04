@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Date;
+namespace CBM\Core;
 
 use DateTimeZone;
 use DateInterval;

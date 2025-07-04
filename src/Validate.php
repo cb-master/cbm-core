@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Validate;
+namespace CBM\Core;
 
 // Validate Hndler
 class Validate

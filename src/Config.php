@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Config;
+namespace CBM\Core;
 
 #[\AllowDynamicProperties]
 
@@ -18,9 +18,7 @@ class Config
     // Initiate Instance
     private static function instance()
     {
-        if(!self::$instance){
-            self::$instance = new Static;
-        }
+        self::$instance ??= new Static;
         return self::$instance;
     }
 
@@ -40,12 +38,12 @@ class Config
     }
 
     // Get Function Value
-    public static function get(string $property, ?string $key = null):mixed
+    public static function get(string $property, ?string $key = null): mixed
     {
-        if(property_exists(self::instance(), $property)){
-            return $key ? self::instance()->$property[$key] : self::instance()->$property;
+        if(!property_exists(self::instance(), $property)){
+            return false;
         }
-        return false;
+        return $key ? (self::instance()->{$property}[$key] ?? '') : self::instance()->{$property};
     }
 
     // Change Config Value in File
@@ -59,10 +57,7 @@ class Config
         if(!property_exists(self::instance(), $property)){
             throw new \Exception("'{$property}' Does Not Exist!");
         };
-        $file = ROOTPATH."/system/{$property}.php";
-        if(!file_exists($file)){
-            throw new \Exception("System Property {$property} Does Not Exist!");
-        }
+        $file = ROOTPATH."/configs/{$property}.php";
         $content = file_get_contents($file);
         if(!preg_match("/'{$key}'\s*=>\s*'[^']*'/i", $content)){
             throw new \Exception("Key '{$key}' Does Not Exist in System Property '{$property}'!");

@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\ErrorHandler;
+namespace CBM\Core;
 
 use ErrorException;
 use PDOException;

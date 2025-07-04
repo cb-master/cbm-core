@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Vault;
+namespace CBM\Core;
 
 class Vault
 {

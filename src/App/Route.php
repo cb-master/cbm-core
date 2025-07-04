@@ -5,15 +5,17 @@ namespace CBM\Core\App;
 // Deny Direct Access
 defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
-use CBM\Core\Directory\Directory;
-use CBM\Core\Language\Language;
-use CBM\Core\Response\Response;
 use CBM\Core\Request\Request;
-use CBM\Core\Config\Config;
-use CBM\Core\Option\Option;
 use CBM\Core\Helper\Args;
-use CBM\Core\Date\Date;
-use CBM\Core\Uri\Uri;
+use CBM\Core\Directory;
+use CBM\Core\Language;
+use CBM\Core\Response;
+use CBM\Core\Option;
+use CBM\Core\Config;
+use CBM\Core\Cookie;
+use CBM\Core\Token;
+use CBM\Core\Date;
+use CBM\Core\Uri;
 
 class Route
 {
@@ -28,6 +30,12 @@ class Route
      * @var string 'userpath' Directory Path
      */
     private ?string $userpath = null;
+
+    // App Token
+    /**
+     * @param $var $user
+     */
+    private string $user = 'unknown';
 
     // Construct
     /**
@@ -111,6 +119,12 @@ class Route
             Response::code(404);
         }
 
+        // Register APP Token and Session
+        $token = new Token(Config::get('secret','key'));
+        if(!Cookie::get('TOKEN')){
+            $token_str = $token->register(['id'=>$this->user]);
+            Cookie::set('TOKEN',$token_str);
+        }
         // Reqire Controller File
         require_once $controller_path;
     }

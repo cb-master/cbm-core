@@ -8,9 +8,9 @@
 // Namespace
 namespace CBM\Core\Helper;
 
-use CBM\Core\Response\Response;
-use CBM\Core\Option\Option;
-use CBM\Core\Uri\Uri;
+use CBM\Core\Response;
+use CBM\Core\Option;
+use CBM\Core\Uri;
 
 class Helper
 {

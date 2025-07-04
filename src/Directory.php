@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Directory;
+namespace CBM\Core;
 
 use Exception;
 

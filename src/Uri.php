@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Uri;
+namespace CBM\Core;
 
 class Uri
 {
