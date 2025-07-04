@@ -24,7 +24,7 @@ class Form
     // Create CSRF Token
     private function generateCsrfToken(): void
     {
-        if((time() - (int) (Session::get('start_time')) > 300)){
+        if((time() - (int) (Session::get('start_time')) > (int)Config::get('app','refresh_time'))){
             Session::set('start_time', time());
             Session::pop($this->key);
         }
