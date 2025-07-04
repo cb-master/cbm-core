@@ -8,6 +8,7 @@ defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 use CBM\Core\Request\Request;
 use CBM\Core\Helper\Args;
 use CBM\Core\Directory;
+use CBM\Session\Session;
 use CBM\Core\Language;
 use CBM\Core\Response;
 use CBM\Core\Option;
@@ -127,6 +128,10 @@ class Route
             $token_str = $token->register(['id'=>$this->user]);
             Cookie::set('TOKEN',$token_str);
         }
+
+        // Set App Start Time
+        Session::set('start_time', time());
+
         // Reqire Controller File
         require_once $controller_path;
     }
