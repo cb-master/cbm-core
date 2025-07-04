@@ -130,7 +130,9 @@ class Route
         }
 
         // Set App Start Time
-        Session::set('start_time', time());
+        if(!Session::get('start_time')){
+            Session::set('start_time', time());
+        }
 
         // Reqire Controller File
         require_once $controller_path;
