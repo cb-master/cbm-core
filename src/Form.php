@@ -16,9 +16,6 @@ class Form
     // Session Name
     private string $key = 'csrf';
 
-    // CSRF Token
-    private string $token;
-
     public function __construct()
     {
         $this->generateCsrfToken();

@@ -15,6 +15,7 @@ use CBM\Core\Config;
 use CBM\Core\Cookie;
 use CBM\Core\Token;
 use CBM\Core\Date;
+use CBM\Core\Form;
 use CBM\Core\Uri;
 
 class Route
@@ -89,6 +90,7 @@ class Route
         Args::add('request', new Request());
         Args::add('uri', new Uri());
         Args::add('date', new Date());
+        Args::add('form', new Form());
         // Get App Configs
         $app = Config::get('app');
         // Check if App is an Array
