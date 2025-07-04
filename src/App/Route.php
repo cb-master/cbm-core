@@ -125,11 +125,6 @@ class Route
             $token_str = $token->register(['id'=>$this->user]);
             Cookie::set('TOKEN',$token_str);
         }
-        // CSRF Token
-        if(!Cookie::get('CSRF')){
-            $csrf = $token->register(['id'=>bin2hex(random_bytes(32))]);
-            Cookie::set('CSRF',$csrf);
-        }
         // Reqire Controller File
         require_once $controller_path;
     }
