@@ -7,8 +7,8 @@
 
 namespace CBM\Core\Api;
 
-use CBM\Core\Response\Response;
-use CBM\Core\Uri\Uri;
+use CBM\Core\Response;
+use CBM\Core\Uri;
 
 class Api
 {

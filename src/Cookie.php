@@ -6,9 +6,7 @@
  */
 
  // Namespace
-namespace CBM\Core\Cookie;
-
-use CBM\Core\Uri\Uri;
+namespace CBM\Core;
 
 // Cookie Hndler
 class Cookie

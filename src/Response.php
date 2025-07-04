@@ -6,9 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core\Response;
-
-use CBM\Core\Config\Config;
+namespace CBM\Core;
 
 class Response
 {

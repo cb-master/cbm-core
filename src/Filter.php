@@ -5,7 +5,7 @@
  * Author Email: riyadhtayf@gmail.com
  */
 
-namespace CBM\Core\Filter;
+namespace CBM\Core;
 
 use Exception;
 
