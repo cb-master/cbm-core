@@ -68,7 +68,7 @@ class Token
 
     public function check(): bool
     {
-        return $this->currentUser !== null;
+        return $this->currentUser ? true : false;
     }
 
     public function user(): ?array
