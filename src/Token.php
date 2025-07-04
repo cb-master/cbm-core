@@ -40,7 +40,7 @@ class Token
     }
 
     // Register
-    public function register(array $user): string
+    public function register(?array $user = null): string
     {
         $now = new DateTimeImmutable();
         $payload = [

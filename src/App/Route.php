@@ -33,12 +33,6 @@ class Route
      */
     private ?string $userpath = null;
 
-    // App Token
-    /**
-     * @param $var $user
-     */
-    private string $user = 'unknown';
-
     // Construct
     /**
      * @param string $appPath
@@ -125,7 +119,7 @@ class Route
         // Register APP Token and Session
         $token = new Token(Config::get('secret','key'));
         if(!Cookie::get('TOKEN')){
-            $token_str = $token->register(['id'=>$this->user]);
+            $token_str = $token->register();
             Cookie::set('TOKEN',$token_str);
         }
 
