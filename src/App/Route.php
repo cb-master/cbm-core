@@ -130,8 +130,8 @@ class Route
         }
 
         // Set App Start Time
-        if(!Session::get('start_time')){
-            Session::set('start_time', time());
+        if(!Session::get('token_refresh_time')){
+            Session::set('token_refresh_time', time());
         }
 
         // Reqire Controller File
