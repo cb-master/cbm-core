@@ -40,6 +40,10 @@ class Token
     }
 
     // Register
+    /**
+     * @param array $user Requried Argument. Example ['id'=>1,'type'=>'staff']
+     * @return string
+     */
     public function register(?array $user = null): string
     {
         $now = new DateTimeImmutable();
@@ -55,10 +59,15 @@ class Token
         return JWT::encode($payload, $this->secret, $this->algorithm);
     }
 
-    public function validateToken(string $token): bool
+    // Validate Token
+    /**
+     * @param ?string $token Required Argument. Example: JWT Encoded Token
+     * @return bool
+     */
+    public function validateToken(?string $token): bool
     {
         try {
-            $decoded = JWT::decode($token, new Key($this->secret, $this->algorithm));
+            $decoded = JWT::decode($token ?: '', new Key($this->secret, $this->algorithm));
             $this->currentUser = (array)$decoded->data;
             return true;
         } catch (Exception $e) {
@@ -66,21 +75,31 @@ class Token
         }
     }
 
+    // Check User Data Exist
+    /**
+     * @return bool
+     */
     public function check(): bool
     {
         return $this->currentUser ? true : false;
     }
 
+    // Get User Data
+    /**
+     * @return ?array
+     */
     public function user(): ?array
     {
         return $this->currentUser;
     }
 
+    // Flush User Data
     public function flush(): void
     {
         $this->currentUser = null;
     }
 
+    // Refresh JWT Token With New Expired Time
     public function refresh(string $token): ?string
     {
         if (!$this->validateToken($token)) {
