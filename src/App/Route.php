@@ -117,10 +117,11 @@ class Route
         }
 
         // Register APP Token and Session
-        $token = new Token(Config::get('secret','key'));
+        $login_expire_time = (int) Option::get('login_expire_time');
+        $token = new Token(Config::get('secret','key'), $login_expire_time ?: 1800); // Default Expire Time is 1800 (30 Minutes)
         if(!Cookie::get('TOKEN')){
             $token_str = $token->register();
-            Cookie::set('TOKEN',$token_str);
+            Cookie::set('TOKEN', $token_str, $login_expire_time ?: 1800); // Default Expire Time is 1800 (30 Minutes)
         }
 
         // Set App Start Time
