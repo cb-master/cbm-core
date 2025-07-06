@@ -9,15 +9,15 @@ namespace CBM\Core;
 
 use CBM\Core\Request\Request;
 use CBM\Session\Session;
-use Exception;
 
 class Form
 {
     // Session Name
-    private string $key = 'csrf';
+    private string $key;
 
-    public function __construct()
+    public function __construct(?string $key = null)
     {
+        $this->key = $key ?: 'csrf';
         $this->generateCsrfToken();
     }
 
@@ -47,12 +47,12 @@ class Form
     }
 
     // Validate Form Token
-    public function validate(string $formKey = 'csrf'): bool
+    public function validate(): bool
     {
         $request = new Request();
         $existing_token = self::getCsrfToken();
         self::resetCsrfToken();
-        if($request->input($formKey) != $existing_token){
+        if($request->input($this->key) != $existing_token){
             return false;
         }
         return true;
