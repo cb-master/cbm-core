@@ -32,11 +32,16 @@ class Token
     // User Data
     private ?array $currentUser = null;
 
-    public function __construct(string $secret)
+    /**
+     * @param string $secret Required Argument. 256 bit Secret Key
+     * @param ?int $expiration Optional Argument. Example 1800 for 30 Minutes
+     */
+    public function __construct(string $secret, ?int $expiration = null)
     {
         $this->secret = $secret;
         $this->issuer = Uri::host();
         $this->audience = Uri::host();
+        $this->expiration = $expiration ?: $this->expiration;
     }
 
     // Register
