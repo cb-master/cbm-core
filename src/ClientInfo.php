@@ -43,7 +43,8 @@ class ClientInfo
     // Get Client Language
     public function language(): string
     {
-        return $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'Unknown';
+        $lang = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'Unknown';
+        return explode(',', $lang)[0];
     }
 
     // Get Client OS Info
