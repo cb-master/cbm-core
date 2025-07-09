@@ -7,6 +7,7 @@
 
 namespace CBM\Core\Api;
 
+use CBM\Core\Request\Request;
 use CBM\Core\Config;
 use CBM\Core\Token;
 
@@ -37,6 +38,9 @@ class ApiManager
     // Errors
     protected array $errors = [];
 
+    // Request
+    protected object $request;
+
     /**
      * @param array $config Optional Argument.
      * To Set Request Header ['request_headers'=>['Content-Type'=>'application/json']]
@@ -45,6 +49,8 @@ class ApiManager
      */
     public function __construct(array $config = [])
     {
+        // Get Request Object
+        $this->request = new Request();
         // Set Expected Request Headers
         if(isset($config['request_headers'])){
             $this->expectedRequestHeaders = array_merge($this->expectedRequestHeaders, $this->normalizeHeaderKey($config['request_headers']));
@@ -110,25 +116,31 @@ class ApiManager
         return $this->user;
     }
 
-    // Get Input Data
-    public function input(): array
+    // Get Request Body Data
+    public function body(): array
     {
         $contentType = $this->getHeader('Content-Type') ?? '';
 
         // Handle application/json
         if(stripos($contentType, 'application/json') !== false){
-            $input = file_get_contents('php://input');
-            $json = json_decode($input, true);
-            return is_array($json) ? $json : [];
+            $json = json_decode($this->request->raw(), true);
+            $data = is_array($json) ? $json : [];
+            return $this->request->purify($data);
         }
 
         // Handle form-data or x-www-form-urlencoded
         $formData = stripos($contentType, 'multipart/form-data');
         $urlencoded = stripos($contentType, 'application/x-www-form-urlencoded');
         if($formData !== false || $urlencoded !== false){
-            return $_POST + $_FILES;
+            return $this->request->purify($_POST) + $_FILES;
         }
         return [];
+    }
+
+    // Get $_GET
+    public function url()
+    {
+        return $this->request->purify($_GET);
     }
 
     // Error Response
@@ -227,7 +239,7 @@ class ApiManager
     // Validate Headers
     private function validateHeaders(): bool
     {
-        foreach ($this->expectedRequestHeaders as $key => $expectedValue) {
+        foreach($this->expectedRequestHeaders as $key => $expectedValue){
             $headerValue = $this->getHeader($key);
 
             if($headerValue === null){

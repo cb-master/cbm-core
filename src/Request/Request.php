@@ -25,10 +25,11 @@ class Request
         $this->post = $this->purify($_POST ?? []);
         $this->files = $_FILES ?? [];
         $this->rawBody = file_get_contents('php://input');
-        $this->json = $this->purify($this->detectJson());
+        $this->json = $this->purify($this->getJSON());
         $this->method = $this->detectMethod();
     }
 
+    // Detect Request Method
     protected function detectMethod(): string
     {
         if (!empty($this->post['_method'])) {
@@ -38,7 +39,8 @@ class Request
         return strtoupper($this->server['REQUEST_METHOD'] ?? 'GET');
     }
 
-    protected function detectJson(): array
+    // Get JSON BODY
+    protected function getJSON(): array
     {
         $contentType = $this->server['CONTENT_TYPE'] ?? '';
         if (str_starts_with(strtolower($contentType), 'application/json')) {
@@ -48,6 +50,7 @@ class Request
         return [];
     }
 
+    // Get Method
     public function method(): string
     {
         return $this->method;
@@ -65,19 +68,19 @@ class Request
         return $this->method() === 'GET';
     }
 
+    // Get Value From Input Key
     public function input(string $key, mixed $default = null): mixed
     {
-        return $this->post[$key]
-            ?? $this->get[$key]
-            ?? $this->json[$key]
-            ?? $default;
+        return $this->post[$key] ?? $this->get[$key] ?? $this->json[$key] ?? $default;
     }
 
+    // Get All Request Key & Values
     public function all(): array
     {
         return array_merge($this->get, $this->post, $this->json);
     }
 
+    // Get Selected Key Values
     public function only(array $keys): array
     {
         // $data = [];
@@ -86,39 +89,38 @@ class Request
         },$keys);
     }
 
+    // Check Request Key Exist
     public function has(string $key): bool
     {
-        return array_key_exists($key, $this->post)
-            || array_key_exists($key, $this->get)
-            || array_key_exists($key, $this->json);
+        return array_key_exists($key, $this->post) || array_key_exists($key, $this->get) || array_key_exists($key, $this->json);
     }
 
-    public function file(string $key): ?array
+    // Get Selected Request File or All Request Files
+    public function file(?string $key = null): ?array
     {
-        return $this->files[$key] ?? null;
+        return $key ? $this->files[$key] : $this->files;
     }
 
+    // Gets Header Key Values
     public function header(string $key): ?string
     {
         $headerKey = 'HTTP_' . strtoupper(str_replace('-', '_', $key));
         return $this->server[$headerKey] ?? null;
     }
 
+    // Check Request is Ajax
     public function isAjax(): bool
     {
         return strtolower($this->header('X-Requested-With')) === 'xmlhttprequest';
     }
 
-    public function ip(): ?string
-    {
-        return $this->server['REMOTE_ADDR'] ?? null;
-    }
-
+    // Get JSON String
     public function raw(): string
     {
         return $this->rawBody;
     }
 
+    // Purify Input Values
     public function purify(array $data): array
     {
         return array_map(function($val){
@@ -128,6 +130,7 @@ class Request
         }, $data);
     }
 
+    // Check Request Keys Are Exist
     public function validRequestKeys(array $keys): bool
     {
         foreach($keys as $key){
