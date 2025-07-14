@@ -7,8 +7,9 @@ defined('ROOTPATH') || http_response_code(403).die('Direct Access Denied!');
 
 use CBM\Core\Request\Request;
 use CBM\Core\Helper\Args;
-use CBM\Core\Directory;
 use CBM\Session\Session;
+use CBM\Core\ClientInfo;
+use CBM\Core\Directory;
 use CBM\Core\Language;
 use CBM\Core\Response;
 use CBM\Core\Option;
@@ -116,12 +117,13 @@ class Route
             Response::code(404);
         }
 
-        // Register APP Token and Session
+        // Register APP Client Info
         $login_expire_time = (int) Option::get('login_expire_time');
         $token = new Token(Config::get('secret','key'), $login_expire_time ?: 1800); // Default Expire Time is 1800 (30 Minutes)
-        if(!Cookie::get('TOKEN')){
-            $token_str = $token->register();
-            Cookie::set('TOKEN', $token_str, $login_expire_time ?: 1800); // Default Expire Time is 1800 (30 Minutes)
+        if(!Cookie::get('_c_info')){
+            $client_info = new ClientInfo();
+            $token_str = $token->register($client_info->all());
+            Cookie::set('_c_info', $token_str, $login_expire_time ?: 1800); // Default Expire Time is 1800 (30 Minutes)
         }
 
         // Set App Start Time
