@@ -8,8 +8,6 @@
 // Namespace
 namespace CBM\Core\File;
 
-use InvalidArgumentException;
-
 class Upload
 {
     // Fields
