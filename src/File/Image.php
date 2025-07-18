@@ -6,7 +6,7 @@
  */
 
 // Namespace
-namespace CBM\Core;
+namespace CBM\Core\File;
 
 use GdImage;
 use InvalidArgumentException;
