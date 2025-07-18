@@ -106,7 +106,7 @@ class Upload
                 continue;
             }
 
-            if ($maxSize && ($size > $maxSize)) {
+            if ($maxSize && ($size > (int)$maxSize)) {
                 $results['errors'][$name] = "File exceeds max size ({$maxSize} bytes)";
                 continue;
             }
