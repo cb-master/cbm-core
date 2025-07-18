@@ -11,7 +11,7 @@ namespace CBM\Core\File;
 use InvalidArgumentException;
 use ZipArchive;
 
-class FileHandler
+class Zip
 {
     // Path
     /**
