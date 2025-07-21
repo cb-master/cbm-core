@@ -73,4 +73,13 @@ class Args
     {
         return self::getInstance()->args;
     }
+
+    // Get Arguments as Method
+    public static function __callStatic($method, $args)
+    {
+        if(!self::has($method)){
+            throw new Exception("Argument '{$method}' does not exist!");
+        }
+        return call_user_func(__NAMESPACE__.'\Args::get', $method, $args);
+    }
 }
