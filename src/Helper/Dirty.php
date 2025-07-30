@@ -39,11 +39,7 @@ class Dirty
      */
     public function set(string|array $key, mixed $value = null): void
     {
-        // if(is_string($key)) $key = [$key=>$value];
-        $this->latest = array_merge($this->latest, $key);
-        // foreach($key as $new_key => $val){
-        //     $this->latest[$new_key] = $val;
-        // }
+        $this->latest = is_array($key) ? array_merge($this->latest, $key) : array_merge($this->latest, [$key => $value]);
     }
 
     // Get Changed Values
