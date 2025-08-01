@@ -59,9 +59,10 @@ class Dirty
 
     // Get Changes
     /**
-     * @return array
+     * @param bool $serialized Optional Argument. If true, the changes will be serialized.
+     * @return array|string
      */
-    public function changes(): array
+    public function changes(bool $serialized = false): array|string
     {
         $changes = [];
         $changes['latest'] = $this->get();
@@ -69,6 +70,6 @@ class Dirty
         foreach($keys as $key){
             $changes['existing'][$key] = $this->original[$key] ?? '';
         }
-        return $changes;
+        return $serialized ? serialize($changes) : $changes;
     }
 }
