@@ -53,8 +53,9 @@ class Controller
      * @param string $class - Required Argument as Middleware Class Name Like 'Client'.
      * @param string $method - Required Argument as Middleware Method Name.
      * @param array $args - Optionsl Argument. Default is Blank Array.
+     * @return mixed
      */
-    public function middleware(string $class, string $method, mixed ...$args): self
+    public function middleware(string $class, string $method, mixed ...$args): mixed
     {
         // Create Middleware Folder if Does Not Exist
         if(!file_exists(ROOTPATH.'/app/Middleware')){
@@ -69,11 +70,16 @@ class Controller
         if(!method_exists($class, $method)){
             throw new Exception("Method '{$class}::{$method}' Not Found!", 8404);
         }
-        call_user_func([new $class, $method], ...$args);
-        return $this;
+        return call_user_func([new $class, $method], ...$args);
     }
 
     // Call Factory & Method
+    /**
+     * @param string $factory - Required Argument as Middleware Class Name Like 'Client'.
+     * @param string $method - Required Argument as Middleware Method Name.
+     * @param array $args - Optionsl Argument. Default is Blank Array.
+     * @return mixed
+     */
     public function factory(string $factory, string $method, mixed ...$args): mixed
     {
         // Create Factory Folder if Does Not Exist
